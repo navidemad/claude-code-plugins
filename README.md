@@ -4,15 +4,13 @@
 [![Changelog](https://img.shields.io/badge/changelogs-view-blue.svg)](CHANGELOG.md)
 ![Status: Production](https://img.shields.io/badge/Status-Production-green)
 
-**Orchestrated AI workflows for Rails, iOS Swift, and Android Kotlin development.**
+**Orchestrated AI workflows development for :
 
 [![Ruby on Rails](https://img.shields.io/badge/Ruby%20on%20Rails-CC0000?logo=rubyonrails&logoColor=white)](CLAUDE.md)
 [![iOS Swift](https://img.shields.io/badge/iOS%20Swift-F05138?logo=swift&logoColor=white)](CLAUDE.md)
 [![Android Kotlin](https://img.shields.io/badge/Android%20Kotlin-7F52FF?logo=kotlin&logoColor=white)](CLAUDE.md)
 
-Just talk naturally! No slash commands needed. 🗣️✨
-
----
+> 🗣️ **Just talk naturally! No slash commands needed** ✨ 
 
 ## ✨ Orchestrated Skills
 
@@ -22,7 +20,7 @@ Just talk naturally! No slash commands needed. 🗣️✨
 | 💻 | **implement** | Auto-test + Auto-review + Auto-fix + Progress tracking |
 | 🚀 | **ship** | Single skill for commit AND PR |
 
-### Key Improvements
+#### Key Improvements
 
 | | Key | Improvements |
 |-|-----|--------------|
@@ -31,8 +29,6 @@ Just talk naturally! No slash commands needed. 🗣️✨
 | 🔍 | **Auto-review** | Code review + fixes before approval |
 | 📊 | **Progress** | See completion after each substory |
 | 💾 | **Memory** | `.claude/context/*.json` files remember decisions across sessions |
-
----
 
 ## 📦 Quick Start
 
