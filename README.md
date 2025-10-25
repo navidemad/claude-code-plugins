@@ -10,9 +10,7 @@
 [![iOS Swift](https://img.shields.io/badge/iOS%20Swift-F05138?logo=swift&logoColor=white)](CLAUDE.md)
 [![Android Kotlin](https://img.shields.io/badge/Android%20Kotlin-7F52FF?logo=kotlin&logoColor=white)](CLAUDE.md)
 
-Just talk naturally! No slash commands needed. 🗣️✨
-
----
+> 🗣️ **Just talk naturally! No slash commands needed** ✨
 
 ## ✨ Orchestrated Skills
 
@@ -24,9 +22,7 @@ Just talk naturally! No slash commands needed. 🗣️✨
 
 📖 **[Full Skills Documentation →](.claude/skills/README.md)**
 
----
-
-## 📦 Quick Start
+## 📦 Installation
 
 ### 1. Install Claude Code
 
@@ -136,7 +132,9 @@ Claude: Extends core using same libraries/patterns ✅
 3. **Expansion PRDs** → Add features one at a time
 4. **Auto-load Context** → Expansions inherit core automatically
 
-**Why?** Large upfront PRDs lead to incorrect assumptions. Starting small and expanding works better with modern LLMs.
+**Why?**:
+- Large upfront PRDs lead to incorrect assumptions.
+- Starting small and expanding works better with modern LLMs.
 
 ### Context as Memory
 
