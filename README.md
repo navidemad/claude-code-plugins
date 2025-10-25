@@ -5,27 +5,11 @@ Use it in your terminal, IDE.
 
 **Learn more in the [official documentation](https://docs.anthropic.com/en/docs/claude-code/overview)**.
 
-## Yespark Claude Plugins
+## Yespark Claude Plugins (Powerful AI assistants for Rails, iOS Swift, and Android Kotlin development)
 
-This repository includes as Claude Team Marketplace contains several Claude Code skills that extend functionality with custom commands and agents. See the [skills directory](./.claude/skills/README.md) for detailed documentation on available skills.
+This repository includes as Claude Team Marketplace contains several Claude Code skills that extend functionalities.
 
-**Powerful AI assistants for Rails, iOS Swift, and Android Kotlin development.**
-
-Smart tools that help you work faster while you stay in control.
-
-## Overview
-
-This marketplace provides **7 intelligent skills** that enhance your development workflow. Each skill is a focused assistant - it helps you accomplish a specific task, you decide what happens next.
-
-**🎯 Philosophy:** Tools, not automation. Each skill does one thing well, you orchestrate the workflow.
-
-**🤖 Model-invoked** - Claude activates skills based on your conversation. No slash commands to remember.
-
-**🔧 Platform-aware** - Automatically detects Rails, iOS Swift, or Android Kotlin and adapts conventions.
-
-**🌍 Bilingual** - All skills support English and French activation phrases.
-
-**💪 Developer control** - You maintain full control. Skills suggest next steps, you decide.
+For detailed information about individual skills, see [.claude/skills/README.md](.claude/skills/README.md)
 
 ### Available Skills
 
@@ -41,15 +25,15 @@ This marketplace provides **7 intelligent skills** that enhance your development
 
 ## Get started
 
-1. Install Claude Code:
+### Étape 1. Install Claude Code:
 
 ```sh
 bun -g install @anthropic-ai/claude-agent-sdk
 ```
 
-2. Navigate to your project directory and run `claude`.
+### Étape 2. Navigate to your project directory and run `claude`.
 
-3. Add to your project's `.claude/settings.json`:
+### Étape 3. Add to your project's `.claude/settings.json`:
 
 ```json
 {
@@ -67,28 +51,26 @@ bun -g install @anthropic-ai/claude-agent-sdk
 }
 ```
 
-4. Start Using
+### Étape 4. Start Using
 
 Just talk naturally! No slash commands needed.
 
 ```
-You: "Create a PRD for user authentication"
+You:    "Create a PRD for user authentication"
 Claude: [Asks questions, generates PRD]
 
-You: "Implement the PRD"
+You:    "Implement the PRD"
 Claude: [Writes code substory by substory]
 
-You: "Review my code"
+You:    "Review my code"
 Claude: [Performs quality analysis]
 
-You: "Commit these changes"
+You:    "Commit these changes"
 Claude: [Generates commit message, waits for approval]
 
-You: "Create a PR"
+You:    "Create a PR"
 Claude: [Generates PR description, waits for approval]
 ```
-
-For detailed information about platform support and individual skills, see [.claude/skills/README.md](.claude/skills/README.md).
 
 ## Complete Workflow Example
 
@@ -190,11 +172,7 @@ Claude: ✅ PR #123 created!
 
 </details>
 
-## Version
-
-**Current version: 5.0.0**
-
-### Changelog
+## Changelog
 
 #### 5.0.0 (2025-10-25) - **Developer Control Release**
 - **🎯 Philosophy shift**: Tools, not automation - you control the workflow
