@@ -5,8 +5,8 @@
 **Supercharge your development workflow with AI-powered skills tailored for :**
 
 [![Ruby on Rails](https://img.shields.io/badge/Rails-CC0000?logo=rubyonrails&logoColor=white)](.claude/skills/README.md)
-[![Android Swift](https://img.shields.io/badge/Swift-F05138?logo=swift&logoColor=white)](.claude/skills/README.md)
-[![iOS Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)](.claude/skills/README.md)
+[![iOS Swift](https://img.shields.io/badge/iOS-Swift-F05138?logo=swift&logoColor=white)](.claude/skills/README.md)
+[![Android Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)](.claude/skills/README.md)
 
 | | Skill | Purpose |
 |-|-------|---------|
