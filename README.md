@@ -11,7 +11,7 @@
 - `implement` ➡️ Auto-code + Auto-test + Auto-review + Auto-fix + Progress tracking |
 - `ship`      ➡️ Single skill for commit and creating pull requests |
 
-[![Documentation](https://img.shields.io/badge/Full%20Skills%20Documentation-view-blue.svg)](.claude/skills/README.md)
+[![Documentation](https://img.shields.io/badge/Documentation-view-blue.svg)](.claude/skills/README.md)
 
 ## 📦 Installation
 
