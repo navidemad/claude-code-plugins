@@ -526,8 +526,5 @@ implement: Detects standalone mode
 
 💡 **Tip**: All skills support both English and French activation phrases!
 
-🔗 Back to [Main README](../../README.md) | [CLAUDE.md](../../CLAUDE.md)
-
-**Built for Claude Sonnet 4.5** 🧠
-
+🔗 Back to [Main README](../../README.md)
 </div>

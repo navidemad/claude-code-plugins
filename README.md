@@ -22,7 +22,8 @@
 
 📖 **[Full Skills Documentation →](.claude/skills/README.md)**
 
-## 📦 Installation
+<details>
+<summary>## 📦 Installation</summary>
 
 ### 1. Install Claude Code
 
@@ -49,10 +50,10 @@ bun -g install @anthropic-ai/claude-agent-sdk
 ```
 
 ### 3. Run `claude` in your project
+</details>
 
----
-
-## 🎯 Usage Example
+<details>
+<summary>## 🎯 Usage Example</summary>
 
 ```
  ▐▛███▜▌   Claude Code
@@ -120,29 +121,4 @@ Claude: Extends core using same libraries/patterns ✅
         Auto-test + Auto-review + Auto-fix ✅
         Asks approval ✅
 ```
-
----
-
-## 💡 Philosophy
-
-### Land Then Expand
-
-1. **Core PRD** → Minimal foundation (just essential fields)
-2. **Implement Core** → Establish patterns
-3. **Expansion PRDs** → Add features one at a time
-4. **Auto-load Context** → Expansions inherit core automatically
-
-**Why?**:
-- Large upfront PRDs lead to incorrect assumptions.
-- Starting small and expanding works better with modern LLMs.
-
-### Context as Memory
-
-`.claude/context/{prd-name}.json` tracks:
-- Platform (Rails/iOS/Android)
-- Patterns established (service objects, API structure, etc.)
-- Libraries chosen (Stripe, Devise, etc.)
-- Architectural decisions
-- Files created
-
-**Expansions auto-load this context** to maintain consistency.
+</details>
