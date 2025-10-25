@@ -67,8 +67,6 @@ Once detected, skills automatically load platform-specific conventions and best 
 
 **What:** Create core or expansion PRDs with automatic context management
 
-**Replaces:** generate-prd, track-prd-progress (context management)
-
 <details>
 <summary><strong>Click to expand full details</strong></summary>
 
@@ -146,8 +144,6 @@ Once detected, skills automatically load platform-specific conventions and best 
 ### 💻 implement
 
 **What:** Code + Auto-test + Auto-review + Auto-fix + Progress tracking (all-in-one)
-
-**Replaces:** implement-code, implement-tests, track-prd-progress, code-review (internal)
 
 <details>
 <summary><strong>Click to expand full details</strong></summary>
@@ -235,8 +231,6 @@ Once detected, skills automatically load platform-specific conventions and best 
 ### 🚀 ship
 
 **What:** Commit + Pull Request with approval gates (mode auto-detection)
-
-**Replaces:** commit, create-pr
 
 <details>
 <summary><strong>Click to expand full details</strong></summary>
