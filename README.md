@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg" alt="Claude AI Logo" width="200"/>
-
   # 🚀 Yespark Claude Plugins
 
   **Supercharge your development workflow with AI-powered skills**
@@ -8,29 +6,20 @@
   [![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)](CHANGELOG.md)
   [![Platform](https://img.shields.io/badge/platform-Rails%20%7C%20iOS%20%7C%20Android-green.svg)](.claude/skills/README.md)
 
+  This repository includes several Claude Code skills that extend its functionality. It has been tailored for **Rails** 💎, **iOS Swift** 🍎, and **Android Kotlin** 🤖 development.
 </div>
 
 ---
 
-## 💡 What is This?
-
-Claude Code is an agentic coding tool that lives in your terminal 💻, understands your codebase 🧠, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows -- all through natural language commands 🗣️.
-
-**Learn more in the [official documentation](https://docs.anthropic.com/en/docs/claude-code/overview)** 📚
-
-This repository includes several Claude Code skills that extend its functionality. It has been tailored for **Rails** 💎, **iOS Swift** 🍎, and **Android Kotlin** 🤖 development.
-
-## 🛠️ Available Skills
-
-| Skill | Purpose | Emoji |
-|-------|---------|-------|
-| **generate-prd** | Create adaptive PRDs with codebase exploration | 📋 |
-| **implement-code** | Write code substory-by-substory from PRDs | 💻 |
-| **implement-tests** | Write comprehensive test suites | ✅ |
-| **track-prd-progress** | Track and update PRD implementation status | 📊 |
-| **commit** | Generate well-formatted commit messages | 💾 |
-| **create-pr** | Generate comprehensive PR descriptions | 🚀 |
-| **code-review** | Multi-dimensional code quality analysis | 🔍 |
+| Skill | Purpose |
+|-------|---------|
+| 📋 **generate-prd** | Create adaptive PRDs with codebase exploration |
+| 💻 **implement-code** | Write code substory-by-substory from PRDs |
+| 🧪 **implement-tests** | Write comprehensive test suites |
+| 📊**track-prd-progress** | Track and update PRD implementation status |
+| 💾 **commit** | Generate well-formatted commit messages |
+| 🚀 **create-pr** | Generate comprehensive PR descriptions |
+| 🔍 **code-review** | Multi-dimensional code quality analysis |
 
 📖 For detailed information about individual skills, see [.claude/skills/README.md](.claude/skills/README.md)
 
