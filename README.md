@@ -75,17 +75,17 @@ gh auth login
 ```json
 {
   "extraKnownMarketplaces": {
-    "yespark-agent-skills": {
+    "productivity-plugins": {
       "source": {
         "source": "github",
-        "repo": "yespark/yespark-claude-plugins"
+        "repo": "navidemad/claude-code-plugins"
       }
     }
   },
   "enabledPlugins": {
-    "yespark-agent-skills:plan-prd": true,
-    "yespark-agent-skills:code-prd": true,
-    "yespark-agent-skills:publish": true
+    "claude-code-plugins:plan-prd": true,
+    "claude-code-plugins:code-prd": true,
+    "claude-code-plugins:publish": true
   }
 }
 ```

@@ -44,8 +44,6 @@ To create one, start a new Claude Code session and type:
 
 Then describe your project, and Claude will help create CLAUDE.md.
 
-Learn more: https://github.com/yespark/yespark-claude-plugins#claude-md
-
 Exiting...
 EOF
     exit 1

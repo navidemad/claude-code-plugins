@@ -1,30 +1,34 @@
 {
-  "name": "yespark-agent-skills",
+  "name": "claude-code-plugins",
   "owner": {
     "name": "Navid Emad",
     "email": "navid.emad@yespark.fr"
   },
   "metadata": {
-    "description": "Yespark skills",
-    "version": "1.0.0"
+    "description": "Curated plugins for Claude Code",
+    "version": "1.0.0",
+    "repository": "https://github.com/navidemad/claude-code-plugins"
   },
   "plugins": [
     {
       "name": "plan-prd",
       "description": "PRD planning with auto-context gathering - creates core or expansion PRDs",
-      "source": "../skills/plan-prd",
+      "source": "./skills/plan-prd",
+      "version": "1.0.0",
       "strict": false
     },
     {
       "name": "code-prd",
       "description": "Code implementation with testing, review, and progress tracking",
-      "source": "../skills/code-prd",
+      "source": "./skills/code-prd",
+      "version": "1.0.0",
       "strict": false
     },
     {
       "name": "publish",
       "description": "Commit and PR creation with approval gates",
-      "source": "../skills/publish",
+      "source": "./skills/publish",
+      "version": "1.0.0",
       "strict": false
     }
   ]
