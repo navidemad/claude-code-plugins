@@ -8,6 +8,8 @@
 [![iOS Swift](https://img.shields.io/badge/iOS%20Swift-F05138?logo=swift&logoColor=white)](.claude/skills/README.md)
 [![Android Kotlin](https://img.shields.io/badge/Android%20Kotlin-7F52FF?logo=kotlin&logoColor=white)](.claude/skills/README.md)
 
+Just talk naturally! No slash commands needed. 🗣️✨
+
 | | Skill | Purpose |
 |-|-------|---------|
 | 📋 | **generate-prd** | Create adaptive PRDs with codebase exploration |
@@ -50,9 +52,7 @@ bun -g install @anthropic-ai/claude-agent-sdk
 
 ### 3️⃣ Navigate to your project directory and run `claude` 🎯
 
-### 4️⃣ Start Using 🎉
-
-Just talk naturally! No slash commands needed. 🗣️✨
+### 4️⃣ Usage 🎉
 
 ```
 You:    "Create a PRD for user authentication"
