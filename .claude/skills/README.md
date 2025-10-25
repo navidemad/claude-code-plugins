@@ -51,11 +51,24 @@ Expansion 2: Add line items (auto-loads invoice + customer context)
 
 ### 🔍 Detection Method
 
-Skills automatically detect your platform by analyzing project files:
+Skills automatically detect your platform by analyzing project files with multiple validation checks:
 
-- **Rails** 💎: Presence of `Gemfile` with `gem "rails"`
-- **iOS Swift** 🍎: `.xcodeproj` folder, `Podfile`, or `Package.swift`
-- **Android Kotlin** 🤖: `gradle.properties` file at project root
+**Detection Priority:**
+
+1. **Android Kotlin** 🤖
+   - Primary: `gradle.properties` + `app/` directory or `build.gradle.kts`
+   - Fallback: `build.gradle` with `com.android.application` plugin
+   - Validates actual Android structure to avoid false positives
+
+2. **iOS Swift** 🍎
+   - Primary: `Podfile` + `.xcodeproj` or `.xcworkspace` at root
+   - Fallback: `Package.swift` + `.xcodeproj` (Swift Package Manager)
+   - Checks for CocoaPods or SPM workspace structure
+
+3. **Rails** 💎
+   - Primary: `Gemfile` + `config.ru` + `Rakefile` + `config/` and `app/` directories
+   - Fallback: `Gemfile` with `gem "rails"` content
+   - Distinguishes Rails from Fastlane `Gemfile` in mobile projects
 
 Once detected, skills automatically load platform-specific conventions and best practices from `shared/references/{platform}/conventions.md`, ensuring code generation follows your platform's standards. ✨
 
