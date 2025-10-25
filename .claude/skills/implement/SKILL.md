@@ -431,7 +431,7 @@ Minor suggestions:
 **If critical or major issues found:**
 
 ```markdown
-🔧 Fixing [2] major issues automatically...
+🔧 Fixing [2] major issues automatically... (Iteration 1/3)
 
 Fixing issue 1: Adding pagination to UsersController...
 ✅ Fixed app/controllers/api/v1/users_controller.rb
@@ -454,10 +454,56 @@ Re-running code review to verify fixes...
 All critical and major issues resolved!
 ```
 
-**If still has critical/major issues after 2 fix attempts:**
+**If still has critical/major issues after iteration 1:**
+- Continue to iteration 2 with auto-fix
+
+**If still has critical/major issues after iteration 2:**
+- Ask user for guidance:
+```markdown
+🔧 Auto-fix iteration 2/3 complete, but issues remain:
+
+🔴 Critical: 1
+🟠 Major: 1
+
+Remaining issues:
+1. [Critical] [file:line] Issue description
+   Current approach tried: [what was attempted]
+
+2. [Major] [file:line] Issue description
+   Current approach tried: [what was attempted]
+
+💡 Need your input for final iteration (3/3):
+- Do you have additional context about these issues?
+- Any specific approach you'd like me to try?
+- Alternative libraries or patterns to consider?
+
+Your guidance: [user input]
+```
+
+**After receiving user guidance:**
+- Apply user suggestions in iteration 3
+- Re-run review
+- Report final results
+
+**If still has critical/major issues after iteration 3:**
 - Stop auto-fixing
-- Show issues to user
-- Ask: "Continue fixing? [yes/skip/manual]"
+- Show detailed issue summary
+- Provide options:
+```markdown
+⚠️ Unable to resolve all issues after 3 iterations.
+
+Remaining issues:
+🔴 Critical: X
+🟠 Major: Y
+
+Options:
+1. **approve-with-issues** - Continue anyway, fix in next phase/PR review
+2. **manual-fix** - You'll fix manually, then continue
+3. **redo-substory** - Re-implement substory with different approach
+4. **get-help** - Pause and document blocker
+
+What would you like to do? [1/2/3/4]
+```
 
 ### Step 6: Phase Approval Gate
 
