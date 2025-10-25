@@ -11,9 +11,9 @@
 > 🗣️ **Just talk naturally! No slash commands needed** ✨
 
 **Orchestrated AI skills for faster development**
-- **plan**: Auto-loads core context for expansions |
-- **implement**: Auto-test + Auto-review + Auto-fix + Progress tracking |
-- **ship**: Single skill for commit AND PR |
+- `plan`      ➡️ Generate PRD and auto-loads core context for expansions |
+- `implement` ➡️ Auto-code + Auto-test + Auto-review + Auto-fix + Progress tracking |
+- `ship`      ➡️ Single skill for commit and creating pull requests |
 
 📖 **[Full Skills Documentation →](.claude/skills/README.md)**
 
