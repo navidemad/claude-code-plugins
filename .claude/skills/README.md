@@ -1,21 +1,23 @@
 # 📚 Skills Documentation
 
-Detailed guide for all available skills in the Yespark Claude Plugins marketplace.
+**3 orchestrated workflows for Rails, iOS Swift, and Android Kotlin development.**
 
 ---
 
 ## 🌱 Land Then Expand Philosophy
 
-These skills use a **"land then expand"** approach for optimal results with modern Claude models:
+These skills use a **"land then expand"** approach optimized for Claude Sonnet 4.5:
 
 1. **Start Minimal (Core)**: Build essential foundation with 2-4 substories max
 2. **Establish Patterns**: Create clean, simple code that works
-3. **Expand Iteratively**: Add features one at a time in separate PRDs
-4. **Maintain Consistency**: Expansions load and extend core patterns
+3. **Auto-Save Context**: Patterns, libraries, and decisions stored in `.claude/context/*.json`
+4. **Expand Iteratively**: Add features one at a time with auto-loaded context
+5. **Maintain Consistency**: Expansions automatically inherit core patterns
 
 **Why this works better:**
 - Prevents incorrect architectural assumptions
 - Establishes patterns before adding complexity
+- Context files enable cross-session memory
 - Better token efficiency
 - Shorter feedback cycles
 - More consistent results
@@ -23,12 +25,14 @@ These skills use a **"land then expand"** approach for optimal results with mode
 **Example Flow:**
 ```
 Core PRD: Invoice with number, date, amount only
-  ↓ implement & merge
-Expansion 1: Add customer details
-  ↓ implement & merge
-Expansion 2: Add line items
-  ↓ implement & merge
-Expansion 3: Add tax calculations
+  ↓ implement (auto-test, auto-review, auto-fix)
+  ↓ ship (commit + PR)
+Expansion 1: Add customer details (auto-loads invoice core context)
+  ↓ implement (extends core patterns)
+  ↓ ship
+Expansion 2: Add line items (auto-loads invoice + customer context)
+  ↓ implement
+  ↓ ship
 ```
 
 ---
@@ -53,18 +57,24 @@ Skills automatically detect your platform by analyzing project files:
 - **iOS Swift** 🍎: `.xcodeproj` folder, `Podfile`, or `Package.swift`
 - **Android Kotlin** 🤖: `gradle.properties` file at project root
 
-Once detected, skills automatically load platform-specific conventions and best practices from reference files, ensuring code generation follows your platform's standards. ✨
+Once detected, skills automatically load platform-specific conventions and best practices from `shared/references/{platform}/conventions.md`, ensuring code generation follows your platform's standards. ✨
 
 ---
 
-## 🛠️ Skills in Detail
+## 🛠️ The 3 Orchestrated Skills
+
+### 📋 plan
+
+**What:** Create core or expansion PRDs with automatic context management
+
+**Replaces:** generate-prd, track-prd-progress (context management)
 
 <details>
-<summary><strong>📋 generate-prd</strong> - Create core or expansion PRDs with codebase exploration</summary>
+<summary><strong>Click to expand full details</strong></summary>
 
 <br>
 
-### Land Then Expand Approach 🌱
+### Core vs Expansion 🌱
 
 **Always asks first:**
 1. 🌱 New core feature (minimal foundation)
@@ -76,24 +86,47 @@ Once detected, skills automatically load platform-specific conventions and best 
 - **Essential fields only** - example: invoice with just number, date, amount
 - **Single phase** - establish foundation
 - **Out of scope section** - lists future expansions
+- **Creates context file**: `.claude/context/YYYY-MM-DD-{feature}-core.json`
 - File: `docs/prds/YYYY-MM-DD-{feature}-core.md`
 
 **Goal**: Establish patterns, NOT completeness
 
-### Expansion PRD Mode
+**Context Initialized:**
+```json
+{
+  "prd": "docs/prds/2024-10-25-invoice-core.md",
+  "platform": "rails",
+  "patterns": {},
+  "libraries": {},
+  "files_created": [],
+  "architectural_decisions": []
+}
+```
 
+### Expansion PRD Mode (AUTO-CONTEXT LOADING)
+
+**Automatically:**
+- ✅ Reads core PRD file
+- ✅ Loads `.claude/context/{core-prd-name}.json`
+- ✅ Extracts files_created, patterns, libraries, decisions
+- ✅ Reads core implementation files
+- ✅ Shows established patterns to user
+
+**Then:**
 - **Focused on ONE aspect** - customer details OR line items, not both
-- **Loads core implementation** - reads completed core files for patterns
 - **Extends core patterns** - maintains consistency
+- **Inherits context** - expansion context starts with core as base
 - File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 
 **Goal**: Add one feature using established patterns
+
+**No manual work needed** - core context auto-loaded!
 
 ### Codebase Exploration 🔍
 
 - ✅ Analyzes existing patterns and architecture
 - ✅ Finds similar features for reference
-- ✅ **For expansions**: Loads completed core files as context
+- ✅ **For expansions**: Automatically loads completed core files
 - ✅ Identifies testing frameworks and conventions
 - ✅ Ensures PRD follows project patterns
 
@@ -101,161 +134,193 @@ Once detected, skills automatically load platform-specific conventions and best 
 
 ### Natural Activation 🗣️
 
-- "Create a PRD for invoices"
+- "Plan a booking system"
 - "Create an expansion for customer details"
-- "Let's plan the core booking feature"
+- "Plan the core invoice feature"
 - 🇫🇷 "Créer un PRD", "planifier une fonctionnalité"
 
 </details>
 
 ---
 
+### 💻 implement
+
+**What:** Code + Auto-test + Auto-review + Auto-fix + Progress tracking (all-in-one)
+
+**Replaces:** implement-code, implement-tests, track-prd-progress, code-review (internal)
+
 <details>
-<summary><strong>💻 implement-code</strong> - Implement core or expansion PRDs with pattern-aware code generation</summary>
+<summary><strong>Click to expand full details</strong></summary>
 
 <br>
 
-### Land Then Expand Implementation 🌱
+### Orchestrated Workflow 🚀
 
-**Detects PRD type automatically** and adjusts workflow:
+**For each phase:**
+
+1. **💻 Implement substories** (one-by-one)
+   - Shows progress after EACH substory
+   - Updates PRD status automatically
+   - Updates context with patterns/decisions
+
+2. **🧪 Auto-test** (after phase completes)
+   - Detects framework (RSpec, Minitest, XCTest, JUnit)
+   - Writes comprehensive tests
+   - Runs tests
+   - Reports coverage
+
+3. **🔍 Auto-review** (after tests pass)
+   - Multi-dimensional analysis (quality, security, performance)
+   - Platform-specific checks
+   - Categorizes findings (🔴 Critical, 🟠 Major, 🟡 Minor)
+
+4. **🔧 Auto-fix** (if issues found)
+   - Fixes critical/major issues automatically
+   - Re-reviews until clean
+   - Max 2 fix iterations
+
+5. **✅ Approval gate** (phase boundary)
+   - Shows: substories complete, tests passing, review clean
+   - Asks: "Phase X complete. Approve to continue? [yes/no]"
+   - User decides: continue or stop
+
+### Core vs Expansion Implementation 🌱
 
 **Core PRD Implementation:**
 - Establishes clean, simple patterns
 - Creates minimal working foundation
-- Max 2-4 substories
+- Stores patterns/libraries/decisions in context
 - After completion: Suggests creating expansion PRDs
 
-**Expansion PRD Implementation (CRITICAL):**
-- **Loads completed core files** as context
+**Expansion PRD Implementation (AUTO-CONTEXT):**
+- **Automatically loads core context** and implementation files
 - Analyzes and follows established patterns
 - Extends (not replaces) core code
+- Uses same libraries (from context)
 - Maintains naming and structure consistency
 
-### Guided Workflow 🚀
+### Standalone Test Mode 🧪
 
-1. 📋 Load PRD and detect type (core vs expansion)
-2. 🔍 For expansions: Load core implementation files
-3. 💻 Implement substory code following patterns
-4. ✅ Update PRD with completion status
-5. 💡 Suggest next steps (review, test, commit, continue)
-6. ⏸️ Wait for your decision
+**Also works without PRD:**
+- "Write tests for user.rb"
+- Detects framework, writes tests, runs tests
+- No PRD updates
 
 ### Features ⭐
 
 - 🔍 Architecture analysis before coding
 - 🎯 Follows existing project patterns
-- 📂 **For expansions**: Loads and extends core files
+- 📂 **For expansions**: Auto-loads and extends core files
 - 🛠️ Platform-specific best practices
 - 📦 Incremental implementation (one substory at a time)
-- 📊 Real-time PRD status updates
-- 💬 Clear suggestions, no auto-invocations
-- 🎮 You orchestrate review → test → commit → PR
+- 🧪 **Auto-tests** after each phase
+- 🔍 **Auto-reviews** code quality, security, performance
+- 🔧 **Auto-fixes** critical/major issues
+- 📊 Real-time progress tracking
+- 📝 PRD and context auto-updated
+- ✅ Approval gates at phase boundaries (not per substory)
+- 💬 Clear communication, no hidden magic
 
 ### Natural Activation 🗣️
 
-- "Implement the authentication PRD"
+- "Implement" or "Implement the authentication PRD"
 - "Build the booking feature"
+- "Write tests for user.rb" (standalone)
 - 🇫🇷 "Implémenter le PRD"
 
 </details>
 
 ---
 
+### 🚀 ship
+
+**What:** Commit + Pull Request with approval gates (mode auto-detection)
+
+**Replaces:** commit, create-pr
+
 <details>
-<summary><strong>🧪 implement-tests</strong> - Write comprehensive test suites</summary>
+<summary><strong>Click to expand full details</strong></summary>
 
 <br>
 
-### Features ⭐
+### Auto-Mode Detection 🎯
 
-- 🔍 Auto-detects testing framework (RSpec, Minitest, XCTest, JUnit+MockK)
-- ✍️ Writes tests matching your project's style
-- 📋 Maps tests to PRD acceptance criteria
-- ✅ Covers happy paths, edge cases, and error scenarios
-- 🎯 Platform-specific test patterns
+**Commit Mode** - When you have uncommitted changes:
+- Analyzes changes (files, lines, scope)
+- Generates conventional commit message
+- Auto-references PRD
+- Shows preview
+- Waits for "yes" approval
+- Creates commit
+- Updates PRD with commit hash
 
-### Test Types 🧪
+**PR Mode** - When branch is clean:
+- Errors if uncommitted changes exist (tells you to commit first)
+- Analyzes branch diff vs origin/main
+- Loads PRD context
+- Generates comprehensive PR description
+- Shows preview
+- Waits for "yes" approval
+- Creates GitHub PR
+- Updates PRD with PR link
 
-Unit • Integration • E2E • Platform-specific UI tests
+### Shared Git Tools 🔧
 
-### Natural Activation 🗣️
+Uses `.claude/skills/shared/lib/git-tools.sh` for:
+- analyze_git_changes()
+- detect_scope_from_files()
+- find_related_prd()
+- get_current_branch()
+- has_uncommitted_changes()
 
-- "Write tests for the auth feature"
-- "Add tests for booking service"
-- 🇫🇷 "Écrire des tests"
+**Benefits**: Consistency between commit and PR modes, reduced code duplication.
 
-</details>
+### Commit Message Format 📄
+
+```
+<type>(<scope>): <subject>
+
+<body>
+
+Related: docs/prds/2024-10-25-auth-core.md (Phase 1)
+
+🤖 Generated with Claude Code
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+**Types**: feat, fix, refactor, docs, test, chore, perf, style
+
+**Scope**: Auto-detected from file paths (platform-aware)
+
+### PR Description Format 📄
+
+```markdown
+## Summary
+[2-3 sentence overview]
+
+## Related PRD
+docs/prds/2024-10-25-auth-core.md
+
+**Completed Substories:**
+- ✅ [Phase 1.1] OAuth provider configuration
+- ✅ [Phase 1.2] Callback handler
+
+## Changes
+
+### Added
+- OAuth2Service for authentication
+- Token encryption
+
+### Modified
+- User model for OAuth support
+
+## Testing
+
+**Test Coverage:** 78% → 94% (+16%)
+**Tests Added:** 23 tests
+**All tests passing:** ✅
 
 ---
-
-<details>
-<summary><strong>📊 track-prd-progress</strong> - Track and update PRD implementation status</summary>
-
-<br>
-
-### Features ⭐
-
-- 📈 Real-time progress dashboard
-- ⚡ Velocity calculations
-- 🚫 Blocker identification and management
-- 📅 Status reports (daily/weekly)
-- 🎯 ETA predictions
-
-### Progress Metrics 📊
-
-```
-📊 Progress Metrics:
-✅ Completed: 3 (37.5%)
-🔄 In Progress: 1 (12.5%)
-🚫 Blocked: 1 (12.5%)
-⏳ Pending: 3 (37.5%)
-
-📈 Velocity: 1.5 substories/day
-🎯 ETA: 2 days
-```
-
-### Natural Activation 🗣️
-
-- "Show PRD progress"
-- "Update the PRD status"
-- 🇫🇷 "Suivre la progression"
-
-</details>
-
----
-
-<details>
-<summary><strong>💾 commit</strong> - Generate well-formatted commit messages</summary>
-
-<br>
-
-### Workflow 🔄
-
-1. 📊 Show change summary (files, lines)
-2. 📝 Generate conventional commit message
-3. ✅ Wait for your approval
-4. 💾 Create commit only after "yes"
-
-### Platform-aware Features ⭐
-
-- 🏷️ Automatic change type detection (feat/fix/refactor/etc.)
-- 📂 Scope detection from file paths
-- 📝 Detailed commit body with context
-- 🔗 Links to PRD substories
-- 💡 Suggests splitting unrelated changes
-
-### Generated Format 📄
-
-```
-feat(auth): add OAuth2 social login support
-
-Implement OAuth2 authentication for Google, GitHub, and Apple.
-
-- Add OAuth2 provider configurations
-- Create callback handler for authentication flow
-- Store OAuth tokens securely with encryption
-
-Related: PRD-2024-10-25-auth (substory 1.3)
 
 🤖 Generated with Claude Code
 Co-Authored-By: Claude <noreply@anthropic.com>
@@ -263,86 +328,203 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 ### Natural Activation 🗣️
 
+- "Ship" (auto-detects commit or PR mode)
 - "Commit these changes"
-- "Save my work"
-- 🇫🇷 "Committer"
-
-</details>
-
----
-
-<details>
-<summary><strong>🚀 create-pr</strong> - Generate comprehensive GitHub pull requests</summary>
-
-<br>
-
-### Workflow 🔄
-
-1. ❌ Error if uncommitted changes exist (tells you to commit first)
-2. 📊 Analyze branch diff vs origin/main
-3. 📝 Generate PR title and description
-4. ✅ Wait for your approval
-5. 🚀 Create PR only after "yes"
-
-### Generated PR Includes 📄
-
-- 📝 Summary (2-3 sentences)
-- 🔗 Related PRD and completed substories
-- 📊 Changes by category (Added/Modified/Removed)
-- 📈 Test coverage metrics
-- ✅ All tests passing confirmation
-
-### Natural Activation 🗣️
-
 - "Create a pull request"
-- "Make a PR"
-- 🇫🇷 "Créer une PR"
+- 🇫🇷 "Committer", "Créer une PR"
 
 </details>
 
 ---
 
-<details>
-<summary><strong>🔍 code-review</strong> - Multi-dimensional code analysis with auto-depth detection</summary>
+## 📦 Shared Infrastructure
 
-<br>
+### Shared Libraries
 
-### Auto-Depth Detection 🎯
+Located in `.claude/skills/shared/lib/`:
 
-- **⚡ Quick** (<100 lines, ≤3 files): 2-3 min, critical issues only
-- **📊 Standard** (100-500 lines, 4-15 files): 10-15 min, comprehensive
-- **🔬 Deep** (>500 lines, >15 files): 20-30 min, full architecture
+**git-tools.sh** - Git operations (used by `ship`)
+- `analyze_git_changes()` - Parse git diff output
+- `detect_scope_from_files()` - Platform-aware scope detection
+- `find_related_prd()` - Find PRD files
+- `get_current_branch()` - Current git branch
+- `has_uncommitted_changes()` - Check git status
 
-### Review Dimensions 📋
+**context-manager.sh** - Context management (used by `plan`, `implement`)
+- `init_context()` - Create new context file
+- `read_context()` - Load context as JSON
+- `add_created_file()` - Track files
+- `set_pattern()` - Store patterns
+- `set_library()` - Store library choices
+- `add_decision()` - Store architectural decisions
+- `get_core_files()` - Extract core files for expansions
+- `mark_phase_complete()` - Update phase status
 
-- **✨ Code Quality**: Readability, maintainability, complexity
-- **🏗️ Architecture**: Design patterns, SOLID principles
-- **🔒 Security**: Auth/authz, input validation, secrets
-- **⚡ Performance**: N+1 queries, memory leaks, algorithms
-- **🧪 Testing**: Coverage, quality, edge cases
+### Platform References
 
-### Platform-specific Checks 🎯
+Located in `.claude/skills/shared/references/{platform}/`:
 
-- **💎 Rails**: Strong parameters, N+1 queries, migrations, ActiveRecord
-- **🍎 iOS Swift**: Retain cycles, optional handling, main thread UI, async/await
-- **🤖 Android Kotlin**: Context leaks, Coroutines, ViewModel, Hilt DI
+- `rails/conventions.md` - Rails best practices, patterns, testing
+- `ios-swift/conventions.md` - iOS/Swift MVVM, Combine, async/await
+- `android-kotlin/conventions.md` - Android Clean Architecture, Coroutines, Hilt
 
-### Output 📤
+**Auto-loaded** by skills based on detected platform.
 
-- 🎯 Findings by severity (🔴 Critical, 🟠 Major, 🟡 Minor)
-- 📍 File:line references with code examples
-- 💡 Fix suggestions (you apply them)
-- ✅ Positive feedback
-- 👍 Approval recommendation
-- 💬 Suggested next steps
+### Platform Detection
 
-### Natural Activation 🗣️
+Script: `.claude/skills/shared/scripts/detect_platform.sh`
 
-- "Review my code"
-- "Check my changes"
-- 🇫🇷 "Réviser le code"
+**Detection logic:**
+1. Android Kotlin: `gradle.properties` at root
+2. iOS Swift: `*.xcodeproj` folder, `Package.swift`, or `Podfile`
+3. Rails: `Gemfile` with `gem "rails"`
 
-</details>
+**Cached per session** for performance.
+
+---
+
+## 🧠 Context System
+
+### What is Context?
+
+`.claude/context/{prd-name}.json` files that store:
+- Platform detected
+- Patterns established (service objects, API structure, etc.)
+- Libraries chosen (Stripe, Devise, etc.)
+- Architectural decisions made
+- Files created during implementation
+- Testing framework detected
+- Current/completed phases
+
+### Context Structure
+
+```json
+{
+  "prd": "docs/prds/2024-10-25-invoice-core.md",
+  "platform": "rails",
+  "created_at": "2024-10-25T10:00:00Z",
+  "updated_at": "2024-10-25T14:30:00Z",
+  "patterns": {
+    "service_objects": "app/services/",
+    "api_structure": "/api/v1/",
+    "serializers": "ActiveModelSerializers"
+  },
+  "libraries": {
+    "payment": "stripe",
+    "auth": "devise + jwt"
+  },
+  "files_created": [
+    "app/models/invoice.rb",
+    "app/controllers/api/v1/invoices_controller.rb",
+    "app/services/invoice_creation_service.rb"
+  ],
+  "architectural_decisions": [
+    "Using service objects for business logic",
+    "RESTful API under /api/v1/",
+    "Stripe for payment processing"
+  ],
+  "testing_framework": "rspec",
+  "completed_phases": ["Phase 1"]
+}
+```
+
+### How Context Works
+
+1. **plan (core)**: Initializes context file
+2. **implement (core)**: Updates context with patterns/libraries/decisions
+3. **plan (expansion)**: Auto-loads core context, reads core files
+4. **implement (expansion)**: Uses core context to maintain consistency
+
+**Result**: Expansions automatically follow core patterns without manual work.
+
+---
+
+## 💡 Philosophy & Design Principles
+
+### 1. Land Then Expand
+Start minimal, expand iteratively with auto-loaded context.
+
+### 2. Auto-Context Loading
+Expansions inherit core patterns automatically via context files.
+
+### 3. Iterative Refinement
+`implement` auto-tests, auto-reviews, and auto-fixes before asking approval.
+
+### 4. User Control with Less Friction
+Approval gates at phase boundaries (not per substory). Skills suggest but never auto-invoke other skills.
+
+### 5. Platform Awareness
+All code follows platform-specific conventions loaded from reference files.
+
+### 6. Bilingual Support
+All skills support English and French activation phrases.
+
+### 7. Context as Memory
+`.claude/context/*.json` files serve as cross-session memory.
+
+### 8. Power User Focused
+Orchestrated workflows reduce cognitive load while maintaining granular control.
+
+---
+
+## 🎯 Typical Workflows
+
+### Full Feature (Core → Expansion)
+
+```bash
+# Day 1: Core foundation
+User: "plan a booking system"
+plan: Creates minimal core PRD (2-4 substories)
+      Initializes .claude/context/booking-core.json
+
+User: "implement"
+implement: Phase 1 substories (with progress after each)
+          Auto-test (23 tests, 94% coverage)
+          Auto-review (found 2 issues)
+          Auto-fix issues
+          Re-review (clean!)
+          "Phase 1 complete. Approve? [yes/no]"
+User: "yes"
+
+User: "ship"
+ship: Commit mode, generates message, waits for approval
+User: "yes"
+
+User: "ship"
+ship: PR mode, generates description, waits for approval
+User: "yes"
+ship: PR #123 created
+
+# Day 2: Expansion
+User: "plan payment details expansion"
+plan: Auto-loads booking-core.json
+      Reads booking.rb, bookings_controller.rb
+      Shows established patterns
+      Creates expansion PRD
+
+User: "implement"
+implement: Extends core using same libraries/patterns
+          Auto-test, auto-review, auto-fix
+          Approval gate
+User: "yes"
+
+User: "ship"
+User: "ship"
+# Done!
+```
+
+### Standalone Testing
+
+```bash
+User: "write tests for app/models/user.rb"
+implement: Detects standalone mode
+          Skips PRD loading
+          Detects RSpec
+          Writes comprehensive tests
+          Runs tests
+          Reports: "15/15 tests passing, 96% coverage"
+          Done (no PRD updates)
+```
 
 ---
 
@@ -350,6 +532,8 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 💡 **Tip**: All skills support both English and French activation phrases!
 
-🔗 Back to [Main README](../../README.md)
+🔗 Back to [Main README](../../README.md) | [CLAUDE.md](../../CLAUDE.md)
+
+**Built for Claude Sonnet 4.5** 🧠
 
 </div>

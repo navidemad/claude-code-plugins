@@ -1,7 +1,7 @@
 {
   "name": "yespark-team-marketplace",
   "metadata": {
-    "description": "Powerful AI assistants for Rails, iOS Swift, and Android Kotlin. 7 focused skills that help you work faster while you stay in control. Tools, not automation. Bilingual English/French.",
+    "description": "Powerful AI workflow orchestrator for Rails, iOS Swift, and Android Kotlin. 3 intelligent skills that supercharge development while you stay in control. Tools, not automation. Bilingual English/French.",
     "version": "1.0.0",
     "pluginRoot": ".claude"
   },
@@ -14,7 +14,7 @@
       "name": "workflow-skills",
       "source": "skills",
       "strict": false,
-      "description": "7 developer-controlled skills: generate-prd (adaptive modes), implement-code (guided workflow), implement-tests, track-prd-progress, commit (message generator), create-pr (description generator), code-review (branch diff analysis). No auto-invocations - you orchestrate the workflow.",
+      "description": "3 orchestrated workflow skills: plan (core/expansion PRDs with auto-context), implement (code + auto-test + auto-review + progress), ship (commit + PR with approval gates). Context-aware, pattern-driven, power-user focused.",
       "author": {
         "name": "Navid Emad"
       },

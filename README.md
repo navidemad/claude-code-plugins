@@ -2,39 +2,46 @@
 ![Claude Code Skill](https://img.shields.io/badge/Claude_Code-Skill-8A2BE2)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 [![Changelog](https://img.shields.io/badge/changelogs-view-blue.svg)](CHANGELOG.md)
-![Status: Beta](https://img.shields.io/badge/Status-Beta-orange)
+![Status: Production](https://img.shields.io/badge/Status-Production-green)
 
-**Supercharge your development workflow with AI-powered skills tailored for :**
+**Orchestrated AI workflows for Rails, iOS Swift, and Android Kotlin development.**
 
-[![Ruby on Rails](https://img.shields.io/badge/Ruby%20on%20Rails-CC0000?logo=rubyonrails&logoColor=white)](.claude/skills/README.md)
-[![iOS Swift](https://img.shields.io/badge/iOS%20Swift-F05138?logo=swift&logoColor=white)](.claude/skills/README.md)
-[![Android Kotlin](https://img.shields.io/badge/Android%20Kotlin-7F52FF?logo=kotlin&logoColor=white)](.claude/skills/README.md)
+[![Ruby on Rails](https://img.shields.io/badge/Ruby%20on%20Rails-CC0000?logo=rubyonrails&logoColor=white)](CLAUDE.md)
+[![iOS Swift](https://img.shields.io/badge/iOS%20Swift-F05138?logo=swift&logoColor=white)](CLAUDE.md)
+[![Android Kotlin](https://img.shields.io/badge/Android%20Kotlin-7F52FF?logo=kotlin&logoColor=white)](CLAUDE.md)
 
 Just talk naturally! No slash commands needed. 🗣️✨
 
-| | Skill | Purpose |
-|-|-------|---------|
-| 📋 | **generate-prd** | Create adaptive PRDs with codebase exploration |
-| 💻 | **implement-code** | Write code substory-by-substory from PRDs |
-| 🧪 | **implement-tests** | Write comprehensive test suites |
-| 📊 | **track-prd-progress** | Track and update PRD implementation status |
-| 💾 | **commit** | Generate well-formatted commit messages |
-| 🚀 | **create-pr** | Generate comprehensive PR descriptions |
-| 🔍 | **code-review** | Multi-dimensional code quality analysis |
+---
 
-📖 For detailed information about individual skills, see [.claude/skills/README.md](.claude/skills/README.md)
+## ✨ Orchestrated Skills
+
+| Skill | Replaces | What Changed |
+|-------|----------|--------------|
+| **📋 plan** | generate-prd + track-prd-progress | ➕ Auto-loads core context for expansions |
+| **💻 implement** | implement-code + implement-tests + track-prd-progress + code-review | ➕ Auto-test + Auto-review + Auto-fix + Progress tracking |
+| **🚀 ship** | commit + create-pr | ➕ Single skill for commit AND PR |
+
+### Key Improvements
+
+🔄 **Auto-context**: Expansions inherit core patterns automatically
+🧪 **Auto-test**: Tests run after each phase
+🔍 **Auto-review**: Code review + fixes before approval
+📊 **Progress**: See completion after each substory
+💾 **Memory**: `.claude/context/*.json` files remember decisions across sessions
+⚡ **Efficiency**: 3 skills instead of 7, fewer approval interruptions
 
 ---
 
-## 📦 Installation
+## 📦 Quick Start
 
-### 1️⃣ Install Claude Code or use Cursor Claude extension:
+### 1. Install Claude Code
 
-```sh
+```bash
 bun -g install @anthropic-ai/claude-agent-sdk
 ```
 
-### 2️⃣ Add to your project's `.claude/settings.json` ⚙️:
+### 2. Add to `.claude/settings.json`
 
 ```json
 {
@@ -52,176 +59,138 @@ bun -g install @anthropic-ai/claude-agent-sdk
 }
 ```
 
-### 3️⃣ Navigate to your project directory and run `claude` 🎯
+### 3. Run `claude` in your project
 
-### 4️⃣ Usage 🎉
+---
 
-```
-You:    "Create a PRD for user authentication"
-Claude: [Asks questions, generates PRD]
-
-You:    "Implement the PRD"
-Claude: [Writes code substory by substory]
-
-You:    "Review my code"
-Claude: [Performs quality analysis]
-
-You:    "Commit these changes"
-Claude: [Generates commit message, waits for approval]
-
-You:    "Create a PR"
-Claude: [Generates PR description, waits for approval]
-```
-
-## 🔄 Workflow Example
-
-```mermaid
-sequenceDiagram
-    participant Dev as 👨‍💻 Developer
-    participant Claude as 🤖 Claude
-    participant PRD as 📄 PRD
-    participant Code as 💻 Codebase
-    participant Git as 📦 Git
-
-    Note over Dev,Claude: Planning Phase
-    Dev->>Claude: "Create a PRD for user auth"
-    Claude->>Code: Explore existing patterns
-    Claude->>PRD: Generate PRD with substories
-    Claude->>Dev: ✅ PRD created. Next: "implement PRD"
-
-    Note over Dev,Claude: Implementation Phase
-    Dev->>Claude: "Implement PRD"
-    Claude->>Code: Analyze architecture
-    Claude->>Code: Write substory 1.1 code
-    Claude->>PRD: Update progress
-    Claude->>Dev: 💡 Suggest: review/test/commit/continue
-
-    Dev->>Claude: "Write tests"
-    Claude->>Code: Generate comprehensive tests
-    Claude->>Dev: 💡 Next: "commit these changes"
-
-    Note over Dev,Claude: Quality Assurance Phase
-    Dev->>Claude: "Review my code"
-    Claude->>Code: Analyze branch diff vs origin/main
-    Claude->>Dev: 🔍 Review report (0 critical, 1 major, 3 minor)
-    Claude->>Dev: 💡 Suggest: "help fix X" or "commit"
-
-    Dev->>Claude: "Help fix the index issue"
-    Claude->>Dev: Show fix suggestions
-    Dev->>Code: Apply fixes manually
-
-    Note over Dev,Claude: Version Control Phase
-    Dev->>Claude: "Commit these changes"
-    Claude->>Code: Analyze changes
-    Claude->>Dev: 📝 Generated commit message. Approve? [yes/no]
-    Dev->>Claude: "Yes"
-    Claude->>Git: Create commit
-    Claude->>Dev: ✅ Committed. Next: "create a PR"
-
-    Dev->>Claude: "Create a PR"
-    Claude->>Git: Analyze branch diff
-    Claude->>Dev: 📝 Generated PR description. Create? [yes/no]
-    Dev->>Claude: "Yes"
-    Claude->>Git: Create pull request
-    Claude->>Dev: ✅ PR #123 created
-```
-
-## 📝 Complete Workflow Example
-
-<details>
-<summary>💬 Click to see a full conversation showing all 7 skills in action</summary>
-
-<br>
+## 🎯 Usage
 
 ```
-You: "I want to build a parking reservation feature"
+You:    "plan a booking system"
+Claude: Creates minimal core PRD (2-4 substories)
+        Initializes .claude/context/booking-core.json
 
-Claude: [generate-prd activates]
-        🔍 Exploring codebase...
-        Found: Existing booking patterns in app/services/booking/
-        ✨ Detected: FULL mode PRD
+You:    "implement"
+Claude: Phase 1:
+        ├─ Substory 1.1 → ✅ (show progress)
+        ├─ Substory 1.2 → ✅ (show progress)
+        ├─ Substory 1.3 → ✅ (show progress)
+        └─ Substory 1.4 → ✅ (show progress)
 
-        [Asks 15 questions]
+        Auto-test (23 tests, 94% coverage) ✅
+        Auto-review (found 2 issues) 🔍
+        Auto-fix issues 🔧
+        Re-review (clean!) ✅
 
-        ✅ Created PRD at docs/prds/2024-10-25-parking-reservation.md
+        "Phase 1 complete. Approve? [yes/no]"
 
-        💡 Next: "implement PRD" to start coding
+You:    "yes"
 
-You: "Implement PRD"
+You:    "ship"
+Claude: Generated commit message
+        "Approve? [yes/no]"
 
-Claude: [implement-code activates]
-        🔍 Analyzing Rails architecture...
-        📋 Implementing substory 1.1: Reservation model...
+You:    "yes"
 
-        ✅ Substory 1.1 complete!
+You:    "ship" (again)
+Claude: Generated PR description
+        "Create PR? [yes/no]"
 
-        💡 Next steps:
-        - "review my code" - Check quality
-        - "write tests" - Add test coverage
-        - "commit these changes" - Save progress
-        - "continue to 1.2" - Next substory
+You:    "yes"
+Claude: PR #123 created ✅
 
-        What would you like?
+# Next day - Expansion
+You:    "plan payment details expansion"
+Claude: Auto-loads booking-core context ✅
+        Reads booking.rb, bookings_controller.rb ✅
+        Creates expansion PRD following core patterns ✅
 
-You: "Write tests"
-
-Claude: [implement-tests activates]
-        🔍 Detected: RSpec + FactoryBot
-        ✅ Writing tests...
-
-        📊 Coverage: 78% → 94% (+16%)
-        All tests passing ✅
-
-        💡 Next: "commit these changes"
-
-You: "Review my code first"
-
-Claude: [code-review activates]
-        📊 Standard Review (247 lines, 8 files)
-
-        ✅ Review complete!
-        - 🔴 0 critical
-        - 🟠 1 major (missing index)
-        - 🟡 3 minor
-
-        💡 Next: "help fix X" or "commit"
-
-You: "Help fix the index issue"
-
-Claude: [Shows fix, you apply it]
-
-You: "Commit these changes"
-
-Claude: [commit activates]
-        📊 8 files, 247 lines
-
-        📝 Generated:
-        feat(booking): add reservation model with tests
-        [Shows message]
-
-        Proceed? [yes/no]
-
-You: "Yes"
-
-Claude: ✅ Committed: a1b2c3d
-
-        💡 Next: "create a PR" or "continue to 1.2"
-
-You: "Create a PR"
-
-Claude: [create-pr activates]
-        📝 Generated PR:
-        Title: feat(booking): add reservation model
-        [Shows description]
-
-        Create? [yes/no]
-
-You: "Yes"
-
-Claude: ✅ PR #123 created!
-        🔗 https://github.com/yespark/app/pull/123
+You:    "implement"
+Claude: Extends core using same libraries/patterns ✅
+        Auto-test + Auto-review + Auto-fix ✅
+        Asks approval ✅
 ```
 
-**Notice:** You control every step. Skills suggest, you decide. 🎮
+---
 
-</details>
+## 🎨 The Three Skills
+
+### 📋 plan
+
+**What:** Create PRDs with auto-context loading
+
+**Modes:**
+- **Core**: Minimal foundation (2-4 substories max)
+- **Expansion**: Auto-loads core patterns/files/libraries
+
+**Activates when:** "plan", "create PRD", "plan feature"
+
+**Creates:**
+- `docs/prds/YYYY-MM-DD-feature-core.md`
+- `.claude/context/YYYY-MM-DD-feature-core.json`
+
+---
+
+### 💻 implement
+
+**What:** Code + Tests + Review + Progress (all-in-one)
+
+**Flow:**
+1. Implement substories one-by-one
+2. Show progress after each
+3. After phase: Auto-test → Auto-review → Auto-fix
+4. Ask approval at phase boundary
+5. Continue or stop
+
+**Also works standalone:** "write tests for user.rb"
+
+**Activates when:** "implement", "build this", "write tests"
+
+**Updates:**
+- PRD status automatically
+- Context file with patterns/decisions
+
+---
+
+### 🚀 ship
+
+**What:** Commit + PR with approval gates
+
+**Auto-detects mode:**
+- Commit mode: Generate conventional commit
+- PR mode: Generate comprehensive description
+
+**Activates when:** "ship", "commit", "create PR"
+
+**Waits for approval** before executing git commands
+
+---
+
+## 💡 Philosophy
+
+### Land Then Expand
+
+1. **Core PRD** → Minimal foundation (just essential fields)
+2. **Implement Core** → Establish patterns
+3. **Expansion PRDs** → Add features one at a time
+4. **Auto-load Context** → Expansions inherit core automatically
+
+**Why?** Large upfront PRDs lead to incorrect assumptions. Starting small and expanding works better with modern LLMs.
+
+### Context as Memory
+
+`.claude/context/{prd-name}.json` tracks:
+- Platform (Rails/iOS/Android)
+- Patterns established (service objects, API structure, etc.)
+- Libraries chosen (Stripe, Devise, etc.)
+- Architectural decisions
+- Files created
+
+**Expansions auto-load this context** to maintain consistency.
+
+---
+
+## 📚 Documentation
+
+- **[.claude/skills/](./claude/skills/)** - Individual skill implementations
+- **[CHANGELOG.md](CHANGELOG.md)** - Version history
