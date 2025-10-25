@@ -8,9 +8,9 @@
 [![iOS Swift](https://img.shields.io/badge/iOS%20Swift-F05138?logo=swift&logoColor=white)](CLAUDE.md)
 [![Android Kotlin](https://img.shields.io/badge/Android%20Kotlin-7F52FF?logo=kotlin&logoColor=white)](CLAUDE.md)
 
-**Orchestrated AI skills for faster development**
 > 🗣️ **Just talk naturally! No slash commands needed** ✨
 
+**Orchestrated AI skills for faster development**
 - **plan**: Auto-loads core context for expansions |
 - **implement**: Auto-test + Auto-review + Auto-fix + Progress tracking |
 - **ship**: Single skill for commit AND PR |
