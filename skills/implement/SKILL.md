@@ -104,7 +104,7 @@ Established patterns:
 - Service objects in app/services/ for business logic
 - RESTful API structure under /api/v1/
 - ActiveModel serializers for JSON responses
-- RSpec tests with FactoryBot
+- Minitest tests with FactoryBot
 
 Libraries in use:
 - Payment: Stripe
@@ -320,7 +320,7 @@ update_context "$prd_file" "testing_framework" "$framework"
 **Run tests:**
 ```bash
 # Rails
-bundle exec rspec
+bundle exec rails test
 
 # iOS
 xcodebuild test -scheme YourApp

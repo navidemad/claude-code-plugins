@@ -129,7 +129,7 @@ done
 - Existing pattern: Service objects for business logic
 - Database: PostgreSQL with ActiveRecord
 - API: RESTful endpoints under /api/v1/
-- Testing: RSpec with FactoryBot
+- Testing: Minitest with FactoryBot
 - Authentication: Devise + JWT
 
 [For Expansion - AUTO-LOADED:]

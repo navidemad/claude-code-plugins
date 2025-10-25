@@ -1,6 +1,6 @@
 # 📚 Skills Documentation
 
-**3 orchestrated workflows for Rails, iOS Swift, and Android Kotlin development.**
+**3 orchestrated workflows for project-agnostic development.**
 
 ---
 
@@ -37,40 +37,40 @@ Expansion 2: Add line items (auto-loads invoice + customer context)
 
 ---
 
-## 🎯 Platform Support
+## 🎯 Project-Agnostic Design
 
-**Automatically detects and adapts to your platform:**
+**Works with ANY tech stack by reading your project's conventions:**
 
-### Supported Platforms
+### How It Works
 
-| Platform | Technologies | What We Support |
-|----------|-------------|-----------------|
-| 💎 **Ruby on Rails** | Backend | Models, controllers, services, migrations, ActiveRecord patterns, RSpec/Minitest |
-| 🍎 **iOS/Swift** | Mobile | MVVM architecture, SwiftUI/UIKit, ViewModels, Combine, async/await |
-| 🤖 **Android/Kotlin** | Mobile | Clean Architecture, MVVM, Coroutines, Hilt DI, Jetpack Compose |
+All skills read project conventions from **`CLAUDE.md`** in your project root. This makes the plugin:
+- ✅ **Truly reusable** across any project type
+- ✅ **Not coupled** to specific platforms
+- ✅ **User-configurable** via your CLAUDE.md
+- ✅ **Adaptable** to your team's standards
 
-### 🔍 Detection Method
+### What Should Be in CLAUDE.md
 
-Skills automatically detect your platform by analyzing project files with multiple validation checks:
+Your project's `CLAUDE.md` should document:
 
-**Detection Priority:**
+- **Tech stack and frameworks** (Rails, Next.js, Go, Python, Swift, Kotlin, etc.)
+- **Coding patterns and architecture** (MVC, MVVM, Clean Architecture, etc.)
+- **Testing approach and framework** (RSpec, Jest, pytest, XCTest, JUnit, etc.)
+- **Project-specific conventions** (naming, file structure, etc.)
+- **Libraries and dependencies** (Stripe, Redux, Room, etc.)
 
-1. **Android Kotlin** 🤖
-   - Primary: `gradle.properties` + `app/` directory or `build.gradle.kts`
-   - Fallback: `build.gradle` with `com.android.application` plugin
-   - Validates actual Android structure to avoid false positives
+### Example Tech Stacks
 
-2. **iOS Swift** 🍎
-   - Primary: `Podfile` + `.xcodeproj` or `.xcworkspace` at root
-   - Fallback: `Package.swift` + `.xcodeproj` (Swift Package Manager)
-   - Checks for CocoaPods or SPM workspace structure
+These skills work with any stack, including:
+- 💎 Ruby on Rails, Sinatra
+- ⚛️ React, Next.js, Vue, Angular
+- 🐍 Python/Django, FastAPI, Flask
+- 🔷 Go, Rust, Elixir
+- 🍎 iOS/Swift (UIKit, SwiftUI)
+- 🤖 Android/Kotlin (Jetpack Compose)
+- 📱 React Native, Flutter
 
-3. **Rails** 💎
-   - Primary: `Gemfile` + `config.ru` + `Rakefile` + `config/` and `app/` directories
-   - Fallback: `Gemfile` with `gem "rails"` content
-   - Distinguishes Rails from Fastlane `Gemfile` in mobile projects
-
-Once detected, skills automatically load platform-specific conventions and best practices from `shared/references/{platform}/conventions.md`, ensuring code generation follows your platform's standards. ✨
+**The plugin adapts to YOUR project by reading CLAUDE.md.** ✨
 
 ---
 
@@ -106,7 +106,6 @@ Once detected, skills automatically load platform-specific conventions and best 
 ```json
 {
   "prd": "docs/prds/2024-10-25-invoice-core.md",
-  "platform": "rails",
   "patterns": {},
   "libraries": {},
   "files_created": [],
@@ -141,7 +140,7 @@ Once detected, skills automatically load platform-specific conventions and best 
 - ✅ Identifies testing frameworks and conventions
 - ✅ Ensures PRD follows project patterns
 
-**Platform-aware** 🎯 - automatically tailors PRD structure for Rails backend, iOS mobile, or Android mobile development.
+**Project-aware** 🎯 - automatically tailors PRD structure based on your CLAUDE.md conventions.
 
 ### Natural Activation 🗣️
 
@@ -173,14 +172,14 @@ Once detected, skills automatically load platform-specific conventions and best 
    - Updates context with patterns/decisions
 
 2. **🧪 Auto-test** (after phase completes)
-   - Detects framework (Minitest prioritized for Rails, XCTest for iOS, JUnit for Android)
+   - Detects framework from CLAUDE.md or existing tests
    - Writes comprehensive tests
    - Runs tests
    - Reports coverage
 
 3. **🔍 Auto-review** (after tests pass)
    - Multi-dimensional analysis (quality, security, performance)
-   - Platform-specific checks
+   - Project-specific checks based on CLAUDE.md
    - Categorizes findings (🔴 Critical, 🟠 Major, 🟡 Minor)
 
 4. **🔧 Auto-fix** (if issues found)
@@ -218,9 +217,9 @@ Once detected, skills automatically load platform-specific conventions and best 
 ### Features ⭐
 
 - 🔍 Architecture analysis before coding
-- 🎯 Follows existing project patterns
+- 🎯 Follows existing project patterns from CLAUDE.md
 - 📂 **For expansions**: Auto-loads and extends core files
-- 🛠️ Platform-specific best practices
+- 🛠️ Project-specific best practices from CLAUDE.md
 - 📦 Incremental implementation (one substory at a time)
 - 🧪 **Auto-tests** after each phase
 - 🔍 **Auto-reviews** code quality, security, performance
@@ -297,7 +296,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 **Types**: feat, fix, refactor, docs, test, chore, perf, style
 
-**Scope**: Auto-detected from file paths (platform-aware)
+**Scope**: Auto-detected from file paths
 
 ### PR Description Format 📄
 
@@ -352,7 +351,7 @@ Located in `skills/shared/scripts/`:
 
 **git-tools.sh** - Git operations (used by `ship`)
 - `analyze_git_changes()` - Parse git diff output
-- `detect_scope_from_files()` - Platform-aware scope detection
+- `detect_scope_from_files()` - Scope detection from file paths
 - `find_related_prd()` - Find PRD files
 - `get_current_branch()` - Current git branch
 - `has_uncommitted_changes()` - Check git status
@@ -430,7 +429,7 @@ Skills read project conventions from `CLAUDE.md` in the project root directory.
     "RESTful API under /api/v1/",
     "Stripe for payment processing"
   ],
-  "testing_framework": "rspec",
+  "testing_framework": "minitest",
   "completed_phases": ["Phase 1"]
 }
 ```
@@ -460,8 +459,8 @@ Expansions inherit core patterns automatically via context files.
 ### 4. User Control with Less Friction
 Approval gates at phase boundaries (not per substory). Skills suggest but never auto-invoke other skills.
 
-### 5. Platform Awareness
-All code follows platform-specific conventions loaded from reference files.
+### 5. Project Awareness
+All code follows project-specific conventions loaded from CLAUDE.md.
 
 ### 6. Bilingual Support
 All skills support English and French activation phrases.
@@ -526,7 +525,7 @@ User: "ship"
 User: "write tests for app/models/user.rb"
 implement: Detects standalone mode
           Skips PRD loading
-          Detects RSpec
+          Detects Minitest
           Writes comprehensive tests
           Runs tests
           Reports: "15/15 tests passing, 96% coverage"

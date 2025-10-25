@@ -1,8 +1,5 @@
 # 🚀 Yespark Claude Plugins
 ![Claude Code Skills](https://img.shields.io/badge/Claude_Code-Skills-D87757)
-[![Ruby on Rails](https://img.shields.io/badge/Ruby%20on%20Rails-CC0000?logo=rubyonrails&logoColor=white)](CLAUDE.md)
-[![iOS Swift](https://img.shields.io/badge/iOS%20Swift-F05138?logo=swift&logoColor=white)](CLAUDE.md)
-[![Android Kotlin](https://img.shields.io/badge/Android%20Kotlin-7F52FF?logo=kotlin&logoColor=white)](CLAUDE.md)
 
 > 🗣️ **Just talk naturally! No slash commands needed** ✨
 
@@ -34,16 +31,18 @@ yum install jq
 ```json
 {
   "extraKnownMarketplaces": {
-    "yespark-team-marketplace": {
+    "yespark-agent-skills": {
       "source": {
         "source": "github",
         "repo": "yespark/yespark-claude-plugins"
       }
     }
   },
-  "enabledPlugins": [
-    "yespark-team-marketplace:workflow-skills"
-  ]
+  "enabledPlugins": {
+    "yespark-agent-skills:plan": true,
+    "yespark-agent-skills:implement": true,
+    "yespark-agent-skills:ship": true
+  }
 }
 ```
 
