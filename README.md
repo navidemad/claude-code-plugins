@@ -1,20 +1,18 @@
 # 🚀 Yespark Claude Plugins
-![Claude Code Skills](https://img.shields.io/badge/Claude_Code-Skills-D87757)
-
-> 🗣️ **Just talk naturally! No slash commands needed** ✨
 
 **Orchestrated AI skills for faster development**
-- `plan`      ➡️ Generate PRD and auto-loads core context for expansions |
-- `implement` ➡️ Auto-code + Auto-test + Auto-review + Auto-fix + Progress tracking |
-- `ship`      ➡️ Single skill for commit and creating pull requests |
+- `plan`      ➡️ Generate PRD and auto-loads core context for expansions
+- `implement` ➡️ Auto-code + Auto-test + Auto-review + Auto-fix + Progress tracking
+- `ship`      ➡️ Single skill for commit and creating pull requests
 
 [![Documentation](https://img.shields.io/badge/Documentation-view-blue.svg)](skills/README.md)
 
+> 🗣️ **Just talk naturally! No slash commands needed** ✨
+
 ## 📦 Installation
 
-### Prerequisites
+### Prerequisite jq dependency for context management:
 
-**Required dependency:**
 ```bash
 # macOS
 brew install jq
