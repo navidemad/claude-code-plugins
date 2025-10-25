@@ -20,8 +20,10 @@
 
 📖 **[Full Skills Documentation →](.claude/skills/README.md)**
 
+## 📦 Installation
+
 <details>
-<summary><h2>📦 Installation</h2></summary>
+<summary>Voir le détails</summary>
 
 ### 1. Install Claude Code
 
@@ -50,8 +52,10 @@ bun -g install @anthropic-ai/claude-agent-sdk
 ### 3. Run `claude` in your project
 </details>
 
+## 🎯 Usage Example
+
 <details>
-<summary>## 🎯 Usage Example</summary>
+<summary>Voir le détails</summary>
 
 ```
  ▐▛███▜▌   Claude Code
