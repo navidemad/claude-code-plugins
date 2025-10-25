@@ -52,7 +52,7 @@ This skill activates when user:
 ```bash
 # Read the PRD file
 # Source context manager
-source .claude/skills/shared/lib/context-manager.sh
+source .claude/skills/shared/scripts/context-manager.sh
 
 # Detect platform (cached for session)
 platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)

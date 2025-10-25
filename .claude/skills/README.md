@@ -260,7 +260,7 @@ Once detected, skills automatically load platform-specific conventions and best 
 
 ### Shared Git Tools 🔧
 
-Uses `.claude/skills/shared/lib/git-tools.sh` for:
+Uses `.claude/skills/shared/scripts/git-tools.sh` for:
 - analyze_git_changes()
 - detect_scope_from_files()
 - find_related_prd()
@@ -335,7 +335,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 ### Shared Libraries
 
-Located in `.claude/skills/shared/lib/`:
+Located in `.claude/skills/shared/scripts/`:
 
 **git-tools.sh** - Git operations (used by `ship`)
 - `analyze_git_changes()` - Parse git diff output

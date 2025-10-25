@@ -36,7 +36,7 @@ The skill automatically detects what you want to do:
 
 ```bash
 # Source shared git tools
-source .claude/skills/shared/lib/git-tools.sh
+source .claude/skills/shared/scripts/git-tools.sh
 
 # Analyze changes
 changes=$(analyze_git_changes "HEAD")
@@ -98,7 +98,7 @@ Analyze changes to identify type:
 
 ```bash
 # Source context manager
-source .claude/skills/shared/lib/context-manager.sh
+source .claude/skills/shared/scripts/context-manager.sh
 
 # Find related PRD
 related_prd=$(find_related_prd "$changed_files")
@@ -226,7 +226,7 @@ What would you like to do?
 **FIRST: Check for uncommitted changes:**
 
 ```bash
-source .claude/skills/shared/lib/git-tools.sh
+source .claude/skills/shared/scripts/git-tools.sh
 
 if has_uncommitted_changes; then
     # ERROR - stop
@@ -257,7 +257,7 @@ Alternatively:
 
 ```bash
 # Source shared tools
-source .claude/skills/shared/lib/git-tools.sh
+source .claude/skills/shared/scripts/git-tools.sh
 
 # Detect platform
 platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
@@ -615,4 +615,4 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 ## Shared Code
 
-This skill uses `.claude/skills/shared/lib/git-tools.sh` for common git operations, ensuring consistency and reducing code duplication.
+This skill uses `.claude/skills/shared/scripts/git-tools.sh` for common git operations, ensuring consistency and reducing code duplication.

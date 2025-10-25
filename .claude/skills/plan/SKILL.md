@@ -105,7 +105,7 @@ Explore to understand project patterns and conventions.
 **For Expansion PRDs (CRITICAL - AUTO-LOAD):**
 ```bash
 # Source context manager
-source .claude/skills/shared/lib/context-manager.sh
+source .claude/skills/shared/scripts/context-manager.sh
 
 # Load core PRD context
 core_context=$(read_context "$core_prd_file")
@@ -393,7 +393,7 @@ This expansion inherits context from core and adds expansion-specific context to
 
 ```bash
 # Source context manager
-source .claude/skills/shared/lib/context-manager.sh
+source .claude/skills/shared/scripts/context-manager.sh
 
 # Initialize context file
 platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
