@@ -5,45 +5,6 @@ Use it in your terminal, IDE. **Learn more in the [official documentation](https
 
 This repository includes several Claude Code skills that extend its functionalityies. It has been tailored for for Rails, iOS Swift, and Android Kotlin development.
 
-### Skills Overview
-
-```mermaid
-graph TB
-    subgraph "Planning Phase"
-        A[generate-prd]
-        A -->|Creates| PRD[📄 PRD Document]
-    end
-
-    subgraph "Implementation Phase"
-        PRD -->|Input for| B[implement-code]
-        B -->|Generates| CODE[💻 Code]
-        CODE -->|Input for| C[implement-tests]
-        C -->|Generates| TESTS[✅ Tests]
-        PRD -->|Tracks| D[track-prd-progress]
-    end
-
-    subgraph "Quality Assurance Phase"
-        CODE -->|Reviews| E[code-review]
-        E -->|Suggests fixes| DEV[👨‍💻 Developer]
-        DEV -->|Applies fixes| CODE
-    end
-
-    subgraph "Version Control Phase"
-        CODE -->|Commits| F[commit]
-        F -->|Creates| COMMIT[📦 Git Commit]
-        COMMIT -->|Submits| G[create-pr]
-        G -->|Creates| PR[🚀 Pull Request]
-    end
-
-    style A fill:#e1f5ff
-    style B fill:#fff3e0
-    style C fill:#fff3e0
-    style D fill:#f3e5f5
-    style E fill:#e8f5e9
-    style F fill:#fce4ec
-    style G fill:#fce4ec
-```
-
 | Skill | Purpose |
 |-------|---------|
 | **generate-prd** | Create adaptive PRDs with codebase exploration |
@@ -58,7 +19,7 @@ For detailed information about individual skills, see [.claude/skills/README.md]
 
 ---
 
-## Get started
+## Installation
 
 ### Étape 1. Install Claude Code:
 
@@ -259,7 +220,5 @@ Claude: ✅ PR #123 created!
 **Notice:** You control every step. Skills suggest, you decide.
 
 </details>
-
----
 
 **Version:** 5.0.0 | [View Changelog](CHANGELOG.md)
