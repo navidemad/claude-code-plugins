@@ -1,0 +1,14 @@
+{
+  "$schema": "https://storage.googleapis.com/claude-cli/settings-schema-v0.json",
+  "extraKnownMarketplaces": {
+    "yespark-team-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "yespark/yespark-claude-plugins"
+      }
+    }
+  },
+  "enabledPlugins": [
+    "yespark-team-marketplace:product-workflow-skills"
+  ]
+}

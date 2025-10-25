@@ -1,0 +1,19 @@
+{
+  "name": "yespark-team-marketplace",
+  "metadata": {
+    "description": "Platform-aware product development workflow skills for Rails, iOS Swift, and Android Kotlin: PRD generation, implementation tracking, smart commits, PR creation, and code review.",
+    "version": "3.1.0",
+    "pluginRoot": ".claude"
+  },
+  "owner": {
+    "name": "Yespark Development Team",
+    "contact": "dev@yespark.com"
+  },
+  "plugins": [
+    {
+      "name": "product-workflow-skills",
+      "source": "skills",
+      "description": "AI-powered skills for complete product development workflow: generate-prd, implement-prd, commit, create-pr, and code-review"
+    }
+  ]
+}
