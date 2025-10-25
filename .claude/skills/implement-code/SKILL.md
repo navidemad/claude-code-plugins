@@ -1,23 +1,30 @@
 ---
 name: implement-code
-description: Implement PRD substories with smart code generation. Activates when user says implement PRD, build feature, code this PRD, start implementation, or references PRD file. French: implémenter PRD, coder cette fonctionnalité, développer le PRD.
+description: Implement core or expansion PRD substories with pattern-aware code generation using "land then expand" approach. Activates when user says implement PRD, build feature, code this PRD, start implementation, or references PRD file. French: implémenter PRD, coder cette fonctionnalité, développer le PRD.
 ---
 
 # Implement Code from PRD
 
-Write production-quality code for PRD substories with smart guidance. This skill is a **coding assistant** - it helps you implement features systematically, you stay in control.
+Write production-quality code for PRD substories using the **"land then expand"** approach: establish patterns in core, extend them in expansions.
+
+## Land Then Expand Philosophy
+
+- **Core PRDs**: Establish foundational patterns with minimal code
+- **Expansion PRDs**: Build on established patterns from completed core
+
+**Key**: Expansions load completed core implementation files as context to maintain consistency.
 
 ## When to Activate
 
 This skill activates when user:
 - Says "implement PRD", "build this PRD", "start implementation"
 - Says "code this feature", "develop this", "build this"
-- References a PRD file path (e.g., "implement docs/prds/2024-10-25-auth.md")
+- References a PRD file path (e.g., "implement docs/prds/2024-10-25-invoice-core.md")
 - French: "implémenter le PRD", "coder cette fonctionnalité", "développer le PRD"
 
 ## Implementation Workflow
 
-### Step 1: Load PRD and Detect Platform
+### Step 1: Load PRD, Detect Type, and Load Platform
 
 **Execute in parallel:**
 ```bash
@@ -29,13 +36,42 @@ platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
 **If no PRD specified:**
 - Check `docs/prds/` for PRD files
 - If multiple exist, ask user which PRD to implement
-- List PRDs with their completion status
+- List PRDs with their type (Core/Expansion) and completion status
 
-**Then load platform reference:**
-- Read `.claude/skills/shared/references/${platform}/conventions.md`
-- **Rails**: Models, controllers, services, ActiveRecord, RSpec/Minitest
-- **iOS Swift**: MVVM, SwiftUI/UIKit, ViewModels, Combine, async/await
-- **Android Kotlin**: Clean Architecture, MVVM, Coroutines, Hilt DI, Repository pattern
+**Determine PRD Type:**
+Check PRD frontmatter for `**Type:** Core Feature` or `**Type:** Expansion`
+
+**For Core PRDs:**
+- Load platform reference: `.claude/skills/shared/references/${platform}/conventions.md`
+- Goal: Establish clean patterns that expansions will follow
+
+**For Expansion PRDs (CRITICAL):**
+- Load platform reference
+- **Find the core PRD** referenced in "Builds On" field
+- **Identify core implementation files** from core PRD's "Implementation Status" section
+- **Read all core implementation files** to understand established patterns
+- Example core files to load:
+  - Rails: `app/models/invoice.rb`, `app/controllers/invoices_controller.rb`
+  - iOS: `InvoiceViewModel.swift`, `InvoiceView.swift`
+  - Android: `InvoiceViewModel.kt`, `InvoiceRepository.kt`
+- Document patterns found:
+```
+🔍 Core Implementation Analysis:
+From: docs/prds/2024-10-25-invoice-core.md
+
+Core files:
+- app/models/invoice.rb
+- app/controllers/api/v1/invoices_controller.rb
+- app/serializers/invoice_serializer.rb
+
+Established patterns:
+- Service objects in app/services/ for business logic
+- RESTful API structure under /api/v1/
+- ActiveModel serializers for JSON responses
+- RSpec tests with FactoryBot
+
+Will extend these patterns for [expansion name].
+```
 
 ### Step 2: Analyze Existing Architecture
 
@@ -102,6 +138,15 @@ Update PRD:
 
 #### Write Code
 
+**For Core PRDs:**
+Establish clean, simple patterns that will be extended later.
+
+**For Expansion PRDs (CRITICAL):**
+- Reference loaded core implementation files
+- Follow established patterns exactly
+- Extend, don't replace core code
+- Maintain consistency in naming, structure, and approach
+
 Follow detected platform conventions and analyzed patterns:
 
 **Rails:**
@@ -110,6 +155,7 @@ Follow detected platform conventions and analyzed patterns:
 - Extract business logic to service objects
 - Create database migrations (reversible)
 - Add background jobs if needed
+- **For expansions**: Extend core models/controllers, add new columns via migrations
 
 **iOS Swift:**
 - Implement ViewModels with published properties
@@ -117,6 +163,7 @@ Follow detected platform conventions and analyzed patterns:
 - Add Services for business logic
 - Implement networking with async/await
 - Handle UI updates on main thread
+- **For expansions**: Extend core ViewModels, add properties following same patterns
 
 **Android Kotlin:**
 - Implement ViewModels with StateFlow
@@ -124,12 +171,13 @@ Follow detected platform conventions and analyzed patterns:
 - Add UseCases for business logic
 - Implement Repositories with Hilt DI
 - Handle coroutines properly
+- **For expansions**: Extend core data classes, add fields following same patterns
 
 **Quality Requirements:**
 - Follow project conventions (CLAUDE.md, .editorconfig, linting)
 - Write clean, readable code
 - Add comments for complex logic
-- Use consistent naming
+- Use consistent naming (especially in expansions - match core naming)
 - Handle errors properly
 - Validate inputs
 - Log appropriately
@@ -198,28 +246,65 @@ What would you like to do?
 3. Loop back to Step 5 to implement
 4. Repeat the guided workflow
 
-### Phase Completion
+### Core PRD Completion
 
-**When all substories in a phase are complete:**
+**When all substories in a CORE PRD are complete:**
 ```markdown
-🎉 Phase 1 Complete!
+🎉 Core PRD Complete!
 
 ✅ Completed substories:
-- [1.1] User OAuth model
-- [1.2] OAuth callback handler
-- [1.3] Token storage
+- [1.1] Minimal invoice model
+- [1.2] Basic CRUD API endpoints
+- [1.3] Simple list/detail views
 
-📊 Phase 1 Stats:
-- Time: 3 sessions
-- Commits: 5
-- Files: 12 files created/modified
+📊 Core Stats:
+- Files: 8 files created (core foundation)
+- Patterns established:
+  - Service objects in app/services/
+  - RESTful API under /api/v1/
+  - ActiveModel serializers
+
+🌱 Core foundation established! Ready to expand.
 
 💡 Next steps:
-- "review my code" - Review entire phase
-- "commit these changes" - Commit any uncommitted work
-- "create a PR" - Submit phase for review
-- "continue to phase 2" - Start next phase
-- "show progress" - See overall PRD progress
+1. "review my code" - Review core implementation
+2. "write tests" - Add test coverage
+3. "commit these changes" - Commit core foundation
+4. "create a PR for core" - Submit core for review
+
+After core is merged:
+5. "create expansion PRDs" - Plan next expansions
+   Suggested expansions:
+   - Customer details
+   - Line items
+   - Tax calculations
+   - Payment integration
+
+What would you like to do?
+```
+
+### Expansion PRD Completion
+
+**When all substories in an EXPANSION PRD are complete:**
+```markdown
+🎉 Expansion Complete: [Expansion Name]
+
+✅ Completed substories:
+- [1.1] Add customer relationship
+- [1.2] Customer details in API
+- [1.3] Customer selection UI
+
+📊 Expansion Stats:
+- Core files extended: 3
+- New files created: 5
+- Followed core patterns: ✅
+
+💡 Next steps:
+- "review my code" - Review expansion changes
+- "write tests" - Add test coverage
+- "commit these changes" - Commit expansion
+- "create a PR" - Submit expansion for review
+- "create another expansion PRD" - Add more features
 
 What would you like to do?
 ```

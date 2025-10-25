@@ -4,6 +4,35 @@ Detailed guide for all available skills in the Yespark Claude Plugins marketplac
 
 ---
 
+## 🌱 Land Then Expand Philosophy
+
+These skills use a **"land then expand"** approach for optimal results with modern Claude models:
+
+1. **Start Minimal (Core)**: Build essential foundation with 2-4 substories max
+2. **Establish Patterns**: Create clean, simple code that works
+3. **Expand Iteratively**: Add features one at a time in separate PRDs
+4. **Maintain Consistency**: Expansions load and extend core patterns
+
+**Why this works better:**
+- Prevents incorrect architectural assumptions
+- Establishes patterns before adding complexity
+- Better token efficiency
+- Shorter feedback cycles
+- More consistent results
+
+**Example Flow:**
+```
+Core PRD: Invoice with number, date, amount only
+  ↓ implement & merge
+Expansion 1: Add customer details
+  ↓ implement & merge
+Expansion 2: Add line items
+  ↓ implement & merge
+Expansion 3: Add tax calculations
+```
+
+---
+
 ## 🎯 Platform Support
 
 **Automatically detects and adapts to your platform:**
@@ -31,43 +60,50 @@ Once detected, skills automatically load platform-specific conventions and best 
 ## 🛠️ Skills in Detail
 
 <details>
-<summary><strong>📋 generate-prd</strong> - Create adaptive PRDs with codebase exploration</summary>
+<summary><strong>📋 generate-prd</strong> - Create core or expansion PRDs with codebase exploration</summary>
 
 <br>
 
-### Adaptive Modes
+### Land Then Expand Approach 🌱
 
-- **⚡ Quick Mode**: Simple features (5-7 questions, lightweight spec)
-- **🎯 Full Mode**: Complex features (15-20 questions, comprehensive spec)
+**Always asks first:**
+1. 🌱 New core feature (minimal foundation)
+2. 🔧 Expansion of existing feature (builds on core)
 
-**Auto-detected based on feature description** - you can override if needed.
+### Core PRD Mode
+
+- **Max 2-4 substories** - enforces minimalism
+- **Essential fields only** - example: invoice with just number, date, amount
+- **Single phase** - establish foundation
+- **Out of scope section** - lists future expansions
+- File: `docs/prds/YYYY-MM-DD-{feature}-core.md`
+
+**Goal**: Establish patterns, NOT completeness
+
+### Expansion PRD Mode
+
+- **Focused on ONE aspect** - customer details OR line items, not both
+- **Loads core implementation** - reads completed core files for patterns
+- **Extends core patterns** - maintains consistency
+- File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
+
+**Goal**: Add one feature using established patterns
 
 ### Codebase Exploration 🔍
 
 - ✅ Analyzes existing patterns and architecture
 - ✅ Finds similar features for reference
-- ✅ Discovers authentication/authorization approaches
+- ✅ **For expansions**: Loads completed core files as context
 - ✅ Identifies testing frameworks and conventions
-- ✅ Ensures new PRD follows project patterns
-
-### PRD Contents 📝
-
-- Problem statement and solution overview
-- Functional and non-functional requirements
-- Multiple implementation phases
-- Substories with acceptance criteria
-- API/interface specifications
-- Data schema design
-- Testing strategy
-- Security and performance considerations
+- ✅ Ensures PRD follows project patterns
 
 **Platform-aware** 🎯 - automatically tailors PRD structure for Rails backend, iOS mobile, or Android mobile development.
 
 ### Natural Activation 🗣️
 
-- "Create a PRD for user authentication"
-- "Let's plan out the booking feature"
-- "Write a spec for the payment system"
+- "Create a PRD for invoices"
+- "Create an expansion for customer details"
+- "Let's plan the core booking feature"
 - 🇫🇷 "Créer un PRD", "planifier une fonctionnalité"
 
 </details>
@@ -75,21 +111,40 @@ Once detected, skills automatically load platform-specific conventions and best 
 ---
 
 <details>
-<summary><strong>💻 implement-code</strong> - Implement PRDs substory-by-substory with smart guidance</summary>
+<summary><strong>💻 implement-code</strong> - Implement core or expansion PRDs with pattern-aware code generation</summary>
 
 <br>
 
+### Land Then Expand Implementation 🌱
+
+**Detects PRD type automatically** and adjusts workflow:
+
+**Core PRD Implementation:**
+- Establishes clean, simple patterns
+- Creates minimal working foundation
+- Max 2-4 substories
+- After completion: Suggests creating expansion PRDs
+
+**Expansion PRD Implementation (CRITICAL):**
+- **Loads completed core files** as context
+- Analyzes and follows established patterns
+- Extends (not replaces) core code
+- Maintains naming and structure consistency
+
 ### Guided Workflow 🚀
 
-1. 📋 Implement substory code
-2. ✅ Update PRD with completion status
-3. 💡 Suggest next steps (review, test, commit, continue)
-4. ⏸️ Wait for your decision
+1. 📋 Load PRD and detect type (core vs expansion)
+2. 🔍 For expansions: Load core implementation files
+3. 💻 Implement substory code following patterns
+4. ✅ Update PRD with completion status
+5. 💡 Suggest next steps (review, test, commit, continue)
+6. ⏸️ Wait for your decision
 
 ### Features ⭐
 
 - 🔍 Architecture analysis before coding
 - 🎯 Follows existing project patterns
+- 📂 **For expansions**: Loads and extends core files
 - 🛠️ Platform-specific best practices
 - 📦 Incremental implementation (one substory at a time)
 - 📊 Real-time PRD status updates

@@ -1,11 +1,20 @@
 ---
 name: generate-prd
-description: Generate adaptive PRDs with codebase exploration. Activates when user says create PRD, plan feature, document requirements, write spec, generate PRD, build requirements. French: créer un PRD, planifier une fonctionnalité, rédiger les exigences, écrire une spec.
+description: Generate core or expansion PRDs with codebase exploration using "land then expand" approach. Activates when user says create PRD, plan feature, document requirements, write spec, generate PRD, build requirements. French: créer un PRD, planifier une fonctionnalité, rédiger les exigences, écrire une spec.
 ---
 
 # Generate Product Requirements Document
 
-Create structured PRDs in `docs/prds/YYYY-MM-DD-feature-name.md` with automatic complexity detection and codebase exploration.
+Create structured PRDs using the **"land then expand"** approach: minimal core first, focused expansions later.
+
+## Philosophy: Land Then Expand
+
+Modern Claude models work best when they establish patterns first, then layer complexity. This skill creates:
+
+1. **Core PRDs**: Minimal foundation with essential fields only (2-4 substories max)
+2. **Expansion PRDs**: Focused enhancements building on completed core
+
+**Why**: Large comprehensive PRDs lead to incorrect assumptions, token inefficiency, and inconsistent results.
 
 ## Activation Context
 
@@ -18,40 +27,57 @@ Use when user requests:
 
 ## Discovery Process
 
-### Phase 0: Detect Complexity and Explore Codebase
+### Phase 0: Determine PRD Type and Explore Codebase
 
-**Step 1: Understand Feature Scope**
+**Step 1: Ask PRD Type**
 
-Ask initial scoping question:
+**CRITICAL**: Ask user to determine if this is a core or expansion PRD:
+
 ```
-"Describe the feature briefly (1-2 sentences):"
+Is this:
+1. 🌱 A new core feature (minimal foundation to establish patterns)
+2. 🔧 An expansion of existing feature (builds on completed core)
+
+Choose [1/2]:
 ```
 
-**Step 2: Auto-Detect Complexity**
+**If user chooses "1 - Core Feature":**
+- Create minimal foundation PRD
+- Max 2-4 substories in single phase
+- Essential fields only (example: invoice with just number, date, amount)
+- File: `docs/prds/YYYY-MM-DD-{feature}-core.md`
+- Goal: Establish patterns and working code, NOT completeness
 
-Analyze user's description to determine mode:
+**If user chooses "2 - Expansion":**
+- Ask: "Which core feature does this expand?" (or check `docs/prds/` for existing core PRDs)
+- Create focused expansion PRD building on core
+- File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
+- Examples: `-customer-details.md`, `-line-items.md`, `-payment-logic.md`
+- Goal: Add one focused aspect using established patterns
 
-**QUICK MODE** (triggered by):
-- Simple CRUD operations
-- Minor UI changes
-- Single model/component
-- Clear, simple requirements
-- Keywords: "simple", "just", "only", "basic"
+**Step 2: Understand Feature Scope**
 
-**FULL MODE** (triggered by):
-- Multi-system integrations
-- Complex business logic
-- Multiple phases/components
-- External API integrations
-- Keywords: "integrate", "complex", "multi-step", "workflow", "system"
-
-**Inform user:**
+Ask scoping question:
 ```
-✨ Detected: [QUICK/FULL] mode PRD
-📋 This will be a [lightweight/comprehensive] requirements document
-
-Continue? [yes/change mode]
+"Describe the [core feature/expansion] briefly (1-2 sentences):"
 ```
+
+**For Core PRDs - Enforce Minimalism:**
+If user describes complex multi-part feature, push back:
+```
+🌱 Core PRD Mode: Let's start with the absolute minimum.
+
+You described: [user's description]
+
+What's the simplest version with just essential fields?
+Example: If building invoices, start with just number, date, amount.
+Everything else (customers, line items, tax) comes later as expansions.
+
+Simplest core version:
+```
+
+**For Expansion PRDs:**
+Ask specifically what this expansion adds to the core.
 
 **Step 3: Explore Existing Codebase**
 
@@ -64,6 +90,15 @@ platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
 # Load platform reference
 # Read .claude/skills/shared/references/${platform}/conventions.md
 ```
+
+**For Core PRDs:**
+Explore to understand project patterns and conventions.
+
+**For Expansion PRDs (CRITICAL):**
+- Find and read the core PRD file
+- Identify which files were created in core implementation
+- Read those core implementation files to understand established patterns
+- Use these patterns as the foundation for expansion
 
 **Explore relevant areas:**
 
@@ -80,6 +115,9 @@ ls app/policies/ app/controllers/concerns/
 
 # Check existing API structure
 grep -r "namespace.*api" config/routes.rb
+
+# For expansions: Read core implementation files
+# Example: cat app/models/invoice.rb app/controllers/invoices_controller.rb
 ```
 
 **For iOS Swift:**
@@ -92,6 +130,8 @@ find . -name "*Service.swift"
 
 # Look for existing navigation
 grep -r "coordinator\|router" . --include="*.swift"
+
+# For expansions: Read core implementation files
 ```
 
 **For Android Kotlin:**
@@ -104,6 +144,8 @@ find . -name "*ViewModel.kt"
 
 # Look for repositories
 find . -name "*Repository.kt"
+
+# For expansions: Read core implementation files
 ```
 
 **Document findings:**
@@ -116,124 +158,191 @@ find . -name "*Repository.kt"
 - Testing: RSpec with FactoryBot
 - Authentication: Devise + JWT
 
+[For expansions: Also document core implementation patterns found]
+
 Will follow these established patterns.
 ```
 
 ### Phase 1: Requirements Gathering
 
-**Adapt questions based on mode:**
+**Adapt questions based on PRD type:**
 
-**QUICK MODE** - Ask only core questions (5-7 questions):
+**CORE PRD MODE** - Ask minimal essential questions (5-7 questions):
 
-1. **What does it do?** (Core functionality)
+**Focus on absolute essentials only:**
+
+1. **What are the essential fields/data?** (Minimum viable data model)
 2. **Who uses it?** (Target users)
-3. **What changes?** (New vs modification of existing)
-4. **What's the main user flow?** (Single primary flow)
-5. **How do we know it works?** (Success criteria)
-6. **Any dependencies?** (Required features/services)
-7. **What's out of scope?** (Explicit exclusions)
+3. **What's the single main user flow?** (One primary happy path only)
+4. **How do we know it works?** (Basic success criteria)
+5. **Any critical dependencies?** (Required features/services)
+6. **What's explicitly out of scope for the core?** (Everything else becomes expansions)
 
-**FULL MODE** - Ask comprehensive questions (15-20 questions):
+**Important**: If answers suggest complexity, remind user that core is minimal and suggest moving complexity to expansions.
 
-**Feature Overview:**
-- Core functionality and purpose
-- Problem being solved in detail
-- Target users and their specific needs
-- Success metrics and KPIs
+**EXPANSION PRD MODE** - Ask focused questions about the expansion (8-12 questions):
 
-**Scope Definition:**
-- New feature vs enhancement
-- Platforms/systems affected (already detected)
-- Dependencies on existing features
-- Integration points
-- Explicitly out of scope items
+**Context Questions:**
+1. **What does this expansion add to the core?** (Specific enhancement)
+2. **Which core PRD does this build on?** (Reference existing core)
+3. **What core patterns should we follow?** (Based on implemented core files)
 
-**User Experience:**
-- Multiple user flows (happy path + alternatives)
-- UI/UX requirements and mockups
-- Edge case handling
-- Error scenarios and recovery
-- Accessibility requirements
+**Expansion Scope:**
+4. **What new data/fields are needed?** (Additions to core data model)
+5. **What user flows does this enable/enhance?** (New or modified flows)
+6. **Integration points with core?** (How it connects to existing code)
+7. **How do we know it works?** (Acceptance criteria)
+8. **Any new dependencies?** (External services, libraries)
+9. **Performance considerations?** (If applicable)
+10. **Security considerations?** (Auth/validation needs)
+11. **What's out of scope for this expansion?** (May become another expansion)
 
-**Technical Requirements:**
-- Architecture constraints
-- Data models needed (detailed schema)
-- API/interface requirements (full specs)
-- External integrations
-- Authentication/authorization approach
-- Performance requirements (specific metrics)
-- Scalability considerations
-- Security requirements
-
-**Success Criteria:**
-- Measurable acceptance criteria per substory
-- Key performance indicators
-- Definition of done
-- Rollout strategy
+**Important**: Expansion PRDs should be focused on ONE aspect (e.g., customer details OR line items, not both)
 
 ### Phase 2: Document Generation
 
-Create PRD with this structure:
+**CRITICAL**: Structure differs for core vs expansion PRDs.
+
+#### Core PRD Structure
+
+File: `docs/prds/YYYY-MM-DD-{feature}-core.md`
 
 ```markdown
-# [Feature Name]
+# [Feature Name] - Core
 
+**Type:** Core Feature
 **Created:** YYYY-MM-DD
 **Status:** Planning
-**Platforms:** [Detected from context: Web/Backend/Mobile/etc.]
+**Platforms:** [Detected from context]
 
 ## Overview
 
 ### Problem Statement
 [Clear articulation of problem]
 
-### Solution
-[High-level solution description]
+### Core Solution
+[Minimal viable solution - essential fields/functionality ONLY]
 
 ### Users
-[Target users and use cases]
+[Target users]
 
 ### Success Criteria
-- [Measurable criteria]
-- [Key metrics]
+- [Basic measurable criteria]
 
-## Requirements
+## Core Requirements
 
-### Functional
-1. [Requirement with clear scope]
+### Essential Data/Fields
+[ONLY the minimum viable fields - example: invoice number, date, amount]
 
-### Non-Functional
-- Performance: [specific requirements]
-- Security: [requirements]
-- Scalability: [requirements]
+### Core User Flow
+[Single primary happy path only]
 
-### Platform-Specific
+### Out of Scope (Future Expansions)
+[List everything NOT in core - these become expansion PRDs]
+Examples:
+- Customer details → expansion PRD
+- Line items → expansion PRD
+- Tax calculations → expansion PRD
 
-[Adapt sections based on detected platforms]
+## Implementation
 
-#### Backend/API
-- Endpoints/interfaces needed
-- Data models/schemas
-- Background processes
-- External services
+**RULE**: Maximum ONE phase with 2-4 substories
 
-#### Frontend/Web
-- UI components
-- State management
-- API integration
-- Client-side storage
+### Phase 1: Core Foundation
+**Goal:** Establish minimal working feature with essential patterns
 
-#### Mobile
-- Platform-specific components
-- API client changes
-- Local persistence
-- Platform permissions
+#### Substory 1.1: [Minimal Model/Component]
+**Description:** [Create basic entity with essential fields only]
 
-## Implementation Phases
+**Acceptance Criteria:**
+- [ ] [Essential field 1] works
+- [ ] [Essential field 2] works
+- [ ] Basic CRUD operations
 
-### Phase [N]: [Phase Name]
-**Goal:** [Phase objective]
-**Estimate:** [duration]
+**Status:** ⏳ Not Started
+
+#### Substory 1.2: [Basic Interface/API]
+**Description:** [Simple create/read operations]
+
+**Acceptance Criteria:**
+- [ ] Can create with essential fields
+- [ ] Can retrieve
+
+**Status:** ⏳ Not Started
+
+[2-4 substories maximum]
+
+## Platform-Specific Notes
+[Minimal platform-specific details for core only]
+
+## Next Expansions
+After core is complete, consider these expansion PRDs:
+1. [Expansion 1 name]
+2. [Expansion 2 name]
+3. [Expansion 3 name]
+```
+
+#### Expansion PRD Structure
+
+File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
+
+```markdown
+# [Feature Name] - [Expansion Name]
+
+**Type:** Expansion
+**Builds On:** [Link to core PRD: docs/prds/YYYY-MM-DD-{feature}-core.md]
+**Created:** YYYY-MM-DD
+**Status:** Planning
+**Platforms:** [Same as core]
+
+## Overview
+
+### What This Expansion Adds
+[Specific enhancement to core]
+
+### Core Implementation Reference
+**Files created in core:**
+- [file path 1]
+- [file path 2]
+
+**Patterns established in core:**
+- [pattern 1 - e.g., "Service objects for business logic"]
+- [pattern 2 - e.g., "RESTful API under /api/v1/"]
+
+### Success Criteria
+- [Measurable criteria for this expansion]
+
+## Expansion Requirements
+
+### New Data/Fields
+[What's added to the core data model]
+
+### Enhanced/New User Flows
+[How this changes or adds to core flows]
+
+### Integration with Core
+[How this connects to existing core implementation]
+
+## Implementation
+
+### Phase 1: [Expansion Name]
+**Goal:** [Expansion objective]
+
+#### Substory 1.1: [Enhancement 1]
+**Description:** [Building on core patterns]
+
+**Core Files to Modify:**
+- [existing file from core]
+
+**Core Patterns to Follow:**
+- [reference established patterns]
+
+**Acceptance Criteria:**
+- [ ] [Criterion 1]
+
+**Status:** ⏳ Not Started
+
+[Add substories as needed for focused expansion]
 
 #### Substory [N.M]: [Title]
 **Description:** [Implementation scope]
@@ -350,33 +459,59 @@ Create PRD with this structure:
 - YYYY-MM-DD: PRD created
 ```
 
-### Phase 3: Validation
+### Phase 3: Validation and Next Steps
 
-After document creation:
-- Review completeness with user
-- Confirm acceptance criteria are measurable
-- Verify technical specifications are sufficient
-- Identify any unclear areas
+**After Core PRD creation:**
+- Verify it's truly minimal (2-4 substories max)
+- Confirm essential fields only
+- Suggest expansion PRDs for excluded features
+- Output message:
+```
+✅ Core PRD created: docs/prds/YYYY-MM-DD-{feature}-core.md
 
-## Output
+📋 Core includes: [brief summary]
+🚫 Out of scope (future expansions): [list]
 
-Provide user with:
-- PRD file path
-- Summary of phases and substories
-- Confirmation of next steps
-- Any items needing clarification
+💡 Next steps:
+1. "Implement the core PRD" - Build minimal foundation
+2. After core is complete, create expansion PRDs for: [list]
+```
+
+**After Expansion PRD creation:**
+- Verify it builds on completed core
+- Confirm focused on ONE aspect
+- Reference core implementation patterns
+- Output message:
+```
+✅ Expansion PRD created: docs/prds/YYYY-MM-DD-{feature}-{expansion}.md
+
+🔧 Expands: {core feature name}
+📋 Adds: [brief summary]
+🎯 Follows core patterns from: [core files]
+
+💡 Next: "Implement this expansion PRD"
+```
 
 ## Guidelines
 
-- **Detect platform first**: Run `.claude/skills/shared/scripts/detect_platform.sh`
-- **Load platform reference**: Read `.claude/skills/shared/references/{platform}/conventions.md`
-- **Use platform-specific terminology**:
+**Critical Rules:**
+- **ALWAYS ask core vs expansion first** - This determines everything
+- **For Core: Enforce minimalism** - Push back on complexity, max 2-4 substories
+- **For Expansion: Load core context** - Read core PRD and implementation files
+- **Naming convention**:
+  - Core: `docs/prds/YYYY-MM-DD-{feature}-core.md`
+  - Expansion: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
+
+**Platform Detection:**
+- Run `.claude/skills/shared/scripts/detect_platform.sh`
+- Read `.claude/skills/shared/references/{platform}/conventions.md`
+- Use platform-specific terminology:
   - Rails: models, controllers, services, migrations, jobs
   - iOS Swift: ViewControllers, ViewModels, Views, Services, coordinators
   - Android Kotlin: Activities, Fragments, ViewModels, Repositories, UseCases
-- Adjust detail level based on feature complexity
-- Break complex features into smaller substories
+
+**Quality Checks:**
 - Ensure acceptance criteria are testable
-- Include realistic time estimates
 - Document assumptions explicitly
 - Reference platform patterns from loaded conventions
+- For expansions: explicitly reference core implementation patterns
