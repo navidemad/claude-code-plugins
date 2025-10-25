@@ -13,7 +13,23 @@
 
 [![Documentation](https://img.shields.io/badge/Documentation-view-blue.svg)](.claude/skills/README.md)
 
-## 📦 Installation `.claude/settings.json`
+## 📦 Installation
+
+### Prerequisites
+
+**Required dependency:**
+```bash
+# macOS
+brew install jq
+
+# Linux (Debian/Ubuntu) - also for WSL on Windows
+apt-get install jq
+
+# Linux (RedHat/CentOS)
+yum install jq
+```
+
+### Claude Code Settings `.claude/settings.json`
 
 ```json
 {

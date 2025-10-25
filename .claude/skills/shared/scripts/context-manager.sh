@@ -2,6 +2,15 @@
 # Context Management for PRD Implementation
 # Manages .claude/context/{prd-name}.json files
 
+# Check for jq dependency
+if ! command -v jq >/dev/null 2>&1; then
+    echo "ERROR: jq is required for context management" >&2
+    echo "Install with:" >&2
+    echo "  macOS:         brew install jq" >&2
+    echo "  Linux/WSL:     apt-get install jq  or  yum install jq" >&2
+    exit 1
+fi
+
 CONTEXT_DIR=".claude/context"
 
 # Initialize context file for a PRD
@@ -58,18 +67,12 @@ update_context() {
 
     local context_file=$(get_context_file "$prd_file")
 
-    if command -v jq >/dev/null 2>&1; then
-        # Use jq for proper JSON manipulation
-        local temp_file="${context_file}.tmp"
-        jq --arg field "$field" --arg value "$value" \
-           '.[$field] = $value | .updated_at = now | strftime("%Y-%m-%dT%H:%M:%SZ")' \
-           "$context_file" > "$temp_file"
-        mv "$temp_file" "$context_file"
-    else
-        # Fallback: manual update (simple string replacement)
-        # Just update timestamp for now
-        echo "Warning: jq not installed, context updates limited" >&2
-    fi
+    # Use jq for proper JSON manipulation
+    local temp_file="${context_file}.tmp"
+    jq --arg field "$field" --arg value "$value" \
+       '.[$field] = $value | .updated_at = now | strftime("%Y-%m-%dT%H:%M:%SZ")' \
+       "$context_file" > "$temp_file"
+    mv "$temp_file" "$context_file"
 }
 
 # Add file to files_created array
@@ -79,13 +82,11 @@ add_created_file() {
 
     local context_file=$(get_context_file "$prd_file")
 
-    if command -v jq >/dev/null 2>&1; then
-        local temp_file="${context_file}.tmp"
-        jq --arg file "$file_path" \
-           '.files_created += [$file] | .files_created |= unique | .updated_at = (now | strftime("%Y-%m-%dT%H:%M:%SZ"))' \
-           "$context_file" > "$temp_file"
-        mv "$temp_file" "$context_file"
-    fi
+    local temp_file="${context_file}.tmp"
+    jq --arg file "$file_path" \
+       '.files_created += [$file] | .files_created |= unique | .updated_at = (now | strftime("%Y-%m-%dT%H:%M:%SZ"))' \
+       "$context_file" > "$temp_file"
+    mv "$temp_file" "$context_file"
 }
 
 # Add architectural decision
@@ -95,13 +96,11 @@ add_decision() {
 
     local context_file=$(get_context_file "$prd_file")
 
-    if command -v jq >/dev/null 2>&1; then
-        local temp_file="${context_file}.tmp"
-        jq --arg decision "$decision" \
-           '.architectural_decisions += [$decision] | .updated_at = (now | strftime("%Y-%m-%dT%H:%M:%SZ"))' \
-           "$context_file" > "$temp_file"
-        mv "$temp_file" "$context_file"
-    fi
+    local temp_file="${context_file}.tmp"
+    jq --arg decision "$decision" \
+       '.architectural_decisions += [$decision] | .updated_at = (now | strftime("%Y-%m-%dT%H:%M:%SZ"))' \
+       "$context_file" > "$temp_file"
+    mv "$temp_file" "$context_file"
 }
 
 # Set pattern
@@ -112,13 +111,11 @@ set_pattern() {
 
     local context_file=$(get_context_file "$prd_file")
 
-    if command -v jq >/dev/null 2>&1; then
-        local temp_file="${context_file}.tmp"
-        jq --arg name "$pattern_name" --arg value "$pattern_value" \
-           '.patterns[$name] = $value | .updated_at = (now | strftime("%Y-%m-%dT%H:%M:%SZ"))' \
-           "$context_file" > "$temp_file"
-        mv "$temp_file" "$context_file"
-    fi
+    local temp_file="${context_file}.tmp"
+    jq --arg name "$pattern_name" --arg value "$pattern_value" \
+       '.patterns[$name] = $value | .updated_at = (now | strftime("%Y-%m-%dT%H:%M:%SZ"))' \
+       "$context_file" > "$temp_file"
+    mv "$temp_file" "$context_file"
 }
 
 # Set library
@@ -129,13 +126,11 @@ set_library() {
 
     local context_file=$(get_context_file "$prd_file")
 
-    if command -v jq >/dev/null 2>&1; then
-        local temp_file="${context_file}.tmp"
-        jq --arg name "$lib_name" --arg value "$lib_value" \
-           '.libraries[$name] = $value | .updated_at = (now | strftime("%Y-%m-%dT%H:%M:%SZ"))' \
-           "$context_file" > "$temp_file"
-        mv "$temp_file" "$context_file"
-    fi
+    local temp_file="${context_file}.tmp"
+    jq --arg name "$lib_name" --arg value "$lib_value" \
+       '.libraries[$name] = $value | .updated_at = (now | strftime("%Y-%m-%dT%H:%M:%SZ"))' \
+       "$context_file" > "$temp_file"
+    mv "$temp_file" "$context_file"
 }
 
 # Read entire context as JSON
@@ -155,7 +150,7 @@ get_core_files() {
     local core_prd_file="$1"
     local context_file=$(get_context_file "$core_prd_file")
 
-    if [[ -f "$context_file" ]] && command -v jq >/dev/null 2>&1; then
+    if [[ -f "$context_file" ]]; then
         jq -r '.files_created[]' "$context_file" 2>/dev/null
     fi
 }
@@ -165,7 +160,7 @@ get_core_patterns() {
     local core_prd_file="$1"
     local context_file=$(get_context_file "$core_prd_file")
 
-    if [[ -f "$context_file" ]] && command -v jq >/dev/null 2>&1; then
+    if [[ -f "$context_file" ]]; then
         jq -r '.patterns' "$context_file" 2>/dev/null
     fi
 }
@@ -177,13 +172,11 @@ mark_phase_complete() {
 
     local context_file=$(get_context_file "$prd_file")
 
-    if command -v jq >/dev/null 2>&1; then
-        local temp_file="${context_file}.tmp"
-        jq --arg phase "$phase_name" \
-           '.completed_phases += [$phase] | .completed_phases |= unique | .current_phase = "" | .updated_at = (now | strftime("%Y-%m-%dT%H:%M:%SZ"))' \
-           "$context_file" > "$temp_file"
-        mv "$temp_file" "$context_file"
-    fi
+    local temp_file="${context_file}.tmp"
+    jq --arg phase "$phase_name" \
+       '.completed_phases += [$phase] | .completed_phases |= unique | .current_phase = "" | .updated_at = (now | strftime("%Y-%m-%dT%H:%M:%SZ"))' \
+       "$context_file" > "$temp_file"
+    mv "$temp_file" "$context_file"
 }
 
 # Set current phase
@@ -193,11 +186,9 @@ set_current_phase() {
 
     local context_file=$(get_context_file "$prd_file")
 
-    if command -v jq >/dev/null 2>&1; then
-        local temp_file="${context_file}.tmp"
-        jq --arg phase "$phase_name" \
-           '.current_phase = $phase | .updated_at = (now | strftime("%Y-%m-%dT%H:%M:%SZ"))' \
-           "$context_file" > "$temp_file"
-        mv "$temp_file" "$context_file"
-    fi
+    local temp_file="${context_file}.tmp"
+    jq --arg phase "$phase_name" \
+       '.current_phase = $phase | .updated_at = (now | strftime("%Y-%m-%dT%H:%M:%SZ"))' \
+       "$context_file" > "$temp_file"
+    mv "$temp_file" "$context_file"
 }
