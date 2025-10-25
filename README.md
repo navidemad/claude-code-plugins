@@ -5,13 +5,12 @@ Use it in your terminal, IDE.
 
 **Learn more in the [official documentation](https://docs.anthropic.com/en/docs/claude-code/overview)**.
 
-## Plugins
+## Yespark Claude Plugins
 
-This repository includes several Claude Code plugins that extend functionality with custom commands and agents. See the [plugins directory](./plugins/README.md) for detailed documentation on available plugins.
-
-# Yespark Team Claude Code Marketplace
+This repository includes as Claude Team Marketplace contains several Claude Code skills that extend functionality with custom commands and agents. See the [skills directory](./.claude/skills/README.md) for detailed documentation on available skills.
 
 **Powerful AI assistants for Rails, iOS Swift, and Android Kotlin development.**
+
 Smart tools that help you work faster while you stay in control.
 
 ## Overview
