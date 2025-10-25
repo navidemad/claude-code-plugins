@@ -4,19 +4,16 @@
 [![Changelog](https://img.shields.io/badge/changelogs-view-blue.svg)](CHANGELOG.md)
 ![Status: Production](https://img.shields.io/badge/Status-Production-green)
 
-**Orchestrated AI skills for development for:**
-
 [![Ruby on Rails](https://img.shields.io/badge/Ruby%20on%20Rails-CC0000?logo=rubyonrails&logoColor=white)](CLAUDE.md)
 [![iOS Swift](https://img.shields.io/badge/iOS%20Swift-F05138?logo=swift&logoColor=white)](CLAUDE.md)
 [![Android Kotlin](https://img.shields.io/badge/Android%20Kotlin-7F52FF?logo=kotlin&logoColor=white)](CLAUDE.md)
 
+**Orchestrated AI skills for faster development**
 > 🗣️ **Just talk naturally! No slash commands needed** ✨
 
-| Skill | Features |
-|-------|----------|
-| **plan** | Auto-loads core context for expansions |
-| **implement** | Auto-test + Auto-review + Auto-fix + Progress tracking |
-| **ship** | Single skill for commit AND PR |
+- **plan**: Auto-loads core context for expansions |
+- **implement**: Auto-test + Auto-review + Auto-fix + Progress tracking |
+- **ship**: Single skill for commit AND PR |
 
 📖 **[Full Skills Documentation →](.claude/skills/README.md)**
 
