@@ -5,11 +5,11 @@ Use it in your terminal, IDE.
 
 **Learn more in the [official documentation](https://docs.anthropic.com/en/docs/claude-code/overview)**.
 
-## Yespark Claude Plugins (Powerful AI assistants for Rails, iOS Swift, and Android Kotlin development)
+## Yespark Claude Plugins
 
-This repository includes as Claude Team Marketplace contains several Claude Code skills that extend functionalities.
+### Powerful AI assistants for Rails, iOS Swift, and Android Kotlin development
 
-For detailed information about individual skills, see [.claude/skills/README.md](.claude/skills/README.md)
+This repository includes several Claude Code skills that extend functionalities.
 
 ### Available Skills
 
@@ -22,6 +22,10 @@ For detailed information about individual skills, see [.claude/skills/README.md]
 | **commit** | Generate well-formatted commit messages |
 | **create-pr** | Generate comprehensive PR descriptions |
 | **code-review** | Multi-dimensional code quality analysis |
+
+For detailed information about individual skills, see [.claude/skills/README.md](.claude/skills/README.md)
+
+---
 
 ## Get started
 
@@ -171,6 +175,8 @@ Claude: ✅ PR #123 created!
 **Notice:** You control every step. Skills suggest, you decide.
 
 </details>
+
+---
 
 ## Changelog
 
