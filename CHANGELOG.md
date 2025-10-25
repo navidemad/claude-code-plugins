@@ -2,44 +2,62 @@
 
 All notable changes to Yespark Claude Plugins will be documented in this file.
 
-## [5.0.0] - 2025-10-25 - **Developer Control Release**
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-- **<� Philosophy shift**: Tools, not automation - you control the workflow
-- **7 focused skills** - each does one thing well, suggests next steps
-  - `implement-prd` � `implement-code`, `implement-tests`, `track-prd-progress`
-- **NO auto-invocations** - skills never call other skills automatically
-  - `implement-code`: writes code, suggests review/test/commit
-  - `commit`: generates message, waits for approval before committing
-  - `create-pr`: requires clean branch, waits for approval before creating
-  - `code-review`: reviews branch diff, suggests fixes (you apply them)
-- **Approval gates** - every action requires explicit user confirmation
-- **Clear suggestions** - skills show "Next steps" with natural phrases
-- **Adaptive intelligence** retained:
-  - `generate-prd`: auto-detects Quick vs Full mode
-  - `code-review`: auto-detects Quick/Standard/Deep depth
-- **Bilingual support** - English and French for all skills
-- **Codebase exploration** - PRD generation analyzes existing patterns
-- **Default scope**: code-review checks branch diff vs `origin/main`
+## [1.0.0] - 2025-01-27
 
-## [4.0.0] - 2025-10-25 - **Automation Release** (deprecated)
+### 🎉 Initial Release
 
-- Fully automated workflow with auto-review � auto-commit � auto-PR
-- Removed in favor of developer-controlled approach
+**7 AI-powered skills for Rails, iOS Swift, and Android Kotlin development**
 
-## [3.1.0] - 2025-10-25
+#### Added
 
-- **Platform-aware skills** - supports Rails, iOS Swift, and Android Kotlin
-- Automatic platform detection from project files (Gemfile, .xcodeproj, gradle.properties)
-- Skills adapt terminology and patterns to detected platform
-- Platform-specific reference files with conventions and best practices
-- Platform-aware PRD templates and code generation
-- Platform-specific code review checks (N+1 for Rails, retain cycles for iOS, Context leaks for Android)
+- 📋 **generate-prd** - Create adaptive PRDs with codebase exploration
+  - Quick mode (5-7 questions) and Full mode (15-20 questions)
+  - Auto-detects complexity based on feature description
+  - Explores existing codebase patterns
 
-## [3.0.0] - 2025-10-25
+- 💻 **implement-code** - Write code substory-by-substory from PRDs
+  - Guided workflow with suggestions (no auto-invocations)
+  - Platform-specific best practices
+  - Real-time PRD status updates
 
-- Complete redesign using Skills (model-invoked, not user-invoked)
-- 5 core skills: generate-prd, implement-prd, commit, create-pr, code-review
-- Natural language activation - no slash commands needed
-- Followed Anthropic's official skill best practices
-- Enhanced PRD format with real-time status tracking
-- Comprehensive code review with platform-specific checks
+- 🧪 **implement-tests** - Write comprehensive test suites
+  - Auto-detects testing framework
+  - Maps tests to PRD acceptance criteria
+  - Platform-specific test patterns
+
+- 📊 **track-prd-progress** - Track and update PRD implementation status
+  - Real-time progress dashboard
+  - Velocity calculations and ETA predictions
+  - Blocker identification
+
+- 💾 **commit** - Generate well-formatted commit messages
+  - Conventional commits format
+  - Waits for approval before committing
+  - Links to PRD substories
+
+- 🚀 **create-pr** - Generate comprehensive PR descriptions
+  - Analyzes branch diff vs origin/main
+  - Requires clean branch (no uncommitted changes)
+  - Waits for approval before creating
+
+- 🔍 **code-review** - Multi-dimensional code quality analysis
+  - Auto-depth detection (Quick/Standard/Deep)
+  - Platform-specific checks
+  - Reviews branch diff by default
+
+#### Platform Support
+
+- 💎 **Ruby on Rails** - Models, controllers, services, migrations, RSpec/Minitest
+- 🍎 **iOS Swift** - MVVM, SwiftUI/UIKit, Combine, async/await
+- 🤖 **Android Kotlin** - Clean Architecture, MVVM, Coroutines, Hilt DI
+
+#### Philosophy
+
+- 🎮 **Developer Control** - Tools, not automation
+- 💡 **Suggestions** - Skills suggest next steps, you decide
+- ✅ **Approval Gates** - Every action requires explicit confirmation
+- 🗣️ **Natural Language** - Model-invoked, no slash commands
+- 🌍 **Bilingual** - English and French support

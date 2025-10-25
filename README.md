@@ -1,5 +1,5 @@
 # 🚀 Yespark Claude Plugins
-![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 [![Changelog](https://img.shields.io/badge/changelogs-view-blue.svg)](CHANGELOG.md)
 
 **Supercharge your development workflow with AI-powered skills tailored for :**

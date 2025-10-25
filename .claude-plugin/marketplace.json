@@ -2,7 +2,7 @@
   "name": "yespark-team-marketplace",
   "metadata": {
     "description": "Powerful AI assistants for Rails, iOS Swift, and Android Kotlin. 7 focused skills that help you work faster while you stay in control. Tools, not automation. Bilingual English/French.",
-    "version": "5.0.0",
+    "version": "1.0.0",
     "pluginRoot": ".claude"
   },
   "owner": {
