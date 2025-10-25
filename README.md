@@ -1,15 +1,11 @@
-<div align="center">
-  # 🚀 Yespark Claude Plugins
+# 🚀 Yespark Claude Plugins
 
-  **Supercharge your development workflow with AI-powered skills**
+**Supercharge your development workflow with AI-powered skills**
 
-  [![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)](CHANGELOG.md)
-  [![Platform](https://img.shields.io/badge/platform-Rails%20%7C%20iOS%20%7C%20Android-green.svg)](.claude/skills/README.md)
+[![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)](CHANGELOG.md)
+[![Platform](https://img.shields.io/badge/platform-Rails%20%7C%20iOS%20%7C%20Android-green.svg)](.claude/skills/README.md)
 
-  This repository includes several Claude Code skills that extend its functionality. It has been tailored for **Rails** 💎, **iOS Swift** 🍎, and **Android Kotlin** 🤖 development.
-</div>
-
----
+> This repository includes several Claude Code skills that extend its functionality. It has been tailored for **Rails** 💎, **iOS Swift** 🍎, and **Android Kotlin** 🤖 development.
 
 | Skill | Purpose |
 |-------|---------|
@@ -33,9 +29,7 @@
 bun -g install @anthropic-ai/claude-agent-sdk
 ```
 
-### 2️⃣ Navigate to your project directory and run `claude` 🎯
-
-### 3️⃣ Add to your project's `.claude/settings.json` ⚙️:
+### 2️⃣ Add to your project's `.claude/settings.json` ⚙️:
 
 ```json
 {
@@ -52,6 +46,8 @@ bun -g install @anthropic-ai/claude-agent-sdk
   ]
 }
 ```
+
+### 3️⃣ Navigate to your project directory and run `claude` 🎯
 
 ### 4️⃣ Start Using 🎉
 
@@ -229,8 +225,4 @@ Claude: ✅ PR #123 created!
 
 ---
 
-<div align="center">
-
 **Version:** 5.0.0 | [📋 View Changelog](CHANGELOG.md)
-
-</div>
