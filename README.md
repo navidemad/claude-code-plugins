@@ -75,7 +75,7 @@ gh auth login
 ```json
 {
   "extraKnownMarketplaces": {
-    "productivity-plugins": {
+    "claude-code-plugins": {
       "source": {
         "source": "github",
         "repo": "navidemad/claude-code-plugins"
