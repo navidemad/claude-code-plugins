@@ -49,9 +49,6 @@ yum install jq
 
 ## 🎯 Usage Example
 
-<details>
-<summary>Voir le détails</summary>
-
 ```
  ▐▛███▜▌   Claude Code
 ▝▜█████▛▘  Sonnet 4.5 · Claude Max
@@ -118,4 +115,3 @@ Claude: Extends core using same libraries/patterns ✅
         Auto-test + Auto-review + Auto-fix ✅
         Asks approval ✅
 ```
-</details>

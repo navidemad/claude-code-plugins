@@ -190,8 +190,12 @@ find_related_prd() {
 
     # Check recent PRDs
     if [[ -d "docs/prds" ]]; then
-        # Find most recent PRD (last modified)
-        find docs/prds -name "*.md" -type f -exec ls -t {} + | head -1
+        # Find most recent PRD (last modified) - use printf for reliable sorting
+        find docs/prds -name "*.md" -type f -printf '%T@ %p\n' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || \
+        # Fallback for systems without -printf (macOS)
+        find docs/prds -name "*.md" -type f -print0 | xargs -0 stat -f '%m %N' 2>/dev/null | sort -rn | head -1 | cut -d' ' -f2- || \
+        # Final fallback
+        find docs/prds -name "*.md" -type f | head -1
     fi
 }
 

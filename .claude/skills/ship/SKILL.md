@@ -1,7 +1,12 @@
 ---
 name: ship
 description: Create commits and pull requests with conventional formats. Auto-references PRDs, waits for approval before executing git commands. Activates when user says commit, create PR, ship changes. French: committer, créer une PR, soumettre.
-allowed-tools: Bash(git:*), Bash(gh pr create:*), Bash(.claude/skills/shared/scripts/detect_platform.sh:*), Read, Glob
+allowed-tools:
+  - "Bash(git:*)"
+  - "Bash(gh pr create:*)"
+  - "Bash(.claude/skills/shared/scripts/detect_platform.sh:*)"
+  - Read
+  - Glob
 ---
 
 # Ship Changes
@@ -18,19 +23,45 @@ This skill activates when user:
 
 ## Mode Detection
 
-The skill automatically detects what you want to do:
+The skill **automatically detects** what you want to do based on git state:
 
-1. **Commit Mode** - Create a git commit
-   - Triggers: "commit", "save changes", "git commit"
+1. **Commit Mode** - When uncommitted changes exist
+   - Detects: Uncommitted changes in working directory
    - Creates: Conventional commit with PRD reference
+   - Shows: Preview before execution
 
-2. **Pull Request Mode** - Create a GitHub PR
-   - Triggers: "create PR", "pull request", "submit for review"
+2. **Pull Request Mode** - When branch is clean and ahead of base
+   - Detects: Clean working directory + commits ahead of main/master
    - Creates: GitHub PR with comprehensive description
+   - Shows: Preview before execution
+
+**User says "ship" → Skill detects mode → Confirms with user → Executes**
 
 ## Workflow
 
 ### Mode 1: Commit
+
+#### Step 0: Confirm Mode Detection
+
+**Show detected mode to user:**
+```
+🔍 Detected uncommitted changes
+
+Mode: Commit
+Files changed: 8 files (+247/-58 lines)
+
+Proceed with commit creation? [yes/show-changes/cancel]
+```
+
+**If user says "show-changes":**
+- Show full `git diff --stat`
+- Then ask again: "Proceed with commit? [yes/cancel]"
+
+**If user says "cancel":**
+- Exit without doing anything
+
+**If user says "yes":**
+- Continue to Step 1
 
 #### Step 1: Analyze Changes
 
@@ -52,7 +83,7 @@ git diff HEAD --name-only
 
 **Show change summary:**
 ```
-📊 Changes detected:
+📊 Changes analyzed:
 - 8 files changed
 - +247 lines added
 - -58 lines removed
@@ -221,6 +252,30 @@ What would you like to do?
 
 ### Mode 2: Pull Request
 
+#### Step 0: Confirm Mode Detection
+
+**Show detected mode to user:**
+```
+🔍 Detected clean branch with commits ahead
+
+Mode: Pull Request
+Branch: feature/oauth-login
+Base: main
+Commits ahead: 5 commits
+
+Proceed with PR creation? [yes/show-commits/cancel]
+```
+
+**If user says "show-commits":**
+- Show `git log main..HEAD --oneline`
+- Then ask again: "Proceed with PR? [yes/cancel]"
+
+**If user says "cancel":**
+- Exit without doing anything
+
+**If user says "yes":**
+- Continue to Step 1
+
 #### Step 1: Verify Branch is Clean
 
 **FIRST: Check for uncommitted changes:**
@@ -243,8 +298,8 @@ fi
 - spec/models/user_spec.rb (new file)
 
 💡 Please commit your changes first:
-   Say "ship" to commit these changes
-   Then try "ship" again to create PR
+   Say "ship" to commit these changes (will switch to Commit Mode)
+   Then say "ship" again to create PR
 
 Alternatively:
 - git stash    (save changes for later)

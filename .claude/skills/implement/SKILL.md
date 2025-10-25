@@ -312,21 +312,23 @@ Update PRD:
 
 **Detect testing framework:**
 ```bash
-# Rails - Prioritize Minitest if both exist (standard Rails convention)
+# Rails - Prioritize Minitest (Rails default testing framework since Rails 5.0)
+# Minitest is included natively in Rails, making it the standard choice
+# Check test/ directory first (Minitest convention), then spec/ (RSpec convention)
 if [ -d "test/" ]; then
     framework="minitest"
 elif [ -d "spec/" ]; then
     framework="rspec"
 fi
 
-# iOS
+# iOS - Check for Quick/Nimble (BDD framework), otherwise use XCTest (Apple's default)
 if grep -q "Quick" *.xcodeproj/project.pbxproj 2>/dev/null; then
     framework="quick-nimble"
 else
     framework="xctest"
 fi
 
-# Android
+# Android - JUnit + MockK is the standard Kotlin testing stack
 framework="junit-mockk"
 ```
 

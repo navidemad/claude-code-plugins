@@ -34,13 +34,17 @@ init_context() {
 
     mkdir -p "$CONTEXT_DIR"
 
+    # Get current timestamp in ISO 8601 format
+    # This format works identically on both GNU date (Linux) and BSD date (macOS)
+    local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
     # Create initial context
     cat > "$context_file" <<EOF
 {
   "prd": "$prd_file",
   "platform": "$platform",
-  "created_at": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
-  "updated_at": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+  "created_at": "$timestamp",
+  "updated_at": "$timestamp",
   "patterns": {},
   "libraries": {},
   "files_created": [],
@@ -282,6 +286,7 @@ set_library() {
 read_context() {
     local prd_file="$1"
     if [[ -z "$prd_file" ]]; then
+        echo "ERROR: prd_file parameter required" >&2
         echo "{}"
         return 1
     fi
@@ -292,6 +297,7 @@ read_context() {
         cat "$context_file"
         return 0
     else
+        echo "WARNING: Context file does not exist: $context_file" >&2
         echo "{}"
         return 1
     fi
@@ -300,65 +306,101 @@ read_context() {
 # Get files created from core PRD (for expansion context loading)
 get_core_files() {
     local core_prd_file="$1"
+
     if [[ -z "$core_prd_file" ]]; then
+        echo "ERROR: core_prd_file parameter required" >&2
+        return 1
+    fi
+
+    if [[ ! -f "$core_prd_file" ]]; then
+        echo "ERROR: Core PRD file does not exist: $core_prd_file" >&2
         return 1
     fi
 
     local context_file=$(get_context_file "$core_prd_file")
 
-    if [[ -f "$context_file" ]]; then
-        jq -r '.files_created[]' "$context_file" 2>/dev/null
-        return 0
+    if [[ ! -f "$context_file" ]]; then
+        echo "ERROR: Core context file does not exist: $context_file" >&2
+        return 1
     fi
-    return 1
+
+    jq -r '.files_created[]' "$context_file" 2>/dev/null
+    return 0
 }
 
 # Get patterns from core PRD
 get_core_patterns() {
     local core_prd_file="$1"
+
     if [[ -z "$core_prd_file" ]]; then
+        echo "ERROR: core_prd_file parameter required" >&2
+        return 1
+    fi
+
+    if [[ ! -f "$core_prd_file" ]]; then
+        echo "ERROR: Core PRD file does not exist: $core_prd_file" >&2
         return 1
     fi
 
     local context_file=$(get_context_file "$core_prd_file")
 
-    if [[ -f "$context_file" ]]; then
-        jq -r '.patterns' "$context_file" 2>/dev/null
-        return 0
+    if [[ ! -f "$context_file" ]]; then
+        echo "ERROR: Core context file does not exist: $context_file" >&2
+        return 1
     fi
-    return 1
+
+    jq -r '.patterns' "$context_file" 2>/dev/null
+    return 0
 }
 
 # Get libraries from core PRD
 get_core_libraries() {
     local core_prd_file="$1"
+
     if [[ -z "$core_prd_file" ]]; then
+        echo "ERROR: core_prd_file parameter required" >&2
+        return 1
+    fi
+
+    if [[ ! -f "$core_prd_file" ]]; then
+        echo "ERROR: Core PRD file does not exist: $core_prd_file" >&2
         return 1
     fi
 
     local context_file=$(get_context_file "$core_prd_file")
 
-    if [[ -f "$context_file" ]]; then
-        jq -r '.libraries' "$context_file" 2>/dev/null
-        return 0
+    if [[ ! -f "$context_file" ]]; then
+        echo "ERROR: Core context file does not exist: $context_file" >&2
+        return 1
     fi
-    return 1
+
+    jq -r '.libraries' "$context_file" 2>/dev/null
+    return 0
 }
 
 # Get architectural decisions from core PRD
 get_core_decisions() {
     local core_prd_file="$1"
+
     if [[ -z "$core_prd_file" ]]; then
+        echo "ERROR: core_prd_file parameter required" >&2
+        return 1
+    fi
+
+    if [[ ! -f "$core_prd_file" ]]; then
+        echo "ERROR: Core PRD file does not exist: $core_prd_file" >&2
         return 1
     fi
 
     local context_file=$(get_context_file "$core_prd_file")
 
-    if [[ -f "$context_file" ]]; then
-        jq -r '.architectural_decisions[]' "$context_file" 2>/dev/null
-        return 0
+    if [[ ! -f "$context_file" ]]; then
+        echo "ERROR: Core context file does not exist: $context_file" >&2
+        return 1
     fi
-    return 1
+
+    jq -r '.architectural_decisions[]' "$context_file" 2>/dev/null
+    return 0
 }
 
 # Mark phase complete

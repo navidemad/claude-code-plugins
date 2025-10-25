@@ -95,8 +95,8 @@ Ask specifically what this expansion adds to the core.
 # Detect platform
 platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
 
-# Load platform reference
-# Read .claude/skills/shared/references/${platform}/conventions.md
+# Load platform conventions reference file using Read tool
+# Example: Read .claude/skills/shared/references/rails/conventions.md
 ```
 
 **For Core PRDs:**

@@ -3,7 +3,21 @@
   "metadata": {
     "description": "Powerful AI workflow orchestrator for Rails, iOS Swift, and Android Kotlin. 3 intelligent skills that supercharge development while you stay in control. Tools, not automation. Bilingual English/French.",
     "version": "1.0.0",
-    "pluginRoot": ".claude"
+    "pluginRoot": ".claude",
+    "license": "MIT",
+    "keywords": [
+      "prd",
+      "rails",
+      "ios",
+      "android",
+      "workflow",
+      "testing",
+      "code-review",
+      "automation",
+      "context-management",
+      "commit",
+      "pull-request"
+    ]
   },
   "owner": {
     "name": "Yespark Development Team",
