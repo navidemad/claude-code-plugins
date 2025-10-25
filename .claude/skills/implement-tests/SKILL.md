@@ -42,10 +42,10 @@ platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
 **Rails:**
 ```bash
 # Check Gemfile.lock
-if grep -q "rspec-rails" Gemfile.lock; then
-    framework="rspec"
-elif grep -q "minitest" Gemfile.lock || [ -d "test/" ]; then
+if grep -q "minitest" Gemfile.lock || [ -d "test/" ]; then
     framework="minitest"
+elif grep -q "rspec-rails" Gemfile.lock; then
+    framework="rspec"
 fi
 ```
 
