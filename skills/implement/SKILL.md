@@ -324,8 +324,8 @@ update_context "$prd_file" "testing_framework" "$framework"
 # Detect and run project-specific test command
 # Check CLAUDE.md or package.json/Makefile/composer.json for test scripts
 # Examples:
-# - npm test / yarn test / pnpm test
-# - bundle exec rspec / bundle exec rails test
+# - bun test / pnpm test / yarn test / npm test
+# - bundle exec rails test / bundle exec rspec
 # - pytest / python -m pytest
 # - go test ./...
 # - cargo test
