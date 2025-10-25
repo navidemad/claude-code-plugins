@@ -17,7 +17,7 @@ Just talk naturally! No slash commands needed. 🗣️✨
 ## ✨ Orchestrated Skills
 
 | | Skill | Purposes |
-|-|------|----------|--------------|
+|-|-------|----------|
 | 📋 | **plan** | Auto-loads core context for expansions |
 | 💻 | **implement** | Auto-test + Auto-review + Auto-fix + Progress tracking |
 | 🚀 | **ship** | Single skill for commit AND PR |
@@ -31,7 +31,6 @@ Just talk naturally! No slash commands needed. 🗣️✨
 | 🔍 | **Auto-review** | Code review + fixes before approval |
 | 📊 | **Progress** | See completion after each substory |
 | 💾 | **Memory** | `.claude/context/*.json` files remember decisions across sessions |
-| ⚡ | **Efficiency** | 3 skills instead of 7, fewer approval interruptions |
 
 ---
 
