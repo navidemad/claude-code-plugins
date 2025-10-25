@@ -10,15 +10,22 @@
   },
   "plugins": [
     {
-      "name": "orchestrator-skills",
-      "description": "Collection of orchestrated workflow skills: plan (core/expansion PRDs with auto-context), implement (code + auto-test + auto-review + progress), ship (commit + PR with approval gates). Context-aware, pattern-driven, power-user focused.",
-      "source": "./skills",
-      "strict": false,
-      "skills": [
-        "./implement",
-        "./plan",
-        "./ship"
-      ]
+      "name": "plan",
+      "description": "PRD planning with auto-context gathering - creates core or expansion PRDs",
+      "source": "./skills/plan",
+      "strict": false
+    },
+    {
+      "name": "implement",
+      "description": "Code implementation with auto-test and auto-review + progress tracking",
+      "source": "./skills/implement",
+      "strict": false
+    },
+    {
+      "name": "ship",
+      "description": "Commit and PR creation with approval gates",
+      "source": "./skills/ship",
+      "strict": false
     }
   ]
 }
