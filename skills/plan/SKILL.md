@@ -92,15 +92,13 @@ Ask specifically what this expansion adds to the core.
 **Before asking detailed questions, understand what exists:**
 
 ```bash
-# Detect platform
-platform=$(bash skills/shared/scripts/detect_platform.sh)
-
-# Load platform conventions reference file using Read tool
-# Example: Read skills/shared/references/rails/conventions.md
+# Read project conventions from CLAUDE.md in project root
+# This file contains project-specific conventions, tech stack, patterns, etc.
+# Example: Read CLAUDE.md
 ```
 
 **For Core PRDs:**
-Explore to understand project patterns and conventions.
+Explore to understand project patterns and conventions from CLAUDE.md and existing codebase.
 
 **For Expansion PRDs (CRITICAL - AUTO-LOAD):**
 ```bash
@@ -204,7 +202,6 @@ File: `docs/prds/YYYY-MM-DD-{feature}-core.md`
 **Type:** Core Feature
 **Created:** YYYY-MM-DD
 **Status:** Planning
-**Platform:** [Detected from context]
 **Context File:** `.claude/context/YYYY-MM-DD-{feature}-core.json`
 
 ## Overview
@@ -267,8 +264,8 @@ Examples:
 
 [2-4 substories maximum]
 
-## Platform-Specific Notes
-[Minimal platform-specific details for core only]
+## Project-Specific Notes
+[Minimal project-specific details for core only - reference CLAUDE.md]
 
 ## Next Expansions
 After core is complete, consider these expansion PRDs:
@@ -297,7 +294,6 @@ File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 **Builds On:** [Link to core PRD: docs/prds/YYYY-MM-DD-{feature}-core.md]
 **Created:** YYYY-MM-DD
 **Status:** Planning
-**Platform:** [Same as core]
 **Context File:** `.claude/context/YYYY-MM-DD-{feature}-{expansion}.json` (inherits from core)
 
 ## Overview
@@ -396,8 +392,7 @@ This expansion inherits context from core and adds expansion-specific context to
 source skills/shared/scripts/context-manager.sh
 
 # Initialize context file
-platform=$(bash skills/shared/scripts/detect_platform.sh)
-context_file=$(init_context "$prd_file" "$platform")
+context_file=$(init_context "$prd_file")
 
 # For expansions: inherit core context
 if [[ "$prd_type" == "expansion" ]]; then
@@ -463,25 +458,21 @@ fi
   - Core: `docs/prds/YYYY-MM-DD-{feature}-core.md`
   - Expansion: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 
-**Platform Detection:**
-- Run `skills/shared/scripts/detect_platform.sh`
-- Read `skills/shared/references/{platform}/conventions.md`
-- Store platform in context file
-- Use platform-specific terminology:
-  - Rails: models, controllers, services, migrations, jobs
-  - iOS Swift: ViewControllers, ViewModels, Views, Services, coordinators
-  - Android Kotlin: Activities, Fragments, ViewModels, Repositories, UseCases
+**Project Conventions:**
+- Read `CLAUDE.md` from project root for project-specific conventions
+- Use project-defined terminology and patterns from CLAUDE.md
+- Follow tech stack, architecture, and coding standards documented in CLAUDE.md
 
 **Context Management:**
 - Create context file on PRD creation
 - For expansions: inherit core context automatically
-- Store: platform, patterns, libraries, architectural decisions
+- Store: patterns, libraries, architectural decisions from CLAUDE.md and codebase
 - Used by `implement` skill for consistency
 
 **Quality Checks:**
 - Ensure acceptance criteria are testable
 - Document assumptions explicitly
-- Reference platform patterns from loaded conventions
+- Reference project patterns from CLAUDE.md and existing codebase
 - For expansions: explicitly reference and auto-load core implementation patterns
 - Verify context files are created and populated
 

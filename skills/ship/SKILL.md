@@ -4,7 +4,6 @@ description: Create commits and pull requests with conventional formats. Auto-re
 allowed-tools:
   - "Bash(git:*)"
   - "Bash(gh pr create:*)"
-  - "Bash(skills/shared/scripts/detect_platform.sh:*)"
   - Read
   - Glob
 ---
@@ -99,17 +98,14 @@ If changes span both "auth" and "booking" (for example), suggest splitting:
    Continue with single commit? [yes/split/cancel]
 ```
 
-#### Step 2: Detect Platform and Scope
+#### Step 2: Detect Scope
 
 ```bash
-# Detect platform
-platform=$(bash skills/shared/scripts/detect_platform.sh)
-
 # Get changed files
 changed_files=$(git diff HEAD --name-only)
 
-# Detect scope based on files
-scope=$(detect_scope_from_files "$platform" "$changed_files")
+# Detect scope based on files (e.g., "auth", "booking", "api")
+scope=$(detect_scope_from_files "$changed_files")
 ```
 
 #### Step 3: Determine Commit Type
@@ -313,9 +309,6 @@ Alternatively:
 ```bash
 # Source shared tools
 source skills/shared/scripts/git-tools.sh
-
-# Detect platform
-platform=$(bash skills/shared/scripts/detect_platform.sh)
 
 # Get current branch
 current_branch=$(get_current_branch)

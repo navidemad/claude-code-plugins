@@ -16,15 +16,10 @@ CONTEXT_DIR=".claude/context"
 # Initialize context file for a PRD
 init_context() {
     local prd_file="$1"
-    local platform="$2"
 
     # Validate inputs
     if [[ -z "$prd_file" ]]; then
         echo "ERROR: prd_file parameter required" >&2
-        return 1
-    fi
-    if [[ -z "$platform" ]]; then
-        echo "ERROR: platform parameter required" >&2
         return 1
     fi
 
@@ -42,7 +37,6 @@ init_context() {
     cat > "$context_file" <<EOF
 {
   "prd": "$prd_file",
-  "platform": "$platform",
   "created_at": "$timestamp",
   "updated_at": "$timestamp",
   "patterns": {},

@@ -46,7 +46,7 @@ This skill activates when user:
 
 **For PRD Implementation Mode**, continue below:
 
-### Step 1: Load PRD, Context, and Platform
+### Step 1: Load PRD, Context, and Project Conventions
 
 **Execute in parallel:**
 ```bash
@@ -54,17 +54,14 @@ This skill activates when user:
 # Source context manager
 source skills/shared/scripts/context-manager.sh
 
-# Detect platform (cached for session)
-platform=$(bash skills/shared/scripts/detect_platform.sh)
-
-# Load platform conventions
-# Read skills/shared/references/${platform}/conventions.md
+# Read project conventions from CLAUDE.md in project root
+# Read CLAUDE.md
 
 # Load or initialize PRD context
 if context_exists "$prd_file"; then
     context=$(read_context "$prd_file")
 else
-    context_file=$(init_context "$prd_file" "$platform")
+    context_file=$(init_context "$prd_file")
     context=$(read_context "$prd_file")
 fi
 ```
@@ -78,12 +75,12 @@ fi
 Check PRD frontmatter for `**Type:** Core Feature` or `**Type:** Expansion`
 
 **For Core PRDs:**
-- Load platform reference
+- Load CLAUDE.md for project conventions
 - Load context file (patterns, libraries, decisions from previous sessions)
 - Goal: Establish clean patterns that expansions will follow
 
 **For Expansion PRDs (CRITICAL - AUTO-LOAD CORE CONTEXT):**
-- Load platform reference
+- Load CLAUDE.md for project conventions
 - **Find the core PRD** referenced in "Builds On" field
 - **Read core context file**: `.claude/context/{core-prd-name}.json`
 - **Auto-extract**:
@@ -174,9 +171,8 @@ Phase 1: [Phase Name] (4 substories)
 ├─ Substory 1.3: [Name] - ⏳ Not Started
 └─ Substory 1.4: [Name] - ⏳ Not Started
 
-Platform: [rails/ios-swift/android-kotlin]
 Context loaded: ✅
-Patterns to follow: [list from context]
+Patterns to follow: [list from context and CLAUDE.md]
 
 Ready to begin Phase 1? [yes/show-details/skip-to]
 ```
@@ -211,31 +207,8 @@ Establish clean, simple patterns that will be extended later.
 - Maintain consistency in naming, structure, and approach
 - Use same libraries/services as core
 
-Follow detected platform conventions:
-
-**Rails:**
-- Create/modify models with validations
-- Add controllers following RESTful conventions
-- Extract business logic to service objects
-- Create database migrations (reversible)
-- Add background jobs if needed
-- **For expansions**: Extend core models/controllers, add new columns via migrations
-
-**iOS Swift:**
-- Implement ViewModels with published properties
-- Create SwiftUI Views or UIKit ViewControllers
-- Add Services for business logic
-- Implement networking with async/await
-- Handle UI updates on main thread
-- **For expansions**: Extend core ViewModels, add properties following same patterns
-
-**Android Kotlin:**
-- Implement ViewModels with StateFlow
-- Create Fragments/Activities or Composables
-- Add UseCases for business logic
-- Implement Repositories with Hilt DI
-- Handle coroutines properly
-- **For expansions**: Extend core data classes, add fields following same patterns
+Follow project conventions from CLAUDE.md and established patterns from context.
+- **For expansions**: Extend core code following established patterns
 
 **Quality Requirements:**
 - Follow project conventions (CLAUDE.md, .editorconfig, linting)
@@ -631,11 +604,9 @@ What would you like to do?
    - Specific files mentioned
    - Or feature area to test
 
-2. **Detect platform and framework:**
-   ```bash
-   platform=$(bash skills/shared/scripts/detect_platform.sh)
-   # Detect testing framework (RSpec, Minitest, XCTest, JUnit)
-   ```
+2. **Detect testing framework:**
+   - Read CLAUDE.md for testing conventions
+   - Detect testing framework from existing tests (RSpec, Minitest, XCTest, JUnit, etc.)
 
 3. **Read implementation files:**
    - Understand the code to test
@@ -645,7 +616,7 @@ What would you like to do?
    - Unit tests for logic
    - Integration tests if applicable
    - Cover happy paths, errors, edge cases
-   - Follow platform conventions
+   - Follow project testing conventions from CLAUDE.md
 
 5. **Run tests:**
    ```bash
@@ -714,10 +685,10 @@ Continue or stop
 ## Guidelines
 
 - Work incrementally (one substory at a time)
-- Always load PRD context at start
+- Always load PRD context and CLAUDE.md at start
 - For expansions: auto-load core context and files
 - Always analyze existing architecture before coding
-- Follow detected platform patterns religiously
+- Follow project conventions from CLAUDE.md and established patterns religiously
 - Update PRD status after each substory
 - Update context with patterns/libraries/decisions
 - Auto-test after each phase (not per substory)

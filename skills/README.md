@@ -377,22 +377,18 @@ Located in `skills/shared/scripts/`:
 
 Located in `skills/shared/references/{platform}/`:
 
-- `rails/conventions.md` - Rails best practices, patterns, testing
-- `ios-swift/conventions.md` - iOS/Swift MVVM, Combine, async/await
-- `android-kotlin/conventions.md` - Android Clean Architecture, Coroutines, Hilt
+### Project Conventions
 
-**Auto-loaded** by skills based on detected platform.
+Skills read project conventions from `CLAUDE.md` in the project root directory.
 
-### Platform Detection
+**CLAUDE.md should contain:**
+- Tech stack and frameworks
+- Coding patterns and architecture
+- Testing approach and framework
+- Project-specific conventions
+- Libraries and dependencies used
 
-Script: `skills/shared/scripts/detect_platform.sh`
-
-**Detection logic:**
-1. Android Kotlin: `gradle.properties` at root
-2. iOS Swift: `*.xcodeproj` folder, `Package.swift`, or `Podfile`
-3. Rails: `Gemfile` with `gem "rails"`
-
-**Cached per session** for performance.
+**Auto-loaded** by all skills to ensure project-agnostic behavior.
 
 ---
 
@@ -401,7 +397,6 @@ Script: `skills/shared/scripts/detect_platform.sh`
 ### What is Context?
 
 `.claude/context/{prd-name}.json` files that store:
-- Platform detected
 - Patterns established (service objects, API structure, etc.)
 - Libraries chosen (Stripe, Devise, etc.)
 - Architectural decisions made
@@ -414,7 +409,6 @@ Script: `skills/shared/scripts/detect_platform.sh`
 ```json
 {
   "prd": "docs/prds/2024-10-25-invoice-core.md",
-  "platform": "rails",
   "created_at": "2024-10-25T10:00:00Z",
   "updated_at": "2024-10-25T14:30:00Z",
   "patterns": {
