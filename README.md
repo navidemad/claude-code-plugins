@@ -14,6 +14,7 @@
 
 ## ✨ Orchestrated Skills
 
+|-|-------|----------|
 | 📋 | **plan** | Auto-loads core context for expansions |
 | 💻 | **implement** | Auto-test + Auto-review + Auto-fix + Progress tracking |
 | 🚀 | **ship** | Single skill for commit AND PR |
