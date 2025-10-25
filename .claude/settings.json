@@ -9,6 +9,6 @@
     }
   },
   "enabledPlugins": [
-    "yespark-team-marketplace:product-workflow-skills"
+    "yespark-team-marketplace:workflow-skills"
   ]
 }

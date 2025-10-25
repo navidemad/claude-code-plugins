@@ -2,7 +2,8 @@
 
 **Supercharge your development workflow with AI-powered skills**
 
-[![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)](CHANGELOG.md)
+![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)
+[![Changelog](https://img.shields.io/badge/changelog-view-orange.svg)](CHANGELOG.md)
 [![Platform](https://img.shields.io/badge/platform-Rails%20%7C%20iOS%20%7C%20Android-green.svg)](.claude/skills/README.md)
 
 > This repository includes several Claude Code skills that extend its functionality.<br>It has been tailored for **Rails** 💎, **iOS Swift** 🍎, and **Android Kotlin** 🤖 development.
@@ -23,7 +24,7 @@
 
 ## 📦 Installation
 
-### 1️⃣ Install Claude Code:
+### 1️⃣ Install Claude Code or use Cursor Claude extension:
 
 ```sh
 bun -g install @anthropic-ai/claude-agent-sdk
@@ -42,7 +43,7 @@ bun -g install @anthropic-ai/claude-agent-sdk
     }
   },
   "enabledPlugins": [
-    "yespark-team-marketplace:product-workflow-skills"
+    "yespark-team-marketplace:workflow-skills"
   ]
 }
 ```
@@ -222,7 +223,3 @@ Claude: ✅ PR #123 created!
 **Notice:** You control every step. Skills suggest, you decide. 🎮
 
 </details>
-
----
-
-**Version:** 5.0.0 | [📋 View Changelog](CHANGELOG.md)

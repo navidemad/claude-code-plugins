@@ -11,7 +11,7 @@
   },
   "plugins": [
     {
-      "name": "product-workflow-skills",
+      "name": "workflow-skills",
       "source": "skills",
       "strict": false,
       "description": "7 developer-controlled skills: generate-prd (adaptive modes), implement-code (guided workflow), implement-tests, track-prd-progress, commit (message generator), create-pr (description generator), code-review (branch diff analysis). No auto-invocations - you orchestrate the workflow."
