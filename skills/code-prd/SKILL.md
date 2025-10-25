@@ -1,9 +1,9 @@
 ---
-name: implement
-description: Implement PRD substories with auto-testing, code review, and progress tracking. Works substory-by-substory with approval gates per phase. Can also write standalone tests. French: implémenter, coder, développer.
+name: code-prd
+description: Implement PRD substories with testing, code review, and progress tracking. Works substory-by-substory with approval gates per phase. Can also write standalone tests. Activates when user says code PRD, implement PRD, build PRD, code this, implement feature. French: coder le PRD, implémenter le PRD, développer le PRD.
 ---
 
-# Implement Feature from PRD
+# Code PRD Implementation
 
 Write production-quality code for PRD substories with **automatic testing, code review, and iterative refinement** until ready.
 

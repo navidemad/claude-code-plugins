@@ -1,9 +1,9 @@
 ---
-name: plan
-description: Generate core or expansion PRDs with automatic context loading using "land then expand" approach. Activates when user says create PRD, plan feature, document requirements, write spec. French: créer un PRD, planifier une fonctionnalité, rédiger les exigences.
+name: plan-prd
+description: Generate core or expansion PRDs with automatic context loading using "land then expand" approach. Activates when user says plan PRD, create PRD, plan feature, document requirements, write spec. French: planifier un PRD, créer un PRD, planifier une fonctionnalité, rédiger les exigences.
 ---
 
-# Plan Feature Implementation
+# Plan PRD
 
 Create structured PRDs using the **"land then expand"** approach with automatic context management for consistency.
 

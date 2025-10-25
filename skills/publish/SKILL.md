@@ -1,6 +1,6 @@
 ---
-name: ship
-description: Create commits and pull requests with conventional formats. Auto-references PRDs, waits for approval before executing git commands. Activates when user says commit, create PR, ship changes. French: committer, créer une PR, soumettre.
+name: publish
+description: Create commits and pull requests with conventional formats. Auto-references PRDs, waits for approval before executing git commands. Activates when user says publish, ship, commit, create PR, ship changes. French: publier, committer, créer une PR, soumettre.
 allowed-tools:
   - "Bash(git:*)"
   - "Bash(gh pr create:*)"
@@ -8,7 +8,7 @@ allowed-tools:
   - Glob
 ---
 
-# Ship Changes
+# Publish Changes
 
 Create well-formatted git commits and GitHub pull requests with automatic PRD referencing. This skill is a **git assistant** - it helps you ship code, you stay in control.
 

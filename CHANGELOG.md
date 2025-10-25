@@ -4,6 +4,30 @@ All notable changes to Yespark Claude Plugins.
 
 ## [Unreleased] - 2025-10-26
 
+### Changed - Skill Names (Breaking Change)
+- **Renamed all skills for clarity and namespace safety**:
+  - `plan` → `plan-prd`
+  - `implement` → `code-prd`
+  - `ship` → `publish`
+- **Why**: Prevents confusion with Claude's internal tools and generic actions
+- **Impact**: Users must update `.claude/settings.json` to enable new skill names
+- Skills still activate on natural language (e.g., "implement", "plan a feature")
+- More professional naming that clearly indicates workflow purpose
+
+### Migration Required
+Update your `.claude/settings.json`:
+```json
+{
+  "enabledPlugins": {
+    "yespark-agent-skills:plan-prd": true,
+    "yespark-agent-skills:code-prd": true,
+    "yespark-agent-skills:publish": true
+  }
+}
+```
+
+## [1.0.0] - 2025-10-26
+
 ### Changed - Honest Positioning & Expectations
 - **Updated positioning**: Now "AI-assisted PRD-driven development workflow for GitHub-based projects"
 - Changed from "automated workflow" to "AI-assisted workflow guidance"

@@ -76,7 +76,7 @@ These skills work with any stack, including:
 
 ## 🛠️ The 3 Orchestrated Skills
 
-### 📋 plan
+### 📋 plan-prd
 
 **What:** Create core or expansion PRDs with automatic context management
 
@@ -153,7 +153,7 @@ These skills work with any stack, including:
 
 ---
 
-### 💻 implement
+### 💻 code-prd
 
 **What:** Code + Auto-test + Auto-review + Auto-fix + Progress tracking (all-in-one)
 
@@ -240,7 +240,7 @@ These skills work with any stack, including:
 
 ---
 
-### 🚀 ship
+### 🚀 publish
 
 **What:** Commit + Pull Request with approval gates (mode auto-detection)
 
@@ -356,7 +356,7 @@ Located in `skills/shared/scripts/`:
 - `get_current_branch()` - Current git branch
 - `has_uncommitted_changes()` - Check git status
 
-**context-manager.sh** - Context management (used by `plan`, `implement`)
+**context-manager.sh** - Context management (used by `plan-prd`, `code-prd`)
 - `init_context()` - Create new context file
 - `read_context()` - Load context as JSON
 - `context_exists()` - Check if context file exists
@@ -452,7 +452,7 @@ Skills read project conventions from `CLAUDE.md` in the project root directory.
 These skills are **structured prompts** that guide Claude through a development workflow. They are NOT autonomous code automation.
 
 **How it works:**
-1. You activate a skill (`plan`, `implement`, `ship`)
+1. You activate a skill (`plan-prd`, `code-prd`, `publish`)
 2. Claude reads the skill's instructions (markdown prompts)
 3. Claude **interprets and follows** the workflow
 4. Claude updates files (PRDs, context, code)

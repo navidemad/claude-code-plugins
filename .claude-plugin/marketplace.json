@@ -10,21 +10,21 @@
   },
   "plugins": [
     {
-      "name": "plan",
+      "name": "plan-prd",
       "description": "PRD planning with auto-context gathering - creates core or expansion PRDs",
-      "source": "../skills/plan",
+      "source": "../skills/plan-prd",
       "strict": false
     },
     {
-      "name": "implement",
-      "description": "Code implementation with auto-test and auto-review + progress tracking",
-      "source": "../skills/implement",
+      "name": "code-prd",
+      "description": "Code implementation with testing, review, and progress tracking",
+      "source": "../skills/code-prd",
       "strict": false
     },
     {
-      "name": "ship",
+      "name": "publish",
       "description": "Commit and PR creation with approval gates",
-      "source": "../skills/ship",
+      "source": "../skills/publish",
       "strict": false
     }
   ]

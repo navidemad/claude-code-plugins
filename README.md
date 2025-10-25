@@ -3,9 +3,9 @@
 **AI-assisted PRD-driven development workflow for GitHub-based projects**
 
 Language-agnostic structured workflow guidance for faster development on Mac/Unix-like systems.
-- `plan`      ➡️ Generate PRD and auto-loads core context for expansions
-- `implement` ➡️ Code + Test + Review + Fix + Progress tracking
-- `ship`      ➡️ Commit and PR creation with approval gates
+- `plan-prd`  ➡️ Generate PRD and auto-loads core context for expansions
+- `code-prd`  ➡️ Code + Test + Review + Fix + Progress tracking
+- `publish`   ➡️ Commit and PR creation with approval gates
 
 [![Documentation](https://img.shields.io/badge/Documentation-view-blue.svg)](skills/README.md)
 
@@ -83,9 +83,9 @@ gh auth login
     }
   },
   "enabledPlugins": {
-    "yespark-agent-skills:plan": true,
-    "yespark-agent-skills:implement": true,
-    "yespark-agent-skills:ship": true
+    "yespark-agent-skills:plan-prd": true,
+    "yespark-agent-skills:code-prd": true,
+    "yespark-agent-skills:publish": true
   }
 }
 ```
@@ -94,13 +94,13 @@ gh auth login
 
 **These workflows guide Claude, but you maintain control and verification:**
 
-### During Planning (`plan`)
+### During Planning (`plan-prd`)
 - ✓ **Review the PRD** before approving - ensure scope is correct
 - ✓ **Check context file** was created in `.claude/context/`
 - ✓ **Verify substories** match your mental model
 - ✓ **Confirm out-of-scope items** for future expansions
 
-### During Implementation (`implement`)
+### During Implementation (`code-prd`)
 - ✓ **Review code after each substory** - don't wait until the end
 - ✓ **Check PRD status updates** - verify substories marked complete
 - ✓ **Verify context updates** - patterns and decisions tracked correctly
@@ -108,7 +108,7 @@ gh auth login
 - ✓ **Review code changes** before approving phases
 - ⚠️ **Don't blindly approve** - Claude can make mistakes
 
-### During Shipping (`ship`)
+### During Publishing (`publish`)
 - ✓ **Review commit message** before saying "yes"
 - ✓ **Check PR description** is accurate and complete
 - ✓ **Verify all files** included are intentional
@@ -140,7 +140,7 @@ Claude: Creates minimal core PRD (2-4 substories)
         Initializes .claude/context/booking-core.json
 
 ──────────────────────────────────────────────────────────────
-> implement
+> code-prd
 ──────────────────────────────────────────────────────────────
 Claude: Phase 1:
         ├─ Substory 1.1 → ✅ (show progress)
@@ -160,7 +160,7 @@ Claude: Phase 1:
 ──────────────────────────────────────────────────────────────
 
 ──────────────────────────────────────────────────────────────
-> ship
+> publish
 ──────────────────────────────────────────────────────────────
 Claude: Generated commit message
         "Approve? [yes/no]"
@@ -170,7 +170,7 @@ Claude: Generated commit message
 ──────────────────────────────────────────────────────────────
 
 ──────────────────────────────────────────────────────────────
-> ship
+> publish
 ──────────────────────────────────────────────────────────────
 Claude: Generated PR description
         "Create PR? [yes/no]"
@@ -189,7 +189,7 @@ Claude: Auto-loads booking-core context ✅
         Creates expansion PRD following core patterns ✅
 
 ──────────────────────────────────────────────────────────────
-> implement
+> code-prd
 ──────────────────────────────────────────────────────────────
 Claude: Extends core using same libraries/patterns ✅
         Auto-test + Auto-review + Auto-fix ✅
