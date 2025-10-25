@@ -13,15 +13,15 @@ For detailed information about individual skills, see [.claude/skills/README.md]
 
 ### Available Skills
 
-| Skill | Purpose | Activated When You Say... |
-|-------|---------|---------------------------|
-| **generate-prd** | Create adaptive PRDs with codebase exploration | "create a PRD", "plan feature" (🇫🇷 "créer un PRD") |
-| **implement-code** | Write code substory-by-substory from PRDs | "implement PRD", "build this" (🇫🇷 "implémenter le PRD") |
-| **implement-tests** | Write comprehensive test suites | "write tests", "add tests" (🇫🇷 "écrire des tests") |
-| **track-prd-progress** | Track and update PRD implementation status | "update PRD", "show progress" (🇫🇷 "mettre à jour le PRD") |
-| **commit** | Generate well-formatted commit messages | "commit this", "save my work" (🇫🇷 "committer") |
-| **create-pr** | Generate comprehensive PR descriptions | "create a PR", "submit for review" (🇫🇷 "créer une PR") |
-| **code-review** | Multi-dimensional code quality analysis | "review code", "check changes" (🇫🇷 "réviser le code") |
+| Skill | Purpose |
+|-------|---------|
+| **generate-prd** | Create adaptive PRDs with codebase exploration |
+| **implement-code** | Write code substory-by-substory from PRDs |
+| **implement-tests** | Write comprehensive test suites |
+| **track-prd-progress** | Track and update PRD implementation status |
+| **commit** | Generate well-formatted commit messages |
+| **create-pr** | Generate comprehensive PR descriptions |
+| **code-review** | Multi-dimensional code quality analysis |
 
 ## Get started
 
