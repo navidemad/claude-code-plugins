@@ -4,20 +4,27 @@
 [![Changelog](https://img.shields.io/badge/changelogs-view-blue.svg)](CHANGELOG.md)
 ![Status: Production](https://img.shields.io/badge/Status-Production-green)
 
-> **Orchestrated AI workflows development for :**
+**Orchestrated AI workflows for development for:**
 
 [![Ruby on Rails](https://img.shields.io/badge/Ruby%20on%20Rails-CC0000?logo=rubyonrails&logoColor=white)](CLAUDE.md)
 [![iOS Swift](https://img.shields.io/badge/iOS%20Swift-F05138?logo=swift&logoColor=white)](CLAUDE.md)
 [![Android Kotlin](https://img.shields.io/badge/Android%20Kotlin-7F52FF?logo=kotlin&logoColor=white)](CLAUDE.md)
 
-> 🗣️ **Just talk naturally! No slash commands needed** ✨ 
+Just talk naturally! No slash commands needed. 🗣️✨
+
+---
 
 ## ✨ Orchestrated Skills
 
-|-|-------|----------|
-| 📋 | **plan** | Auto-loads core context for expansions |
-| 💻 | **implement** | Auto-test + Auto-review + Auto-fix + Progress tracking |
-| 🚀 | **ship** | Single skill for commit AND PR |
+| Skill | Features |
+|-------|----------|--------------|
+| **plan** | Auto-loads core context for expansions |
+| **implement** | Auto-test + Auto-review + Auto-fix + Progress tracking |
+| **ship** | Single skill for commit AND PR |
+
+📖 **[Full Skills Documentation →](.claude/skills/README.md)**
+
+---
 
 ## 📦 Quick Start
 
@@ -47,12 +54,14 @@ bun -g install @anthropic-ai/claude-agent-sdk
 
 ### 3. Run `claude` in your project
 
-## 🎯 Usage
+---
+
+## 🎯 Usage Example
 
 ```
- ▐▛███▜▌   Claude Code v2.0.27
+ ▐▛███▜▌   Claude Code
 ▝▜█████▛▘  Sonnet 4.5 · Claude Max
-  ▘▘ ▝▝    /Users/navid/code/yespark-claude-plugins
+  ▘▘ ▝▝    /Users/dev/code/yespark-project
 ──────────────────────────────────────────────────────────────
 > plan a booking system
 ──────────────────────────────────────────────────────────────
@@ -118,59 +127,6 @@ Claude: Extends core using same libraries/patterns ✅
 
 ---
 
-## 🎨 The Three Skills
-
-### 📋 plan
-
-**What:** Create PRDs with auto-context loading
-
-**Modes:**
-- **Core**: Minimal foundation (2-4 substories max)
-- **Expansion**: Auto-loads core patterns/files/libraries
-
-**Activates when:** "plan", "create PRD", "plan feature"
-
-**Creates:**
-- `docs/prds/YYYY-MM-DD-feature-core.md`
-- `.claude/context/YYYY-MM-DD-feature-core.json`
-
----
-
-### 💻 implement
-
-**What:** Code + Tests + Review + Progress (all-in-one)
-
-**Flow:**
-1. Implement substories one-by-one
-2. Show progress after each
-3. After phase: Auto-test → Auto-review → Auto-fix
-4. Ask approval at phase boundary
-5. Continue or stop
-
-**Also works standalone:** "write tests for user.rb"
-
-**Activates when:** "implement", "build this", "write tests"
-
-**Updates:**
-- PRD status automatically
-- Context file with patterns/decisions
-
----
-
-### 🚀 ship
-
-**What:** Commit + PR with approval gates
-
-**Auto-detects mode:**
-- Commit mode: Generate conventional commit
-- PR mode: Generate comprehensive description
-
-**Activates when:** "ship", "commit", "create PR"
-
-**Waits for approval** before executing git commands
-
----
-
 ## 💡 Philosophy
 
 ### Land Then Expand
@@ -192,10 +148,3 @@ Claude: Extends core using same libraries/patterns ✅
 - Files created
 
 **Expansions auto-load this context** to maintain consistency.
-
----
-
-## 📚 Documentation
-
-- **[.claude/skills/README.md](./.claude/skills/README.md)** - Individual skill implementations
-- **[CHANGELOG.md](CHANGELOG.md)** - Version history
