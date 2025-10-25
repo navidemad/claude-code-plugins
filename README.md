@@ -1,6 +1,8 @@
 # 🚀 Yespark Claude Plugins
 
-**Orchestrated AI skills for faster development**
+**Language-agnostic PRD-driven development workflow for GitHub-based projects**
+
+Orchestrated AI skills for faster, structured development on Mac/Unix-like systems.
 - `plan`      ➡️ Generate PRD and auto-loads core context for expansions
 - `implement` ➡️ Auto-code + Auto-test + Auto-review + Auto-fix + Progress tracking
 - `ship`      ➡️ Single skill for commit and creating pull requests
@@ -9,19 +11,43 @@
 
 > 🗣️ **Just talk naturally! No slash commands needed** ✨
 
+## 📋 Requirements
+
+**System:**
+- Mac/Linux/Unix-like OS (or Windows with WSL)
+- bash >= 4.0
+- Git repository with GitHub remote
+
+**Tools:**
+- [jq](https://jqlang.github.io/jq/) >= 1.6 (JSON processor for context management)
+- [gh CLI](https://cli.github.com/) (GitHub CLI, authenticated)
+- CLAUDE.md file in project root ([learn more](skills/README.md#project-conventions))
+
 ## 📦 Installation
 
-### Prerequisite jq dependency for context management:
+### Install required dependencies:
 
 ```bash
 # macOS
 brew install jq
 
 # Linux (Debian/Ubuntu) - also for WSL on Windows
-apt-get install jq
+sudo apt-get install jq
 
 # Linux (RedHat/CentOS)
-yum install jq
+sudo yum install jq
+
+# Install GitHub CLI
+# macOS
+brew install gh
+
+# Linux - see https://github.com/cli/cli/blob/trunk/docs/install_linux.md
+```
+
+### Authenticate GitHub CLI:
+
+```bash
+gh auth login
 ```
 
 ### Claude Code Settings `.claude/settings.json`

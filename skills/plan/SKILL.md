@@ -29,7 +29,37 @@ Use when user requests:
 
 ## Workflow
 
-### Phase 0: Determine PRD Type and Load Context
+### Phase 0: Validate Prerequisites
+
+**FIRST: Check for CLAUDE.md**
+
+```bash
+if [[ ! -f "CLAUDE.md" ]]; then
+    cat <<EOF
+❌ ERROR: CLAUDE.md file not found in project root
+
+This workflow requires a CLAUDE.md file documenting your project conventions.
+
+To create one, start a new Claude Code session and type:
+  /init
+
+Then describe your project, and Claude will help create CLAUDE.md.
+
+Learn more: https://github.com/yespark/yespark-claude-plugins#claude-md
+
+Exiting...
+EOF
+    exit 1
+fi
+```
+
+**Show confirmation:**
+```
+✅ CLAUDE.md found
+📋 Ready to plan PRD
+```
+
+### Phase 1: Determine PRD Type and Load Context
 
 **Step 1: Ask PRD Type**
 

@@ -1,6 +1,6 @@
 # 📚 Skills Documentation
 
-**3 orchestrated workflows for project-agnostic development.**
+**3 orchestrated workflows for language-agnostic, PRD-driven development.**
 
 ---
 
@@ -37,9 +37,9 @@ Expansion 2: Add line items (auto-loads invoice + customer context)
 
 ---
 
-## 🎯 Project-Agnostic Design
+## 🎯 Language-Agnostic Design
 
-**Works with ANY tech stack by reading your project's conventions:**
+**Works with ANY programming language/framework by reading your project's conventions:**
 
 ### How It Works
 

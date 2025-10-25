@@ -28,6 +28,36 @@ This skill activates when user:
 
 ## Implementation Workflow
 
+### Phase 0: Validate Prerequisites
+
+**FIRST: Check for CLAUDE.md**
+
+```bash
+if [[ ! -f "CLAUDE.md" ]]; then
+    cat <<EOF
+❌ ERROR: CLAUDE.md file not found in project root
+
+This workflow requires a CLAUDE.md file documenting your project conventions.
+
+To create one, start a new Claude Code session and type:
+  /init
+
+Then describe your project, and Claude will help create CLAUDE.md.
+
+Learn more: https://github.com/yespark/yespark-claude-plugins#claude-md
+
+Exiting...
+EOF
+    exit 1
+fi
+```
+
+**Show confirmation:**
+```
+✅ CLAUDE.md found
+📋 Ready to implement
+```
+
 ### Mode Detection
 
 **Check user request:**
@@ -278,7 +308,23 @@ Update PRD:
 
 #### Step 5a: Auto-Run Tests
 
-**Analyze project testing setup from CLAUDE.md and existing tests:**
+**Check if testing is applicable:**
+
+```bash
+# Read CLAUDE.md for testing info
+if grep -qi "no tests\|testing: none\|tests: n/a" CLAUDE.md; then
+    testing_disabled=true
+fi
+```
+
+**If testing is disabled in CLAUDE.md:**
+```markdown
+ℹ️  Testing skipped (CLAUDE.md indicates no tests for this project)
+
+Proceeding to code review...
+```
+
+**If testing is enabled, analyze project testing setup:**
 - Read CLAUDE.md for testing framework and conventions
 - Examine existing test files to understand patterns
 - Identify test command from CLAUDE.md or project config files
@@ -297,7 +343,30 @@ update_context "$prd_file" "testing_framework" "[framework identified from CLAUD
 ```
 
 **Run tests:**
-- Identify and execute the test command specified in CLAUDE.md or project configuration
+```bash
+# Identify test command from CLAUDE.md or project config
+# Execute tests
+# Capture results
+
+# If test command fails or not found:
+if [[ $test_exit_code -ne 0 ]] && [[ "$test_output" == *"command not found"* ]]; then
+    cat <<EOF
+⚠️  Warning: Unable to run tests
+
+Test command failed or not found. Possible reasons:
+- Test command not configured in CLAUDE.md
+- Dependencies not installed
+- Test framework not set up
+
+Skipping test execution. Please verify tests manually.
+
+Proceeding to code review...
+EOF
+    tests_skipped=true
+fi
+```
+
+**If tests run successfully:**
 - Report results with pass/fail counts and coverage if available
 
 **Report results:**
@@ -315,11 +384,15 @@ Test breakdown:
 All acceptance criteria verified!
 ```
 
-**If tests fail:**
+**If tests fail (and tests weren't skipped):**
 - Show failures
 - Fix code
 - Re-run tests
 - Loop until all tests pass
+
+**If tests were skipped:**
+- Continue to code review without test results
+- Note in review summary that tests were not executed
 
 #### Step 5b: Auto-Run Code Review (Internal)
 
@@ -450,14 +523,14 @@ What would you like to do? [1/2/3/4]
 
 ### Step 6: Phase Approval Gate
 
-**When tests pass and review is clean (no critical/major issues):**
+**When review is complete and clean (no critical/major issues):**
 
 ```markdown
 🎉 Phase 1 Ready for Approval!
 
 📊 Summary:
 ✅ 4 substories completed
-✅ 23 tests passing (94% coverage)
+✅ 23 tests passing (94% coverage) [or "⚠️ Tests skipped - manual verification needed"]
 ✅ Code review: No critical/major issues
 📝 8 files created/modified
 ⏱️  Duration: ~45 minutes
