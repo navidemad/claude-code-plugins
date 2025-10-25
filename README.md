@@ -1,17 +1,11 @@
-# Claude Code
+# Yespark Claude Plugins
 
 Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows -- all through natural language commands.
-Use it in your terminal, IDE.
+Use it in your terminal, IDE. **Learn more in the [official documentation](https://docs.anthropic.com/en/docs/claude-code/overview)**.
 
-**Learn more in the [official documentation](https://docs.anthropic.com/en/docs/claude-code/overview)**.
+This repository includes several Claude Code skills that extend its functionalityies. It has been tailored for for Rails, iOS Swift, and Android Kotlin development.
 
-## Yespark Claude Plugins
-
-### Powerful AI assistants for Rails, iOS Swift, and Android Kotlin development
-
-This repository includes several Claude Code skills that extend functionalities.
-
-### Available Skills
+### Skills
 
 | Skill | Purpose |
 |-------|---------|
