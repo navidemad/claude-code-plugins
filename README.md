@@ -4,9 +4,11 @@
 
 ![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)
 [![Changelog](https://img.shields.io/badge/changelog-view-orange.svg)](CHANGELOG.md)
-[![Platform](https://img.shields.io/badge/platform-Rails%20%7C%20iOS%20%7C%20Android-green.svg)](.claude/skills/README.md)
 
-> This repository includes several Claude Code skills that extend its functionality.<br>It has been tailored for **Rails** 💎, **iOS Swift** 🍎, and **Android Kotlin** 🤖 development.
+> 🚀 A collection of AI-powered skills that supercharge your development workflow across projects using:
+[![Rails](https://img.shields.io/badge/Rails-CC0000?logo=rubyonrails&logoColor=white)](.claude/skills/README.md)
+[![Swift](https://img.shields.io/badge/Swift-F05138?logo=swift&logoColor=white)](.claude/skills/README.md)
+[![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)](.claude/skills/README.md)
 
 | | Skill | Purpose |
 |-|-------|---------|
