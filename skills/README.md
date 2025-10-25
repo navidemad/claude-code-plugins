@@ -445,6 +445,46 @@ Skills read project conventions from `CLAUDE.md` in the project root directory.
 
 ---
 
+## ⚠️ Important: Prompt-Based Workflow System
+
+**Understanding what this is:**
+
+These skills are **structured prompts** that guide Claude through a development workflow. They are NOT autonomous code automation.
+
+**How it works:**
+1. You activate a skill (`plan`, `implement`, `ship`)
+2. Claude reads the skill's instructions (markdown prompts)
+3. Claude **interprets and follows** the workflow
+4. Claude updates files (PRDs, context, code)
+5. **You verify** the results at each step
+
+**What this means for you:**
+
+✅ **Do this:**
+- Review PRDs before approving
+- Check code after each substory
+- Verify context files are updated correctly
+- Read commit messages before saying "yes"
+- Treat Claude as a guided assistant, not autopilot
+
+❌ **Don't assume:**
+- Perfect state management across sessions
+- All workflow steps executed correctly
+- Context files are always accurate
+- Claude won't skip or misinterpret steps
+
+**Best results when:**
+- Features are small (2-4 substories)
+- Sessions are short (1-2 hours)
+- You review frequently
+- You verify state between sessions
+
+**May struggle when:**
+- Features are large/complex (>6 substories)
+- Work spans multiple days
+- Multiple people use same PRD
+- Complex state dependencies
+
 ## 💡 Philosophy & Design Principles
 
 ### 1. Land Then Expand

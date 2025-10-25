@@ -1,15 +1,35 @@
 # 🚀 Yespark Claude Plugins
 
-**Language-agnostic PRD-driven development workflow for GitHub-based projects**
+**AI-assisted PRD-driven development workflow for GitHub-based projects**
 
-Orchestrated AI skills for faster, structured development on Mac/Unix-like systems.
+Language-agnostic structured workflow guidance for faster development on Mac/Unix-like systems.
 - `plan`      ➡️ Generate PRD and auto-loads core context for expansions
-- `implement` ➡️ Auto-code + Auto-test + Auto-review + Auto-fix + Progress tracking
-- `ship`      ➡️ Single skill for commit and creating pull requests
+- `implement` ➡️ Code + Test + Review + Fix + Progress tracking
+- `ship`      ➡️ Commit and PR creation with approval gates
 
 [![Documentation](https://img.shields.io/badge/Documentation-view-blue.svg)](skills/README.md)
 
 > 🗣️ **Just talk naturally! No slash commands needed** ✨
+
+## 🤔 How It Works
+
+These skills provide **structured guidance** for Claude to help you follow a consistent PRD-driven workflow.
+
+**Important to understand:**
+- These are **prompt-based workflows**, not code automation
+- Claude interprets and follows the workflow instructions
+- **You should review** all PRD updates, code changes, and context files
+- Think of it as an **AI pair programmer with process knowledge**, not a robot
+- Works best for **small-to-medium features** (2-4 substories per phase)
+
+**What the skills do:**
+- ✅ Guide Claude through structured development steps
+- ✅ Maintain context files to track decisions and patterns
+- ✅ Suggest tests, reviews, and improvements
+- ✅ Format commits and PRs consistently
+- ❌ Do NOT execute autonomously without your oversight
+- ❌ Do NOT guarantee perfect state management across sessions
+- ❌ Do NOT replace human verification and judgment
 
 ## 📋 Requirements
 
@@ -69,6 +89,43 @@ gh auth login
   }
 }
 ```
+
+## ✅ Best Practices & Human Verification
+
+**These workflows guide Claude, but you maintain control and verification:**
+
+### During Planning (`plan`)
+- ✓ **Review the PRD** before approving - ensure scope is correct
+- ✓ **Check context file** was created in `.claude/context/`
+- ✓ **Verify substories** match your mental model
+- ✓ **Confirm out-of-scope items** for future expansions
+
+### During Implementation (`implement`)
+- ✓ **Review code after each substory** - don't wait until the end
+- ✓ **Check PRD status updates** - verify substories marked complete
+- ✓ **Verify context updates** - patterns and decisions tracked correctly
+- ✓ **Run tests manually** if coverage concerns exist
+- ✓ **Review code changes** before approving phases
+- ⚠️ **Don't blindly approve** - Claude can make mistakes
+
+### During Shipping (`ship`)
+- ✓ **Review commit message** before saying "yes"
+- ✓ **Check PR description** is accurate and complete
+- ✓ **Verify all files** included are intentional
+- ✓ **Review diff** before final approval
+
+### Periodic Maintenance
+- ✓ **Clean up old context files** from abandoned PRDs
+- ✓ **Verify context files** match current codebase after refactors
+- ✓ **Update CLAUDE.md** when tech stack or patterns change
+- ✓ **Check PRD files** are up-to-date with reality
+
+### Multi-Day Work
+- ⚠️ When continuing work across sessions, **verify state first**:
+  - Read the PRD file - what phase/substory are we on?
+  - Check context file - what patterns were established?
+  - Review recent commits - what actually got done?
+- ⚠️ Claude may lose context between sessions - **re-orient it** with current status
 
 ## 🎯 Usage Example
 
