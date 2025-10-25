@@ -1,3 +1,23 @@
+# Claude Code
+
+Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows -- all through natural language commands. Use it in your terminal, IDE, or tag @claude on Github.
+
+**Learn more in the [official documentation](https://docs.anthropic.com/en/docs/claude-code/overview)**.
+
+## Get started
+
+1. Install Claude Code:
+
+```sh
+bun -g install @anthropic-ai/claude-agent-sdk
+```
+
+2. Navigate to your project directory and run `claude`.
+
+## Plugins
+
+This repository includes several Claude Code plugins that extend functionality with custom commands and agents. See the [plugins directory](./plugins/README.md) for detailed documentation on available plugins.
+
 # Yespark Team Claude Code Marketplace
 
 **Powerful AI assistants for Rails, iOS Swift, and Android Kotlin development.** Smart tools that help you work faster while you stay in control.
