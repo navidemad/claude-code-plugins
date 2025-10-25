@@ -1,9 +1,9 @@
 # 🚀 Yespark Claude Plugins
-
 ![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)
 [![Changelog](https://img.shields.io/badge/changelog-view-orange.svg)](CHANGELOG.md)
 
 **Supercharge your development workflow with AI-powered skills tailored for :**
+
 [![Rails](https://img.shields.io/badge/Rails-CC0000?logo=rubyonrails&logoColor=white)](.claude/skills/README.md)
 [![Swift](https://img.shields.io/badge/Swift-F05138?logo=swift&logoColor=white)](.claude/skills/README.md)
 [![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)](.claude/skills/README.md)
