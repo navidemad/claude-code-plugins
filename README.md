@@ -5,17 +5,17 @@
 [![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)](CHANGELOG.md)
 [![Platform](https://img.shields.io/badge/platform-Rails%20%7C%20iOS%20%7C%20Android-green.svg)](.claude/skills/README.md)
 
-> This repository includes several Claude Code skills that extend its functionality. It has been tailored for **Rails** 💎, **iOS Swift** 🍎, and **Android Kotlin** 🤖 development.
+> This repository includes several Claude Code skills that extend its functionality.<br>It has been tailored for **Rails** 💎, **iOS Swift** 🍎, and **Android Kotlin** 🤖 development.
 
-| Skill | Purpose |
-|-------|---------|
-| 📋 **generate-prd** | Create adaptive PRDs with codebase exploration |
-| 💻 **implement-code** | Write code substory-by-substory from PRDs |
-| 🧪 **implement-tests** | Write comprehensive test suites |
-| 📊**track-prd-progress** | Track and update PRD implementation status |
-| 💾 **commit** | Generate well-formatted commit messages |
-| 🚀 **create-pr** | Generate comprehensive PR descriptions |
-| 🔍 **code-review** | Multi-dimensional code quality analysis |
+| | Skill | Purpose |
+|-|-------|---------|
+| 📋 | **generate-prd** | Create adaptive PRDs with codebase exploration |
+| 💻 | **implement-code** | Write code substory-by-substory from PRDs |
+| 🧪 | **implement-tests** | Write comprehensive test suites |
+| 📊 | **track-prd-progress** | Track and update PRD implementation status |
+| 💾 | **commit** | Generate well-formatted commit messages |
+| 🚀 | **create-pr** | Generate comprehensive PR descriptions |
+| 🔍 | **code-review** | Multi-dimensional code quality analysis |
 
 📖 For detailed information about individual skills, see [.claude/skills/README.md](.claude/skills/README.md)
 
