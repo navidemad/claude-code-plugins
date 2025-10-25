@@ -7,6 +7,8 @@ description: Implement PRD substories with auto-testing, code review, and progre
 
 Write production-quality code for PRD substories with **automatic testing, code review, and iterative refinement** until ready.
 
+**Communication Style**: In all interactions and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
+
 ## Philosophy
 
 - **Substory-by-substory**: Implement incrementally with progress tracking

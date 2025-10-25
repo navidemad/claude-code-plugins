@@ -7,6 +7,8 @@ description: Generate core or expansion PRDs with automatic context loading usin
 
 Create structured PRDs using the **"land then expand"** approach with automatic context management for consistency.
 
+**Communication Style**: In all interactions and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
+
 ## Philosophy: Land Then Expand
 
 Modern Claude models work best when they establish patterns first, then layer complexity. This skill creates:
@@ -219,6 +221,9 @@ File: `docs/prds/YYYY-MM-DD-{feature}-core.md`
 ### Success Criteria
 - [Basic measurable criteria]
 
+### SLC Commitment
+**This PRD defines an SLC (Simple, Lovable, Complete) - *not* an MVP.** The release must feel complete, polished, and delightful even with a tight scope.
+
 ## Core Requirements
 
 ### Essential Data/Fields
@@ -326,6 +331,9 @@ File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 
 ### Success Criteria
 - [Measurable criteria for this expansion]
+
+### SLC Commitment
+**This PRD defines an SLC (Simple, Lovable, Complete) - *not* an MVP.** The release must feel complete, polished, and delightful even with a tight scope.
 
 ## Expansion Requirements
 
