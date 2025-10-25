@@ -273,7 +273,7 @@ Once detected, skills automatically load platform-specific conventions and best 
 
 ### Shared Git Tools 🔧
 
-Uses `.claude/skills/shared/scripts/git-tools.sh` for:
+Uses `skills/shared/scripts/git-tools.sh` for:
 - analyze_git_changes()
 - detect_scope_from_files()
 - find_related_prd()
@@ -348,7 +348,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 ### Shared Libraries
 
-Located in `.claude/skills/shared/scripts/`:
+Located in `skills/shared/scripts/`:
 
 **git-tools.sh** - Git operations (used by `ship`)
 - `analyze_git_changes()` - Parse git diff output
@@ -375,7 +375,7 @@ Located in `.claude/skills/shared/scripts/`:
 
 ### Platform References
 
-Located in `.claude/skills/shared/references/{platform}/`:
+Located in `skills/shared/references/{platform}/`:
 
 - `rails/conventions.md` - Rails best practices, patterns, testing
 - `ios-swift/conventions.md` - iOS/Swift MVVM, Combine, async/await
@@ -385,7 +385,7 @@ Located in `.claude/skills/shared/references/{platform}/`:
 
 ### Platform Detection
 
-Script: `.claude/skills/shared/scripts/detect_platform.sh`
+Script: `skills/shared/scripts/detect_platform.sh`
 
 **Detection logic:**
 1. Android Kotlin: `gradle.properties` at root

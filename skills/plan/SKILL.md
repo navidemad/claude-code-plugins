@@ -93,10 +93,10 @@ Ask specifically what this expansion adds to the core.
 
 ```bash
 # Detect platform
-platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
+platform=$(bash skills/shared/scripts/detect_platform.sh)
 
 # Load platform conventions reference file using Read tool
-# Example: Read .claude/skills/shared/references/rails/conventions.md
+# Example: Read skills/shared/references/rails/conventions.md
 ```
 
 **For Core PRDs:**
@@ -105,7 +105,7 @@ Explore to understand project patterns and conventions.
 **For Expansion PRDs (CRITICAL - AUTO-LOAD):**
 ```bash
 # Source context manager
-source .claude/skills/shared/scripts/context-manager.sh
+source skills/shared/scripts/context-manager.sh
 
 # Load core PRD context
 core_context=$(read_context "$core_prd_file")
@@ -393,10 +393,10 @@ This expansion inherits context from core and adds expansion-specific context to
 
 ```bash
 # Source context manager
-source .claude/skills/shared/scripts/context-manager.sh
+source skills/shared/scripts/context-manager.sh
 
 # Initialize context file
-platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
+platform=$(bash skills/shared/scripts/detect_platform.sh)
 context_file=$(init_context "$prd_file" "$platform")
 
 # For expansions: inherit core context
@@ -464,8 +464,8 @@ fi
   - Expansion: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 
 **Platform Detection:**
-- Run `.claude/skills/shared/scripts/detect_platform.sh`
-- Read `.claude/skills/shared/references/{platform}/conventions.md`
+- Run `skills/shared/scripts/detect_platform.sh`
+- Read `skills/shared/references/{platform}/conventions.md`
 - Store platform in context file
 - Use platform-specific terminology:
   - Rails: models, controllers, services, migrations, jobs

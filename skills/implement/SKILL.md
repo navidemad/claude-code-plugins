@@ -52,13 +52,13 @@ This skill activates when user:
 ```bash
 # Read the PRD file
 # Source context manager
-source .claude/skills/shared/scripts/context-manager.sh
+source skills/shared/scripts/context-manager.sh
 
 # Detect platform (cached for session)
-platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
+platform=$(bash skills/shared/scripts/detect_platform.sh)
 
 # Load platform conventions
-# Read .claude/skills/shared/references/${platform}/conventions.md
+# Read skills/shared/references/${platform}/conventions.md
 
 # Load or initialize PRD context
 if context_exists "$prd_file"; then
@@ -633,7 +633,7 @@ What would you like to do?
 
 2. **Detect platform and framework:**
    ```bash
-   platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
+   platform=$(bash skills/shared/scripts/detect_platform.sh)
    # Detect testing framework (RSpec, Minitest, XCTest, JUnit)
    ```
 

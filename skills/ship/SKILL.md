@@ -4,7 +4,7 @@ description: Create commits and pull requests with conventional formats. Auto-re
 allowed-tools:
   - "Bash(git:*)"
   - "Bash(gh pr create:*)"
-  - "Bash(.claude/skills/shared/scripts/detect_platform.sh:*)"
+  - "Bash(skills/shared/scripts/detect_platform.sh:*)"
   - Read
   - Glob
 ---
@@ -67,7 +67,7 @@ Proceed with commit creation? [yes/show-changes/cancel]
 
 ```bash
 # Source shared git tools
-source .claude/skills/shared/scripts/git-tools.sh
+source skills/shared/scripts/git-tools.sh
 
 # Analyze changes
 changes=$(analyze_git_changes "HEAD")
@@ -103,7 +103,7 @@ If changes span both "auth" and "booking" (for example), suggest splitting:
 
 ```bash
 # Detect platform
-platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
+platform=$(bash skills/shared/scripts/detect_platform.sh)
 
 # Get changed files
 changed_files=$(git diff HEAD --name-only)
@@ -129,7 +129,7 @@ Analyze changes to identify type:
 
 ```bash
 # Source context manager
-source .claude/skills/shared/scripts/context-manager.sh
+source skills/shared/scripts/context-manager.sh
 
 # Find related PRD
 related_prd=$(find_related_prd "$changed_files")
@@ -281,7 +281,7 @@ Proceed with PR creation? [yes/show-commits/cancel]
 **FIRST: Check for uncommitted changes:**
 
 ```bash
-source .claude/skills/shared/scripts/git-tools.sh
+source skills/shared/scripts/git-tools.sh
 
 if has_uncommitted_changes; then
     # ERROR - stop
@@ -312,10 +312,10 @@ Alternatively:
 
 ```bash
 # Source shared tools
-source .claude/skills/shared/scripts/git-tools.sh
+source skills/shared/scripts/git-tools.sh
 
 # Detect platform
-platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
+platform=$(bash skills/shared/scripts/detect_platform.sh)
 
 # Get current branch
 current_branch=$(get_current_branch)
@@ -670,4 +670,4 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 ## Shared Code
 
-This skill uses `.claude/skills/shared/scripts/git-tools.sh` for common git operations, ensuring consistency and reducing code duplication.
+This skill uses `skills/shared/scripts/git-tools.sh` for common git operations, ensuring consistency and reducing code duplication.
