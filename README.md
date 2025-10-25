@@ -13,18 +13,7 @@
 
 [![Documentation](https://img.shields.io/badge/Documentation-view-blue.svg)](.claude/skills/README.md)
 
-## 📦 Installation
-
-<details>
-<summary>Voir le détails</summary>
-
-### 1. Install Claude Code
-
-```bash
-bun -g install @anthropic-ai/claude-agent-sdk
-```
-
-### 2. Add to `.claude/settings.json`
+## 📦 Installation `.claude/settings.json`
 
 ```json
 {
@@ -41,9 +30,6 @@ bun -g install @anthropic-ai/claude-agent-sdk
   ]
 }
 ```
-
-### 3. Run `claude` in your project
-</details>
 
 ## 🎯 Usage Example
 
