@@ -173,7 +173,7 @@ Once detected, skills automatically load platform-specific conventions and best 
    - Updates context with patterns/decisions
 
 2. **🧪 Auto-test** (after phase completes)
-   - Detects framework (RSpec, Minitest, XCTest, JUnit)
+   - Detects framework (Minitest prioritized for Rails, XCTest for iOS, JUnit for Android)
    - Writes comprehensive tests
    - Runs tests
    - Reports coverage

@@ -312,11 +312,11 @@ Update PRD:
 
 **Detect testing framework:**
 ```bash
-# Rails
-if [ -d "spec/" ]; then
-    framework="rspec"
-elif [ -d "test/" ]; then
+# Rails - Prioritize Minitest if both exist (standard Rails convention)
+if [ -d "test/" ]; then
     framework="minitest"
+elif [ -d "spec/" ]; then
+    framework="rspec"
 fi
 
 # iOS

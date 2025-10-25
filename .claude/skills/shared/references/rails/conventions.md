@@ -277,7 +277,197 @@ class CreateReservations < ActiveRecord::Migration[7.0]
 end
 ```
 
-## Testing with RSpec
+## Testing with Minitest (Primary Framework)
+
+**Minitest is Rails' default testing framework.** When both `test/` and `spec/` directories exist, prioritize Minitest for new tests unless you're adding to an existing RSpec spec file.
+
+### Model Tests
+
+```ruby
+# test/models/reservation_test.rb
+require "test_helper"
+
+class ReservationTest < ActiveSupport::TestCase
+  test "should belong to user" do
+    reservation = reservations(:valid_reservation)
+    assert_respond_to reservation, :user
+    assert_instance_of User, reservation.user
+  end
+
+  test "should belong to parking spot" do
+    reservation = reservations(:valid_reservation)
+    assert_respond_to reservation, :parking_spot
+    assert_instance_of ParkingSpot, reservation.parking_spot
+  end
+
+  test "should validate presence of starts_at" do
+    reservation = Reservation.new(ends_at: 1.hour.from_now)
+    assert_not reservation.valid?
+    assert_includes reservation.errors[:starts_at], "can't be blank"
+  end
+
+  test "should validate ends_at is after starts_at" do
+    reservation = Reservation.new(
+      starts_at: 2.hours.from_now,
+      ends_at: 1.hour.from_now
+    )
+    assert_not reservation.valid?
+    assert_includes reservation.errors[:ends_at], "must be after start time"
+  end
+
+  test "should calculate total_price correctly" do
+    reservation = reservations(:valid_reservation)
+    expected_price = (reservation.ends_at - reservation.starts_at) / 3600 * reservation.parking_spot.hourly_rate
+    assert_equal expected_price, reservation.total_price
+  end
+end
+```
+
+### Controller Tests
+
+```ruby
+# test/controllers/api/v1/reservations_controller_test.rb
+require "test_helper"
+
+class Api::V1::ReservationsControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @user = users(:john)
+    @parking_spot = parking_spots(:downtown)
+    @valid_params = {
+      reservation: {
+        parking_spot_id: @parking_spot.id,
+        starts_at: 1.hour.from_now,
+        ends_at: 3.hours.from_now
+      }
+    }
+  end
+
+  test "should create reservation with valid params" do
+    sign_in @user
+
+    assert_difference("Reservation.count", 1) do
+      post api_v1_reservations_path, params: @valid_params, as: :json
+    end
+
+    assert_response :created
+    json = JSON.parse(response.body)
+    assert_equal @parking_spot.id, json["data"]["parking_spot_id"]
+  end
+
+  test "should not create reservation with invalid time range" do
+    sign_in @user
+    invalid_params = @valid_params.deep_merge(
+      reservation: { ends_at: 30.minutes.from_now }
+    )
+
+    assert_no_difference("Reservation.count") do
+      post api_v1_reservations_path, params: invalid_params, as: :json
+    end
+
+    assert_response :unprocessable_entity
+  end
+
+  test "should require authentication" do
+    post api_v1_reservations_path, params: @valid_params, as: :json
+    assert_response :unauthorized
+  end
+end
+```
+
+### Service Tests
+
+```ruby
+# test/services/booking_creation_service_test.rb
+require "test_helper"
+
+class BookingCreationServiceTest < ActiveSupport::TestCase
+  setup do
+    @user = users(:john)
+    @params = {
+      parking_spot_id: parking_spots(:downtown).id,
+      starts_at: 1.hour.from_now.iso8601,
+      ends_at: 3.hours.from_now.iso8601
+    }
+  end
+
+  test "creates reservation with valid params" do
+    service = BookingCreationService.new(user: @user, params: @params)
+
+    assert_difference("Reservation.count", 1) do
+      result = service.call
+      assert result.success?
+      assert_instance_of Reservation, result.reservation
+    end
+  end
+
+  test "returns failure with invalid params" do
+    invalid_params = @params.merge(ends_at: 30.minutes.from_now.iso8601)
+    service = BookingCreationService.new(user: @user, params: invalid_params)
+
+    assert_no_difference("Reservation.count") do
+      result = service.call
+      assert_not result.success?
+      assert_includes result.errors, "Invalid time range"
+    end
+  end
+
+  test "sends confirmation email after successful booking" do
+    service = BookingCreationService.new(user: @user, params: @params)
+
+    assert_enqueued_email_with ReservationMailer, :confirmation do
+      service.call
+    end
+  end
+end
+```
+
+### Job Tests
+
+```ruby
+# test/jobs/reservation_reminder_job_test.rb
+require "test_helper"
+
+class ReservationReminderJobTest < ActiveJob::TestCase
+  test "sends reminder email for reservation" do
+    reservation = reservations(:upcoming_reservation)
+
+    assert_enqueued_email_with ReservationMailer, :reminder, args: [reservation] do
+      ReservationReminderJob.perform_later(reservation.id)
+    end
+  end
+
+  test "handles missing reservation gracefully" do
+    assert_nothing_raised do
+      ReservationReminderJob.perform_now(999999)
+    end
+  end
+end
+```
+
+### Fixtures
+
+```yaml
+# test/fixtures/reservations.yml
+valid_reservation:
+  user: john
+  parking_spot: downtown
+  starts_at: <%= 1.hour.from_now %>
+  ends_at: <%= 3.hours.from_now %>
+  status: confirmed
+  confirmation_code: ABC123
+  total_price: 15.00
+
+upcoming_reservation:
+  user: jane
+  parking_spot: airport
+  starts_at: <%= 2.hours.from_now %>
+  ends_at: <%= 5.hours.from_now %>
+  status: confirmed
+  confirmation_code: XYZ789
+  total_price: 30.00
+```
+
+## Testing with RSpec (Secondary Framework)
 
 ### Model Specs
 

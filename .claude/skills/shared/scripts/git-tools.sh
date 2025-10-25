@@ -1,7 +1,6 @@
 #!/bin/bash
 # Shared Git Analysis Tools
 # Used by commit and create-pr (now in 'ship' skill)
-# Optimized for Yespark project structures
 
 # Analyze git changes and return structured data
 analyze_git_changes() {
@@ -39,7 +38,7 @@ detect_scope_from_files() {
 
     case "$platform" in
         rails)
-            # Yespark Rails structure: app/{models,controllers,services,jobs,mailers,interactors,queries,presenters,serializers}
+            # Common Rails structure: app/{models,controllers,services,jobs,mailers,interactors,queries,presenters,serializers}
             if echo "$files" | grep -q "app/models/"; then
                 echo "models"
             elif echo "$files" | grep -q "app/controllers/"; then
@@ -52,6 +51,8 @@ detect_scope_from_files() {
                 echo "mailers"
             elif echo "$files" | grep -q "app/interactors/"; then
                 echo "interactors"
+            elif echo "$files" | grep -q "app/components/"; then
+                echo "components"
             elif echo "$files" | grep -q "app/queries/"; then
                 echo "queries"
             elif echo "$files" | grep -q "app/presenters/"; then
@@ -73,7 +74,7 @@ detect_scope_from_files() {
             fi
             ;;
         ios-swift)
-            # Yespark iOS structure: organized by feature modules
+            # Common iOS structure: organized by feature modules
             if echo "$files" | grep -q "Tests\|Test"; then
                 echo "tests"
             elif echo "$files" | grep -q "Network/"; then
@@ -105,7 +106,7 @@ detect_scope_from_files() {
             fi
             ;;
         android-kotlin)
-            # Yespark Android structure: feature-based or layered architecture
+            # Common Android structure: feature-based or layered architecture
             if echo "$files" | grep -q "src/test/\|src/androidTest/"; then
                 echo "tests"
             elif echo "$files" | grep -q "presentation/\|ui/"; then

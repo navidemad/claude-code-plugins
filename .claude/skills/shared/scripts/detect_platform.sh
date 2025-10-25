@@ -1,13 +1,12 @@
 #!/bin/bash
 # Platform Detection Script
 # Detects Rails, iOS Swift, or Android Kotlin projects
-# Optimized for Yespark project structures
 
 detect_platform() {
     local project_root="${1:-.}"
 
     # Priority 1: Check for Android Kotlin
-    # Yespark Android projects have: gradle.properties + build.gradle.kts + app/ directory
+    # Android projects typically have: gradle.properties + build.gradle.kts + app/ directory
     if [ -f "$project_root/gradle.properties" ]; then
         # Additional validation: check for app/ directory (standard Android structure)
         if [ -d "$project_root/app" ] || [ -f "$project_root/build.gradle.kts" ]; then
@@ -17,7 +16,7 @@ detect_platform() {
     fi
 
     # Priority 2: Check for iOS Swift
-    # Yespark iOS projects have: .xcodeproj or .xcworkspace + Podfile
+    # iOS projects typically have: .xcodeproj or .xcworkspace + Podfile
     if [ -f "$project_root/Podfile" ]; then
         # Check for .xcodeproj or .xcworkspace in root
         if find "$project_root" -maxdepth 1 -name "*.xcodeproj" -type d 2>/dev/null | grep -q .; then
@@ -31,7 +30,7 @@ detect_platform() {
     fi
 
     # Priority 3: Check for Ruby on Rails
-    # Yespark Rails projects have: Gemfile + config.ru + Rakefile + config/ directory
+    # Rails projects typically have: Gemfile + config.ru + Rakefile + config/ directory
     if [ -f "$project_root/Gemfile" ]; then
         # Check for Rails-specific files
         if [ -f "$project_root/config.ru" ] || [ -f "$project_root/Rakefile" ]; then
