@@ -340,9 +340,9 @@ git diff "$base_branch...HEAD" --name-only
 - What was added (new features/files)
 - What was modified (improvements/fixes)
 - What was removed (deprecated code)
-- Test coverage changes
-- Database migrations (Rails)
-- New dependencies
+- Test coverage changes (if applicable)
+- Schema changes (migrations, SQL, ORM changes - if applicable)
+- New dependencies (if applicable)
 
 #### Step 3: Find Related PRD
 
@@ -628,6 +628,8 @@ docs/prds/2024-10-28-invoice-customer-details.md
 🤖 Generated with Claude Code
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
+
+**Note**: The "Follows Core Patterns" section is specific to expansion PRs and should list the actual patterns established in the core PRD for that project (loaded from context). This example shows Rails patterns, but your project may use different patterns documented in CLAUDE.md.
 
 ## Best Practices
 
