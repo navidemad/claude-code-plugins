@@ -1,18 +1,9 @@
 # Claude Code
 
-Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows -- all through natural language commands. Use it in your terminal, IDE, or tag @claude on Github.
+Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows -- all through natural language commands.
+Use it in your terminal, IDE.
 
 **Learn more in the [official documentation](https://docs.anthropic.com/en/docs/claude-code/overview)**.
-
-## Get started
-
-1. Install Claude Code:
-
-```sh
-bun -g install @anthropic-ai/claude-agent-sdk
-```
-
-2. Navigate to your project directory and run `claude`.
 
 ## Plugins
 
@@ -20,7 +11,8 @@ This repository includes several Claude Code plugins that extend functionality w
 
 # Yespark Team Claude Code Marketplace
 
-**Powerful AI assistants for Rails, iOS Swift, and Android Kotlin development.** Smart tools that help you work faster while you stay in control.
+**Powerful AI assistants for Rails, iOS Swift, and Android Kotlin development.**
+Smart tools that help you work faster while you stay in control.
 
 ## Overview
 
@@ -48,11 +40,17 @@ This marketplace provides **7 intelligent skills** that enhance your development
 | **create-pr** | Generate comprehensive PR descriptions | "create a PR", "submit for review" (🇫🇷 "créer une PR") |
 | **code-review** | Multi-dimensional code quality analysis | "review code", "check changes" (🇫🇷 "réviser le code") |
 
-## Quick Start
+## Get started
 
-### 1. Install
+1. Install Claude Code:
 
-Add to your project's `.claude/settings.json`:
+```sh
+bun -g install @anthropic-ai/claude-agent-sdk
+```
+
+2. Navigate to your project directory and run `claude`.
+
+3. Add to your project's `.claude/settings.json`:
 
 ```json
 {
@@ -70,11 +68,7 @@ Add to your project's `.claude/settings.json`:
 }
 ```
 
-### 2. Trust Folder
-
-When Claude Code prompts you, click **Trust**.
-
-### 3. Start Using
+4. Start Using
 
 Just talk naturally! No slash commands needed.
 
@@ -94,29 +88,6 @@ Claude: [Generates commit message, waits for approval]
 You: "Create a PR"
 Claude: [Generates PR description, waits for approval]
 ```
-
-**You control the workflow.** Each skill:
-- ✅ Does one thing well
-- ✅ Suggests next steps
-- ✅ Waits for your approval
-- ❌ Never auto-invokes other skills
-
-<details>
-<summary>Troubleshooting</summary>
-
-<br>
-
-**Skills not activating?**
-1. Check `.claude/settings.json` is correct
-2. Trust the folder in Claude Code
-3. Say "use the [skill-name] skill" explicitly
-4. Restart Claude Code
-
-**Need help?**
-- **Issues**: Open an issue in this repo
-- **Claude Code docs**: https://docs.claude.com/claude-code/skills
-
-</details>
 
 ## Platform Support
 
