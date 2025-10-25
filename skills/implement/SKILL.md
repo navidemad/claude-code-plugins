@@ -72,12 +72,22 @@ fi
 - List PRDs with their type (Core/Expansion) and completion status
 
 **Determine PRD Type:**
-Check PRD frontmatter for `**Type:** Core Feature` or `**Type:** Expansion`
+Check PRD frontmatter for:
+- `**Type:** Core Feature`
+- `**Type:** Expansion`
+- `**Type:** Task`
 
 **For Core PRDs:**
 - Load CLAUDE.md for project conventions
 - Load context file (patterns, libraries, decisions from previous sessions)
 - Goal: Establish clean patterns that expansions will follow
+
+**For Task PRDs:**
+- Load CLAUDE.md for project conventions
+- Work through Implementation Checklist sequentially
+- No phases/substories - just step-by-step execution
+- Update checkboxes as steps complete
+- Goal: Complete technical task efficiently
 
 **For Expansion PRDs (CRITICAL - AUTO-LOAD CORE CONTEXT):**
 - Load CLAUDE.md for project conventions
@@ -92,33 +102,19 @@ Check PRD frontmatter for `**Type:** Core Feature` or `**Type:** Expansion`
 - Document patterns found:
 ```
 🔍 Core Implementation Analysis (AUTO-LOADED):
-From: docs/prds/2024-10-25-invoice-core.md
-Context: .claude/context/2024-10-25-invoice-core.json
+From: [path to core PRD]
+Context: [path to core context file]
 
-Core files:
-- src/models/invoice.js
-- src/controllers/invoices.controller.ts
-- src/services/invoice.service.ts
+Core files: [list actual files from context]
 
-Established patterns:
-- Service layer pattern for business logic
-- RESTful API structure
-- DTOs for request/response validation
-- Jest + Supertest for testing
+Established patterns: [list actual patterns from context and code analysis]
 
-Libraries in use:
-- Payment: Stripe
-- Auth: Passport + JWT
+Libraries in use: [list actual libraries from context]
 
-Architectural decisions:
-- Business logic in service layer
-- Repository pattern for data access
-- Event-driven notifications
+Architectural decisions: [list actual decisions from context]
 
 ✅ Will extend these patterns for [expansion name].
 ```
-
-**Note**: This example shows a Node.js/TypeScript project. Your project will show patterns specific to your tech stack from CLAUDE.md.
 
 ### Step 2: Analyze Existing Architecture
 
@@ -139,10 +135,7 @@ Architectural decisions:
 - Data layer patterns (if applicable - database, ORM, storage)
 - API patterns (if applicable - REST, GraphQL, gRPC)
 
-**Document findings (examples from different projects):**
-- "Found existing auth in `app/services/auth/`, will follow same pattern"
-- "State management uses Redux, will maintain consistency"
-- "Repository pattern used with dependency injection, following established structure"
+**Document findings based on your project's CLAUDE.md and codebase analysis.**
 
 ### Step 3: Parse PRD and Create Implementation Plan
 
@@ -231,9 +224,9 @@ add_created_file "$prd_file" "src/services/oauth.service.ts"
 **Track decisions made:**
 ```bash
 # If using a new library or pattern
-add_decision "$prd_file" "Chose Stripe SDK for payment processing"
-set_library "$prd_file" "payment" "stripe"
-set_pattern "$prd_file" "service_layer" "src/services/"
+add_decision "$prd_file" "[Your architectural decision]"
+set_library "$prd_file" "[category]" "[library name]"
+set_pattern "$prd_file" "[pattern name]" "[pattern location/description]"
 ```
 
 #### Mark Substory Complete
@@ -285,27 +278,10 @@ Update PRD:
 
 #### Step 5a: Auto-Run Tests
 
-**Detect testing framework:**
-```bash
-# Read CLAUDE.md for testing framework information
-# Or detect from existing test files and directories
-# Examples:
-# - test/ directory → might be Minitest, Go test, pytest, etc.
-# - spec/ directory → might be RSpec, Jest, Jasmine, etc.
-# - __tests__/ directory → Jest, Vitest, etc.
-# - Look for test files with specific patterns (.test.js, _test.go, test_*.py, *_spec.rb)
-
-# Generic detection based on common patterns
-if [ -d "test/" ]; then
-    framework="detected from test/"
-elif [ -d "spec/" ]; then
-    framework="detected from spec/"
-elif [ -d "__tests__/" ]; then
-    framework="detected from __tests__/"
-else
-    framework="check CLAUDE.md or existing tests"
-fi
-```
+**Analyze project testing setup from CLAUDE.md and existing tests:**
+- Read CLAUDE.md for testing framework and conventions
+- Examine existing test files to understand patterns
+- Identify test command from CLAUDE.md or project config files
 
 **Write comprehensive tests:**
 - Unit tests for core logic (business logic, utilities, domain models)
@@ -313,40 +289,28 @@ fi
 - Cover all acceptance criteria from substories
 - Test happy paths, error scenarios, edge cases
 - Follow project testing conventions from CLAUDE.md
+- Match existing test file patterns and structure
 
 **Update context with testing framework:**
 ```bash
-update_context "$prd_file" "testing_framework" "$framework"
+update_context "$prd_file" "testing_framework" "[framework identified from CLAUDE.md or project]"
 ```
 
 **Run tests:**
-```bash
-# Detect and run project-specific test command
-# Check CLAUDE.md or package.json/Makefile/composer.json for test scripts
-# Examples:
-# - bun test / pnpm test / yarn test / npm test
-# - bundle exec rails test / bundle exec rspec
-# - pytest / python -m pytest
-# - go test ./...
-# - cargo test
-# - ./gradlew test
-# - xcodebuild test
-# - make test
-
-# Claude will analyze project structure and run appropriate test command
-```
+- Identify and execute the test command specified in CLAUDE.md or project configuration
+- Report results with pass/fail counts and coverage if available
 
 **Report results:**
 ```
 🧪 Tests Written and Executed:
 
-✅ 23 tests passed
-📊 Coverage: 94%
-⏱️  Duration: 3.2s
+✅ [X] tests passed
+📊 Coverage: [Y]%
+⏱️  Duration: [time]
 
 Test breakdown:
-- Unit tests: 15 (business logic, utilities)
-- Integration tests: 8 (API endpoints, services)
+- [Test type 1]: [count] tests
+- [Test type 2]: [count] tests
 
 All acceptance criteria verified!
 ```
@@ -608,9 +572,9 @@ What would you like to do?
    - Specific files mentioned
    - Or feature area to test
 
-2. **Detect testing framework:**
-   - Read CLAUDE.md for testing conventions
-   - Detect testing framework from existing tests (RSpec, Minitest, XCTest, JUnit, etc.)
+2. **Understand testing setup from CLAUDE.md:**
+   - Read CLAUDE.md for testing framework and conventions
+   - Examine existing test files to understand patterns and structure
 
 3. **Read implementation files:**
    - Understand the code to test

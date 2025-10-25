@@ -33,14 +33,15 @@ Use when user requests:
 
 **Step 1: Ask PRD Type**
 
-**CRITICAL**: Ask user to determine if this is a core or expansion PRD:
+**CRITICAL**: Ask user to determine the PRD type:
 
 ```
 Is this:
 1. 🌱 A new core feature (minimal foundation to establish patterns)
 2. 🔧 An expansion of existing feature (builds on completed core)
+3. ⚡ A task-based change (infrastructure, migration, optimization, refactor, etc.)
 
-Choose [1/2]:
+Choose [1/2/3]:
 ```
 
 **If user chooses "1 - Core Feature":**
@@ -62,6 +63,13 @@ Choose [1/2]:
 - Create focused expansion PRD building on core
 - File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 - Goal: Add ONE focused aspect using established patterns
+
+**If user chooses "3 - Task-based Change":**
+- Use task-oriented format instead of substories
+- File: `docs/prds/YYYY-MM-DD-{task-name}-task.md`
+- Format: Checklist of concrete steps instead of phases/substories
+- Examples: Database migration, CI/CD setup, performance optimization, refactoring, security patch
+- Goal: Complete specific technical task with clear acceptance criteria
 
 **Step 2: Understand Feature Scope**
 
@@ -125,29 +133,18 @@ done
 🔍 Codebase Analysis:
 
 [For Core:]
-- Found similar feature: OAuth login in app/services/auth/
-- Existing pattern: Service objects for business logic
-- Database: PostgreSQL with ActiveRecord
-- API: RESTful endpoints under /api/v1/
-- Testing: Minitest with FactoryBot
-- Authentication: Devise + JWT
+- Found similar feature: [describe what you found]
+- Existing patterns: [list patterns from CLAUDE.md and codebase]
+- Tech stack: [from CLAUDE.md]
+- Testing approach: [from CLAUDE.md and existing tests]
+- Key libraries: [from CLAUDE.md]
 
 [For Expansion - AUTO-LOADED:]
-- Core PRD: docs/prds/2024-10-25-invoice-core.md
-- Core files created:
-  * app/models/invoice.rb
-  * app/controllers/api/v1/invoices_controller.rb
-  * app/services/invoice_creation_service.rb
-- Established patterns:
-  * Service objects in app/services/
-  * RESTful API under /api/v1/
-  * ActiveModel serializers
-- Libraries in use:
-  * Payment: Stripe
-  * Auth: Devise + JWT
-- Architectural decisions:
-  * Business logic in service objects
-  * Background jobs for emails
+- Core PRD: [path to core PRD]
+- Core files created: [list from context]
+- Established patterns: [list from context]
+- Libraries in use: [list from context]
+- Architectural decisions: [list from context]
 
 Will follow these established patterns.
 ```
@@ -306,24 +303,16 @@ File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 **Core PRD:** `docs/prds/YYYY-MM-DD-{feature}-core.md`
 
 **Files created in core:**
-[AUTO-POPULATED from context file]
-- [file path 1]
-- [file path 2]
+[AUTO-POPULATED from context file - actual file paths from your project]
 
 **Patterns established in core:**
-[AUTO-POPULATED from context file]
-- [pattern 1 - e.g., "Service objects for business logic"]
-- [pattern 2 - e.g., "RESTful API under /api/v1/"]
+[AUTO-POPULATED from context file - actual patterns used in your codebase]
 
 **Libraries in use:**
-[AUTO-POPULATED from context file]
-- [Payment: Stripe]
-- [Auth: Devise]
+[AUTO-POPULATED from context file - actual libraries chosen during core implementation]
 
 **Architectural decisions:**
-[AUTO-POPULATED from context file]
-- [decision 1]
-- [decision 2]
+[AUTO-POPULATED from context file - actual decisions made during core implementation]
 
 ### Success Criteria
 - [Measurable criteria for this expansion]
@@ -383,6 +372,67 @@ File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 This expansion inherits context from core and adds expansion-specific context to `.claude/context/YYYY-MM-DD-{feature}-{expansion}.json`.
 ```
 
+#### Task-Based PRD Structure
+
+File: `docs/prds/YYYY-MM-DD-{task-name}-task.md`
+
+```markdown
+# [Task Name]
+
+**Type:** Task
+**Created:** YYYY-MM-DD
+**Status:** Planning
+**Context File:** `.claude/context/YYYY-MM-DD-{task-name}-task.json`
+
+## Overview
+
+### Problem/Goal
+[Clear description of what needs to be done and why]
+
+### Success Criteria
+- [Measurable criteria for completion]
+
+## Technical Approach
+
+[Describe the approach, technology choices, and reasoning]
+
+## Implementation Checklist
+
+**Each checkbox represents a concrete step:**
+
+### Preparation
+- [ ] [Step 1: e.g., Backup database, review current config]
+- [ ] [Step 2: e.g., Set up test environment]
+
+### Execution
+- [ ] [Step 3: e.g., Create migration scripts]
+- [ ] [Step 4: e.g., Update configuration files]
+- [ ] [Step 5: e.g., Deploy changes]
+
+### Validation
+- [ ] [Step 6: e.g., Run integration tests]
+- [ ] [Step 7: e.g., Verify monitoring/alerts]
+- [ ] [Step 8: e.g., Document changes]
+
+**Status:** ⏳ Not Started
+
+## Testing Strategy
+[How to verify this task is complete]
+
+## Rollback Plan
+[How to revert if something goes wrong]
+
+## Dependencies
+**Internal:** [Other PRDs or systems affected]
+**External:** [Third-party services, tools required]
+
+## Project-Specific Notes
+[Any project-specific details from CLAUDE.md]
+
+## Context
+Task-based PRDs use simplified context tracking focused on steps completed rather than phases/substories.
+```
+
 ### Phase 3: Context Initialization
 
 **After creating PRD:**
@@ -400,6 +450,12 @@ if [[ "$prd_type" == "expansion" ]]; then
     core_context=$(read_context "$core_prd_file")
     # Add expansion-specific fields
     # Update context with expansion name
+fi
+
+# For tasks: simpler context structure
+if [[ "$prd_type" == "task" ]]; then
+    # Task-based context focuses on checklist completion
+    # No phases/substories tracking needed
 fi
 ```
 
@@ -445,6 +501,23 @@ fi
    - [W] architectural decisions
 
 💡 Next: "implement" to build this expansion following core patterns
+```
+
+**After Task-Based PRD creation:**
+- Verify checklist is concrete and actionable
+- Confirm rollback plan is included
+- Confirm success criteria are measurable
+- Output message:
+```
+✅ Task PRD created: docs/prds/YYYY-MM-DD-{task-name}-task.md
+📋 Context file: .claude/context/YYYY-MM-DD-{task-name}-task.json
+
+⚡ Task: [brief summary]
+📋 Steps: [X] concrete steps defined
+✅ Success criteria: [brief list]
+🔄 Rollback plan: Included
+
+💡 Next: "implement" to execute this task checklist
 ```
 
 ## Guidelines

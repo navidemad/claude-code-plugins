@@ -12,19 +12,19 @@
     {
       "name": "plan",
       "description": "PRD planning with auto-context gathering - creates core or expansion PRDs",
-      "source": "./skills/plan",
+      "source": "../skills/plan",
       "strict": false
     },
     {
       "name": "implement",
       "description": "Code implementation with auto-test and auto-review + progress tracking",
-      "source": "./skills/implement",
+      "source": "../skills/implement",
       "strict": false
     },
     {
       "name": "ship",
       "description": "Commit and PR creation with approval gates",
-      "source": "./skills/ship",
+      "source": "../skills/ship",
       "strict": false
     }
   ]
