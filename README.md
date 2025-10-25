@@ -16,20 +16,22 @@ Just talk naturally! No slash commands needed. 🗣️✨
 
 ## ✨ Orchestrated Skills
 
-| Skill | Replaces | What Changed |
-|-------|----------|--------------|
-| **📋 plan** | generate-prd + track-prd-progress | ➕ Auto-loads core context for expansions |
-| **💻 implement** | implement-code + implement-tests + track-prd-progress + code-review | ➕ Auto-test + Auto-review + Auto-fix + Progress tracking |
-| **🚀 ship** | commit + create-pr | ➕ Single skill for commit AND PR |
+| | Skill | Purposes |
+|-|------|----------|--------------|
+| 📋 | **plan** | Auto-loads core context for expansions |
+| 💻 | **implement** | Auto-test + Auto-review + Auto-fix + Progress tracking |
+| 🚀 | **ship** | Single skill for commit AND PR |
 
 ### Key Improvements
 
-🔄 **Auto-context**: Expansions inherit core patterns automatically
-🧪 **Auto-test**: Tests run after each phase
-🔍 **Auto-review**: Code review + fixes before approval
-📊 **Progress**: See completion after each substory
-💾 **Memory**: `.claude/context/*.json` files remember decisions across sessions
-⚡ **Efficiency**: 3 skills instead of 7, fewer approval interruptions
+| | Key | Improvements |
+|-|-----|--------------|
+| 🔄 | **Auto-context** | Expansions inherit core patterns automatically |
+| 🧪 | **Auto-test** | Tests run after each phase |
+| 🔍 | **Auto-review** | Code review + fixes before approval |
+| 📊 | **Progress** | See completion after each substory |
+| 💾 | **Memory** | `.claude/context/*.json` files remember decisions across sessions |
+| ⚡ | **Efficiency** | 3 skills instead of 7, fewer approval interruptions |
 
 ---
 
@@ -60,8 +62,6 @@ bun -g install @anthropic-ai/claude-agent-sdk
 ```
 
 ### 3. Run `claude` in your project
-
----
 
 ## 🎯 Usage
 
@@ -192,5 +192,5 @@ Claude: Extends core using same libraries/patterns ✅
 
 ## 📚 Documentation
 
-- **[.claude/skills/](./claude/skills/)** - Individual skill implementations
+- **[.claude/skills/](./claude/skills/README.md)** - Individual skill implementations
 - **[CHANGELOG.md](CHANGELOG.md)** - Version history
