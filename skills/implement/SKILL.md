@@ -96,27 +96,29 @@ From: docs/prds/2024-10-25-invoice-core.md
 Context: .claude/context/2024-10-25-invoice-core.json
 
 Core files:
-- app/models/invoice.rb
-- app/controllers/api/v1/invoices_controller.rb
-- app/serializers/invoice_serializer.rb
+- src/models/invoice.js
+- src/controllers/invoices.controller.ts
+- src/services/invoice.service.ts
 
 Established patterns:
-- Service objects in app/services/ for business logic
-- RESTful API structure under /api/v1/
-- ActiveModel serializers for JSON responses
-- Minitest tests with FactoryBot
+- Service layer pattern for business logic
+- RESTful API structure
+- DTOs for request/response validation
+- Jest + Supertest for testing
 
 Libraries in use:
 - Payment: Stripe
-- Auth: Devise + JWT
+- Auth: Passport + JWT
 
 Architectural decisions:
-- Business logic extracted to service objects
-- Background jobs for email notifications
-- Validations in models, business rules in services
+- Business logic in service layer
+- Repository pattern for data access
+- Event-driven notifications
 
 ✅ Will extend these patterns for [expansion name].
 ```
+
+**Note**: This example shows a Node.js/TypeScript project. Your project will show patterns specific to your tech stack from CLAUDE.md.
 
 ### Step 2: Analyze Existing Architecture
 
@@ -134,13 +136,13 @@ Architectural decisions:
 - Current architecture (layering, separation of concerns)
 - Naming conventions in use
 - Where similar features are implemented
-- Database schema (if Rails)
-- API patterns (if backend)
+- Data layer patterns (if applicable - database, ORM, storage)
+- API patterns (if applicable - REST, GraphQL, gRPC)
 
-**Document findings:**
+**Document findings (examples from different projects):**
 - "Found existing auth in `app/services/auth/`, will follow same pattern"
-- "ViewModels use Combine publishers, will maintain consistency"
-- "Repository pattern used with Hilt DI, following established structure"
+- "State management uses Redux, will maintain consistency"
+- "Repository pattern used with dependency injection, following established structure"
 
 ### Step 3: Parse PRD and Create Implementation Plan
 
@@ -185,8 +187,8 @@ Ready to begin Phase 1? [yes/show-details/skip-to]
 
 Update PRD:
 ```markdown
-- 🔄 [1.1] User OAuth model - In Progress
-  - Current: Creating model and migration
+- 🔄 [1.1] User OAuth integration - In Progress
+  - Current: Implementing OAuth flow
   - Started: YYYY-MM-DD HH:MM
 ```
 
@@ -222,25 +224,25 @@ Follow project conventions from CLAUDE.md and established patterns from context.
 **Track files created/modified:**
 ```bash
 # Add to context
-add_created_file "$prd_file" "app/models/user.rb"
-add_created_file "$prd_file" "db/migrate/20241025_add_oauth_to_users.rb"
+add_created_file "$prd_file" "src/models/user.model.ts"
+add_created_file "$prd_file" "src/services/oauth.service.ts"
 ```
 
 **Track decisions made:**
 ```bash
 # If using a new library or pattern
-add_decision "$prd_file" "Chose Stripe for payment processing"
+add_decision "$prd_file" "Chose Stripe SDK for payment processing"
 set_library "$prd_file" "payment" "stripe"
-set_pattern "$prd_file" "service_objects" "app/services/"
+set_pattern "$prd_file" "service_layer" "src/services/"
 ```
 
 #### Mark Substory Complete
 
 Update PRD:
 ```markdown
-- ✅ [1.1] User OAuth model - Completed (YYYY-MM-DD)
-  Files: app/models/user.rb, db/migrate/xxx_add_oauth_to_users.rb
-  Summary: Added OAuth provider and UID fields with indexes
+- ✅ [1.1] User OAuth integration - Completed (YYYY-MM-DD)
+  Files: src/models/user.model.ts, src/services/oauth.service.ts
+  Summary: Implemented OAuth flow with provider support
 ```
 
 #### Show Progress After Each Substory
@@ -249,9 +251,9 @@ Update PRD:
 ✅ Substory 1.1 complete!
 
 📝 Files created/modified:
-- app/models/user.rb (User model with OAuth fields)
-- db/migrate/20241025_add_oauth_to_users.rb (Migration)
-- app/serializers/user_serializer.rb (Updated serializer)
+- src/models/user.model.ts (User model with OAuth fields)
+- src/services/oauth.service.ts (OAuth service)
+- src/dto/oauth-response.dto.ts (Response DTO)
 
 📊 Progress: 1/4 substories (25% of Phase 1)
 
@@ -268,7 +270,7 @@ Update PRD:
 🎉 Phase 1 Complete: [Phase Name]
 
 ✅ Completed substories:
-- [1.1] User OAuth model
+- [1.1] User OAuth integration
 - [1.2] OAuth callback handler
 - [1.3] Token management
 - [1.4] Account linking
@@ -276,7 +278,7 @@ Update PRD:
 📊 Phase Stats:
 - Files: 8 files created/modified
 - Lines: +350 lines
-- Patterns: Service object pattern established
+- Patterns: Service layer pattern established
 
 🧪 Now running automated testing and review...
 ```
@@ -285,32 +287,32 @@ Update PRD:
 
 **Detect testing framework:**
 ```bash
-# Rails - Prioritize Minitest (Rails default testing framework since Rails 5.0)
-# Minitest is included natively in Rails, making it the standard choice
-# Check test/ directory first (Minitest convention), then spec/ (RSpec convention)
+# Read CLAUDE.md for testing framework information
+# Or detect from existing test files and directories
+# Examples:
+# - test/ directory → might be Minitest, Go test, pytest, etc.
+# - spec/ directory → might be RSpec, Jest, Jasmine, etc.
+# - __tests__/ directory → Jest, Vitest, etc.
+# - Look for test files with specific patterns (.test.js, _test.go, test_*.py, *_spec.rb)
+
+# Generic detection based on common patterns
 if [ -d "test/" ]; then
-    framework="minitest"
+    framework="detected from test/"
 elif [ -d "spec/" ]; then
-    framework="rspec"
-fi
-
-# iOS - Check for Quick/Nimble (BDD framework), otherwise use XCTest (Apple's default)
-if grep -q "Quick" *.xcodeproj/project.pbxproj 2>/dev/null; then
-    framework="quick-nimble"
+    framework="detected from spec/"
+elif [ -d "__tests__/" ]; then
+    framework="detected from __tests__/"
 else
-    framework="xctest"
+    framework="check CLAUDE.md or existing tests"
 fi
-
-# Android - JUnit + MockK is the standard Kotlin testing stack
-framework="junit-mockk"
 ```
 
 **Write comprehensive tests:**
-- Unit tests for models/ViewModels/domain logic
-- Integration tests for controllers/services/repositories
+- Unit tests for core logic (business logic, utilities, domain models)
+- Integration tests for interactions between components
 - Cover all acceptance criteria from substories
 - Test happy paths, error scenarios, edge cases
-- Follow platform testing conventions
+- Follow project testing conventions from CLAUDE.md
 
 **Update context with testing framework:**
 ```bash
@@ -319,14 +321,19 @@ update_context "$prd_file" "testing_framework" "$framework"
 
 **Run tests:**
 ```bash
-# Rails
-bundle exec rails test
+# Detect and run project-specific test command
+# Check CLAUDE.md or package.json/Makefile/composer.json for test scripts
+# Examples:
+# - npm test / yarn test / pnpm test
+# - bundle exec rspec / bundle exec rails test
+# - pytest / python -m pytest
+# - go test ./...
+# - cargo test
+# - ./gradlew test
+# - xcodebuild test
+# - make test
 
-# iOS
-xcodebuild test -scheme YourApp
-
-# Android
-./gradlew testDebugUnitTest
+# Claude will analyze project structure and run appropriate test command
 ```
 
 **Report results:**
@@ -338,7 +345,7 @@ xcodebuild test -scheme YourApp
 ⏱️  Duration: 3.2s
 
 Test breakdown:
-- Unit tests: 15 (models, ViewModels)
+- Unit tests: 15 (business logic, utilities)
 - Integration tests: 8 (API endpoints, services)
 
 All acceptance criteria verified!
@@ -358,12 +365,9 @@ Perform multi-dimensional review:
 - **Code Quality**: Readability, maintainability, complexity
 - **Architecture**: Design patterns, SOLID principles, separation of concerns
 - **Security**: Auth, input validation, secrets, data exposure
-- **Performance**: N+1 queries, caching, algorithms, resource management
+- **Performance**: Query optimization, caching, algorithms, resource management
 - **Testing**: Coverage, edge cases, meaningful tests
-- **Platform-Specific**:
-  - Rails: Strong params, N+1 queries, migrations, background jobs
-  - iOS: Retain cycles, main thread UI, optional handling, async/await
-  - Android: Context leaks, coroutines, ViewModels, lifecycle
+- **Project-Specific**: Checks based on tech stack from CLAUDE.md (e.g., async/await patterns, memory management, concurrency, error handling)
 
 **Categorize findings:**
 - 🔴 Critical (Must fix before approval)
@@ -381,21 +385,21 @@ Perform multi-dimensional review:
 ✅ Positive: 8 things done well
 
 Major issues:
-1. [controllers/users_controller.rb:23] Missing pagination on index endpoint
+1. [src/controllers/users.controller.ts:23] Missing pagination on list endpoint
    Risk: Could return thousands of records, causing performance issues
-   Fix: Add .page(params[:page]).per(25)
+   Fix: Add pagination with skip/take or cursor-based pagination
 
-2. [models/user.rb:45] Missing database index on (oauth_provider, oauth_uid)
+2. [src/repositories/user.repository.ts:45] Missing database index on (oauth_provider, oauth_uid)
    Risk: Slow queries when looking up OAuth users
-   Fix: Add composite index in migration
+   Fix: Add composite index in schema migration
 
 Minor suggestions:
-- [services/oauth_service.rb:12] Extract magic number to constant
-- [ViewModels/UserViewModel.swift:34] Consider using weak self in closure
+- [src/services/oauth.service.ts:12] Extract magic number to constant
+- [src/utils/validators.ts:34] Consider adding input sanitization
 - ...
 
 ✅ Excellent work on:
-- Clear separation of concerns with service objects
+- Clear separation of concerns with service layer
 - Comprehensive error handling
 - Consistent naming conventions
 - Good test coverage (94%)
@@ -408,11 +412,11 @@ Minor suggestions:
 ```markdown
 🔧 Fixing [2] major issues automatically... (Iteration 1/3)
 
-Fixing issue 1: Adding pagination to UsersController...
-✅ Fixed app/controllers/api/v1/users_controller.rb
+Fixing issue 1: Adding pagination to users endpoint...
+✅ Fixed src/controllers/users.controller.ts
 
 Fixing issue 2: Adding database index...
-✅ Created db/migrate/20241025_add_oauth_index.rb
+✅ Updated database schema with composite index
 
 Re-running code review to verify fixes...
 ```
@@ -495,13 +499,13 @@ What would you like to do? [1/2/3/4]
 ⏱️  Duration: ~45 minutes
 
 Changes:
-- User OAuth model with validations
+- User OAuth integration with validations
 - OAuth callback endpoint
 - Token management service
 - Account linking logic
 
 Patterns established:
-- Service objects for business logic
+- Service layer for business logic
 - RESTful API structure
 - JWT token management
 
@@ -548,10 +552,10 @@ mark_phase_complete "$prd_file" "Phase 1"
 - Files: 12 files created
 - Tests: 45 tests, 95% coverage
 - Patterns established:
-  * Service objects in app/services/
-  * RESTful API under /api/v1/
-  * ActiveModel serializers
-  * Background jobs for emails
+  * Service layer pattern
+  * RESTful API endpoints
+  * DTO validation
+  * Event-driven notifications
 
 🌱 Core foundation is ready!
 
@@ -629,8 +633,8 @@ What would you like to do?
    ✅ Tests written for [file/feature]
 
    📝 Tests created:
-   - spec/models/user_spec.rb (15 tests)
-   - spec/services/oauth_service_spec.rb (8 tests)
+   - tests/unit/user.test.ts (15 tests)
+   - tests/integration/oauth.test.ts (8 tests)
 
    🧪 Test results:
    ✅ 23/23 tests passing
