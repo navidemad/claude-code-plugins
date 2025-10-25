@@ -1,12 +1,12 @@
 # 🚀 Yespark Claude Plugins
 ![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)
-[![Changelog](https://img.shields.io/badge/changelog-view-orange.svg)](CHANGELOG.md)
+[![Changelog](https://img.shields.io/badge/changelogs-view-blue.svg)](CHANGELOG.md)
 
 **Supercharge your development workflow with AI-powered skills tailored for :**
 
-[![Ruby on Rails](https://img.shields.io/badge/Rails-CC0000?logo=rubyonrails&logoColor=white)](.claude/skills/README.md)
-[![iOS Swift](https://img.shields.io/badge/iOS-Swift-F05138?logo=swift&logoColor=white)](.claude/skills/README.md)
-[![Android Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?logo=kotlin&logoColor=white)](.claude/skills/README.md)
+[![Ruby on Rails](https://img.shields.io/badge/Ruby%20on%20Rails-CC0000?logo=rubyonrails&logoColor=white)](.claude/skills/README.md)
+[![iOS Swift](https://img.shields.io/badge/iOS%20Swift-F05138?logo=swift&logoColor=white)](.claude/skills/README.md)
+[![Android Kotlin](https://img.shields.io/badge/Android%20Kotlin-7F52FF?logo=kotlin&logoColor=white)](.claude/skills/README.md)
 
 | | Skill | Purpose |
 |-|-------|---------|
