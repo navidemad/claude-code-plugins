@@ -351,7 +351,7 @@ Located in `skills/shared/scripts/`:
 
 **git-tools.sh** - Git operations (used by `ship`)
 - `analyze_git_changes()` - Parse git diff output
-- `detect_scope_from_files()` - Scope detection from file paths
+- `detect_scope_from_files()` - Simple scope detection using common directory heuristics
 - `find_related_prd()` - Find PRD files
 - `get_current_branch()` - Current git branch
 - `has_uncommitted_changes()` - Check git status

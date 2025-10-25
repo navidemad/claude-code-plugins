@@ -98,15 +98,18 @@ If changes span both "auth" and "booking" (for example), suggest splitting:
    Continue with single commit? [yes/split/cancel]
 ```
 
-#### Step 2: Detect Scope
+#### Step 2: Analyze Changed Files
 
 ```bash
 # Get changed files
 changed_files=$(git diff HEAD --name-only)
 
-# Detect scope based on files (e.g., "auth", "booking", "api")
+# Optionally detect scope from common directory patterns
+# Scope is optional and can be omitted if not clear
 scope=$(detect_scope_from_files "$changed_files")
 ```
+
+**Note**: Scope detection uses simple heuristics (most common directory). Claude will analyze the changes and may choose to omit scope if it's not meaningful or use a more descriptive scope based on the actual changes.
 
 #### Step 3: Determine Commit Type
 
@@ -139,6 +142,8 @@ prd_ref=$(get_prd_from_commits)
 **Format:**
 ```
 <type>(<scope>): <subject>
+# or if scope is not meaningful:
+<type>: <subject>
 
 <body>
 
@@ -147,6 +152,8 @@ prd_ref=$(get_prd_from_commits)
 🤖 Generated with Claude Code
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
+
+**Scope is optional** - omit it if the changes don't fit a clear scope.
 
 **Subject Line (max 50 chars):**
 - Imperative mood: "add" not "added"

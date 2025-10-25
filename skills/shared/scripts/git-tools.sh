@@ -30,107 +30,24 @@ FILELIST
 EOF
 }
 
-# Detect scope from file paths based on platform
+# Detect scope from file paths using simple heuristics
 # Returns the primary scope for conventional commit messages
+# This is intentionally simple and generic to work across any project type
 detect_scope_from_files() {
-    local platform="$1"
-    local files="$2"
+    local files="$1"
 
-    case "$platform" in
-        rails)
-            # Common Rails structure: app/{models,controllers,services,jobs,mailers,interactors,queries,presenters,serializers}
-            if echo "$files" | grep -q "app/models/"; then
-                echo "models"
-            elif echo "$files" | grep -q "app/controllers/"; then
-                echo "controllers"
-            elif echo "$files" | grep -q "app/services/"; then
-                echo "services"
-            elif echo "$files" | grep -q "app/jobs/"; then
-                echo "jobs"
-            elif echo "$files" | grep -q "app/mailers/"; then
-                echo "mailers"
-            elif echo "$files" | grep -q "app/interactors/"; then
-                echo "interactors"
-            elif echo "$files" | grep -q "app/components/"; then
-                echo "components"
-            elif echo "$files" | grep -q "app/queries/"; then
-                echo "queries"
-            elif echo "$files" | grep -q "app/presenters/"; then
-                echo "presenters"
-            elif echo "$files" | grep -q "app/serializers/"; then
-                echo "serializers"
-            elif echo "$files" | grep -q "app/policies/"; then
-                echo "policies"
-            elif echo "$files" | grep -q "db/migrate/"; then
-                echo "db"
-            elif echo "$files" | grep -q "spec/\|test/"; then
-                echo "test"
-            elif echo "$files" | grep -q "config/"; then
-                echo "config"
-            elif echo "$files" | grep -q "lib/"; then
-                echo "lib"
-            else
-                echo "app"
-            fi
-            ;;
-        ios-swift)
-            # Common iOS structure: organized by feature modules
-            if echo "$files" | grep -q "Tests\|Test"; then
-                echo "tests"
-            elif echo "$files" | grep -q "Network/"; then
-                echo "network"
-            elif echo "$files" | grep -q "Storage/"; then
-                echo "storage"
-            elif echo "$files" | grep -q "Manager/"; then
-                echo "manager"
-            elif echo "$files" | grep -q "Coordinator/"; then
-                echo "coordinator"
-            elif echo "$files" | grep -q "Router/"; then
-                echo "router"
-            elif echo "$files" | grep -q "Payment/"; then
-                echo "payment"
-            elif echo "$files" | grep -q "Checkout/"; then
-                echo "checkout"
-            elif echo "$files" | grep -q "Tracking/"; then
-                echo "tracking"
-            elif echo "$files" | grep -q "DependencyInjection/"; then
-                echo "di"
-            elif echo "$files" | grep -q "Configuration/"; then
-                echo "config"
-            elif echo "$files" | grep -q "\.xcdatamodel"; then
-                echo "data"
-            elif echo "$files" | grep -q "Podfile\|\.xcodeproj"; then
-                echo "project"
-            else
-                echo "ios"
-            fi
-            ;;
-        android-kotlin)
-            # Common Android structure: feature-based or layered architecture
-            if echo "$files" | grep -q "src/test/\|src/androidTest/"; then
-                echo "tests"
-            elif echo "$files" | grep -q "presentation/\|ui/"; then
-                echo "ui"
-            elif echo "$files" | grep -q "data/"; then
-                echo "data"
-            elif echo "$files" | grep -q "domain/"; then
-                echo "domain"
-            elif echo "$files" | grep -q "network/\|api/"; then
-                echo "network"
-            elif echo "$files" | grep -q "di/\|injection/"; then
-                echo "di"
-            elif echo "$files" | grep -q "build.gradle\|gradle"; then
-                echo "build"
-            elif echo "$files" | grep -q "res/"; then
-                echo "resources"
-            else
-                echo "android"
-            fi
-            ;;
-        *)
-            echo "app"
-            ;;
-    esac
+    # Extract common directory patterns from file paths
+    # Get the most common top-level directory (after src/ or app/)
+    local scope=$(echo "$files" | \
+        sed -E 's#^(src/|app/|lib/)?([^/]+)/.*#\2#' | \
+        sort | uniq -c | sort -rn | head -1 | awk '{print $2}')
+
+    # Fallback to generic scopes if nothing found
+    if [[ -z "$scope" ]]; then
+        echo ""
+    else
+        echo "$scope"
+    fi
 }
 
 # Check for uncommitted changes
