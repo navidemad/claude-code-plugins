@@ -1,6 +1,5 @@
 # 🚀 Yespark Claude Plugins
-![Claude Code Skill](https://img.shields.io/badge/Claude_Code-Skill-8A2BE2)
-[![Changelog](https://img.shields.io/badge/Full%20Skills%20Documentation-view-blue.svg)](.claude/skills/README.md)
+![Claude Code Skills](https://img.shields.io/badge/Claude_Code-Skills-D87757)
 [![Ruby on Rails](https://img.shields.io/badge/Ruby%20on%20Rails-CC0000?logo=rubyonrails&logoColor=white)](CLAUDE.md)
 [![iOS Swift](https://img.shields.io/badge/iOS%20Swift-F05138?logo=swift&logoColor=white)](CLAUDE.md)
 [![Android Kotlin](https://img.shields.io/badge/Android%20Kotlin-7F52FF?logo=kotlin&logoColor=white)](CLAUDE.md)
@@ -11,6 +10,8 @@
 - `plan`      ➡️ Generate PRD and auto-loads core context for expansions |
 - `implement` ➡️ Auto-code + Auto-test + Auto-review + Auto-fix + Progress tracking |
 - `ship`      ➡️ Single skill for commit and creating pull requests |
+
+[![Documentation](https://img.shields.io/badge/Full%20Skills%20Documentation-view-blue.svg)](.claude/skills/README.md)
 
 ## 📦 Installation
 
