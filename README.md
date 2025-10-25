@@ -1,24 +1,32 @@
 # Yespark Team Claude Code Marketplace
 
-AI-powered skills for complete product development workflow: from PRD creation to implementation, commits, and pull requests. **Platform-agnostic** - adapts to your tech stack automatically.
+**Powerful AI assistants for Rails, iOS Swift, and Android Kotlin development.** Smart tools that help you work faster while you stay in control.
 
 ## Overview
 
-This marketplace provides **5 intelligent skills** that Claude Code automatically activates based on your needs. No slash commands to remember - just describe what you want, and Claude uses the right skill.
+This marketplace provides **7 intelligent skills** that enhance your development workflow. Each skill is a focused assistant - it helps you accomplish a specific task, you decide what happens next.
 
-**Skills are model-invoked** - Claude decides when to use them based on your conversation, making your workflow natural and intuitive.
+**🎯 Philosophy:** Tools, not automation. Each skill does one thing well, you orchestrate the workflow.
 
-**Truly platform-agnostic** - Works with Ruby/Rails, JavaScript/Node.js, Python, Java/Kotlin, Swift/iOS, React, Vue, Angular, and more. Skills detect your tech stack and adapt automatically.
+**🤖 Model-invoked** - Claude activates skills based on your conversation. No slash commands to remember.
+
+**🔧 Platform-aware** - Automatically detects Rails, iOS Swift, or Android Kotlin and adapts conventions.
+
+**🌍 Bilingual** - All skills support English and French activation phrases.
+
+**💪 Developer control** - You maintain full control. Skills suggest next steps, you decide.
 
 ### Available Skills
 
 | Skill | Purpose | Activated When You Say... |
 |-------|---------|---------------------------|
-| **generate-prd** | Create comprehensive PRDs with phases and substories | "create a PRD", "plan this feature", "document requirements" |
-| **implement-prd** | Implement PRDs with automatic progress tracking | "implement the PRD", "continue implementing", references a PRD file |
-| **commit** | Smart git commits with Conventional Commits format | "commit this", "save my work", "create a commit" |
-| **create-pr** | Generate comprehensive PR descriptions | "create a PR", "make a pull request", "submit for review" |
-| **code-review** | Multi-dimensional code quality analysis | "review my code", "code review", "check my changes" |
+| **generate-prd** | Create adaptive PRDs with codebase exploration | "create a PRD", "plan feature" (🇫🇷 "créer un PRD") |
+| **implement-code** | Write code substory-by-substory from PRDs | "implement PRD", "build this" (🇫🇷 "implémenter le PRD") |
+| **implement-tests** | Write comprehensive test suites | "write tests", "add tests" (🇫🇷 "écrire des tests") |
+| **track-prd-progress** | Track and update PRD implementation status | "update PRD", "show progress" (🇫🇷 "mettre à jour le PRD") |
+| **commit** | Generate well-formatted commit messages | "commit this", "save my work" (🇫🇷 "committer") |
+| **create-pr** | Generate comprehensive PR descriptions | "create a PR", "submit for review" (🇫🇷 "créer une PR") |
+| **code-review** | Multi-dimensional code quality analysis | "review code", "check changes" (🇫🇷 "réviser le code") |
 
 ## Quick Start
 
@@ -46,23 +54,95 @@ Trust the folder in Claude Code - skills are immediately available!
 
 ### How It Works
 
-Unlike slash commands, **you don't invoke skills directly**. Just have a natural conversation:
+**Skills activate naturally** when you describe what you want. Each skill helps with one task, then suggests next steps. You decide the workflow.
 
 ```
 You: "Let's create a PRD for the new payment feature"
-Claude: [Activates generate-prd skill, asks clarifying questions, creates PRD]
 
-You: "Now implement this PRD"
-Claude: [Activates implement-prd skill, detects your tech stack, starts implementing]
+Claude: [generate-prd activates]
+        🔍 Exploring codebase...
+        Found: Existing payment logic in app/services/payment/
+        ✨ Detected: FULL mode PRD (complex feature)
 
-You: "Commit my changes"
-Claude: [Activates commit skill, analyzes changes, generates commit message]
+        [Asks 15 clarifying questions]
 
-You: "Review my code before I push"
-Claude: [Activates code-review skill, performs comprehensive analysis]
+        ✅ Created PRD at docs/prds/2024-10-25-payments.md
 
-You: "Create a pull request"
-Claude: [Activates create-pr skill, generates PR with full description]
+        💡 Next steps:
+        - "implement PRD" - Start coding
+        - "review PRD" - Check requirements
+
+        What would you like to do?
+
+You: "Implement PRD"
+
+Claude: [implement-code activates]
+        📋 Implementing substory 1.1: Payment model...
+        [Writes code following existing patterns]
+
+        ✅ Substory 1.1 complete!
+
+        💡 Next steps:
+        - "review my code" - Check code quality
+        - "commit these changes" - Save progress
+        - "continue to 1.2" - Next substory
+
+        What would you like to do?
+
+You: "Review my code"
+
+Claude: [code-review activates]
+        📊 Auto-detected: Standard Review (247 lines, 8 files)
+
+        [Performs comprehensive review]
+
+        ✅ Review complete!
+        - 🔴 0 critical issues
+        - 🟠 2 major issues
+        - 🟡 3 minor suggestions
+
+        💡 Next steps:
+        - "help fix X" - Get fix suggestions
+        - "commit anyway" - Proceed with commit
+
+        What would you like to do?
+
+You: "Help fix the major issues"
+
+Claude: [Helps fix issues interactively]
+
+You: "Commit these changes"
+
+Claude: [commit activates]
+        📊 Changes: 8 files, 247 lines
+
+        📝 Generated commit message:
+        feat(payment): add payment model with validation
+        [Shows full message]
+
+        Proceed? [yes/no/edit]
+
+You: "Yes"
+
+Claude: ✅ Committed: a1b2c3d
+
+        💡 Next steps:
+        - "create a PR" - Submit for review
+        - "continue to 1.2" - Next substory
+
+        What would you like to do?
+
+You: "Create a PR"
+
+Claude: [create-pr activates]
+        [Generates PR description]
+
+        Create PR? [yes/no/edit]
+
+You: "Yes"
+
+Claude: ✅ PR #123 created!
+        🔗 https://github.com/yespark/app/pull/123
 ```
 
 ## Platform Support
@@ -85,9 +165,24 @@ Once detected, skills automatically load platform-specific conventions and best 
 ## Skills in Detail
 
 ### 🎯 generate-prd
-**Create comprehensive Product Requirements Documents**
+**Create adaptive Product Requirements Documents with codebase exploration**
 
-Claude asks clarifying questions and generates structured PRDs in `docs/prds/` with:
+Claude explores your existing codebase first, then asks clarifying questions and generates structured PRDs in `docs/prds/` with:
+
+**Adaptive Modes:**
+- **Quick Mode**: Simple features (5-7 questions, lightweight spec)
+- **Full Mode**: Complex features (15-20 questions, comprehensive spec)
+
+**Auto-detected based on feature description** - you can override if needed.
+
+**Codebase Exploration:**
+- Analyzes existing patterns and architecture
+- Finds similar features for reference
+- Discovers authentication/authorization approaches
+- Identifies testing frameworks and conventions
+- Ensures new PRD follows project patterns
+
+**PRD Contents:**
 - Problem statement and solution overview
 - Functional and non-functional requirements
 - Multiple implementation phases
@@ -97,51 +192,113 @@ Claude asks clarifying questions and generates structured PRDs in `docs/prds/` w
 - Testing strategy
 - Security and performance considerations
 
-**Platform-aware sections adapt to your stack** - automatically tailors PRD structure for Rails backend, iOS mobile, or Android mobile development.
+**Platform-aware** - automatically tailors PRD structure for Rails backend, iOS mobile, or Android mobile development.
 
 **Natural activation:**
 - "Create a PRD for user authentication"
 - "Let's plan out the booking feature"
-- "Help me document these requirements"
+- "Write a spec for the payment system"
+- 🇫🇷 "Créer un PRD", "planifier une fonctionnalité"
 
 ---
 
-### 🔨 implement-prd
-**Implement PRDs with automatic progress tracking**
+### 🔨 implement-code
+**Implement PRDs substory-by-substory with smart guidance**
 
-Claude reads your PRD, **detects your tech stack**, implements it substory by substory, and automatically updates the PRD with progress (✅ completed, 🔄 in progress, ⏳ pending).
+Claude reads your PRD, explores your architecture, and implements it incrementally. After each substory, it suggests next steps - you decide.
+
+**Guided Workflow:**
+1. 📋 Implement substory code
+2. ✅ Update PRD with completion status
+3. 💡 Suggest next steps (review, test, commit, continue)
+4. ⏸️ Wait for your decision
 
 **Features:**
-- Automatic platform detection from project files
+- Architecture analysis before coding
+- Follows existing project patterns
+- Platform-specific best practices
 - Incremental implementation (one substory at a time)
 - Real-time PRD status updates
-- Creates appropriate commits per substory
-- Adapts code patterns to your framework
-- Resumes from where you left off
-- Tests using your project's testing framework
+- Clear suggestions, no auto-invocations
+- You orchestrate review → test → commit → PR
 
 **Natural activation:**
 - "Implement the authentication PRD"
+- "Build the booking feature"
 - "Continue implementing docs/prds/2024-10-25-booking.md"
-- "Let's start building this feature"
+- 🇫🇷 "Implémenter le PRD", "coder cette fonctionnalité"
 
-**PRD Status Tracking:**
+---
+
+### ✅ implement-tests
+**Write comprehensive test suites**
+
+Claude writes unit, integration, and E2E tests mapped to PRD acceptance criteria.
+
+**Features:**
+- Auto-detects testing framework (RSpec, Minitest, XCTest, JUnit+MockK)
+- Writes tests matching your project's style
+- Maps tests to PRD acceptance criteria
+- Covers happy paths, edge cases, and error scenarios
+- Platform-specific test patterns
+
+**Test Types:**
+- Unit tests for models/services/components
+- Integration tests for API/workflow
+- E2E tests for critical user flows
+- Platform-specific UI tests
+
+**Natural activation:**
+- "Write tests for the auth feature"
+- "Add tests for booking service"
+- "Test the payment flow"
+- 🇫🇷 "Écrire des tests", "ajouter des tests"
+
+---
+
+### 📊 track-prd-progress
+**Track and update PRD implementation status**
+
+Claude provides real-time progress tracking, metrics, and status reports.
+
+**Features:**
+- Real-time progress dashboard
+- Velocity calculations
+- Blocker identification and management
+- Status reports (daily/weekly)
+- ETA predictions
+
+**Progress Metrics:**
 ```markdown
-## Implementation Status
-- ✅ [Phase 1.1] User model - Completed (2024-10-25)
-  Files: app/models/user.rb, spec/models/user_spec.rb
-  Commit: a1b2c3d
-- 🔄 [Phase 1.2] OAuth integration - In Progress
-  Current: Implementing Google OAuth
-- ⏳ [Phase 1.3] Password reset - Not Started
+📊 Progress Metrics:
+✅ Completed: 3 (37.5%)
+🔄 In Progress: 1 (12.5%)
+🚫 Blocked: 1 (12.5%)
+⏳ Pending: 3 (37.5%)
+
+📈 Velocity: 1.5 substories/day
+⏱️  Avg Duration: 1.2 hours/substory
+🎯 ETA: 2 days (based on current velocity)
 ```
+
+**Natural activation:**
+- "Show PRD progress"
+- "Update the PRD status"
+- "What's the implementation status?"
+- 🇫🇷 "Mettre à jour le PRD", "suivre la progression"
 
 ---
 
 ### 💾 commit
-**Smart git commits with Conventional Commits format**
+**Generate well-formatted commit messages**
 
-Claude analyzes your staged changes and generates descriptive commit messages following Conventional Commits specification.
+Claude analyzes your changes and generates descriptive commit messages following Conventional Commits specification. You approve before committing.
+
+**Workflow:**
+1. 📊 Show change summary (files, lines)
+2. 📝 Generate conventional commit message
+3. ✅ Wait for your approval
+4. 💾 Create commit only after "yes"
 
 **Platform-aware features:**
 - Automatic change type detection (feat/fix/refactor/etc.)
@@ -154,6 +311,7 @@ Claude analyzes your staged changes and generates descriptive commit messages fo
 - "Commit these changes"
 - "Save my work"
 - "Create a commit"
+- 🇫🇷 "Committer", "sauvegarder les modifications"
 
 **Generated Format:**
 ```
@@ -178,141 +336,192 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 ### 🚀 create-pr
 **Generate comprehensive GitHub pull requests**
 
-Claude analyzes your branch, finds related PRD (if any), and creates a PR with detailed description covering all aspects.
+Claude analyzes your branch, finds related PRD, and creates a focused PR description. **Requires clean branch** - you must commit first.
+
+**Workflow:**
+1. ❌ Error if uncommitted changes exist (tells you to commit first)
+2. 📊 Analyze branch diff vs origin/main
+3. 📝 Generate PR title and description
+4. ✅ Wait for your approval
+5. 🚀 Create PR only after "yes"
 
 **Platform-aware features:**
 - Auto-generated title and description
 - Links to related PRD with completed substories
-- Comprehensive change summary by component
-- Testing checklist (adapts to your test framework)
-- Database/schema migration details
-- Security and performance notes
-- Deployment instructions
+- Focused change summary (Added/Modified/Removed)
+- Testing evidence with coverage metrics
 
 **Natural activation:**
 - "Create a pull request"
 - "Make a PR"
 - "Submit this for review"
+- 🇫🇷 "Créer une PR", "soumettre pour révision"
 
 **Generated PR Includes:**
-- Executive summary
+- Summary (2-3 sentences)
 - Related PRD and completed substories
-- Changes by layer (backend/frontend/mobile/etc.)
-- Testing performed
-- Schema changes
-- Security considerations
-- Deployment notes and rollback plan
-- Reviewer checklist
+- Changes by category
+- Test coverage metrics
+- All tests passing confirmation
 
 ---
 
 ### 🔍 code-review
-**Comprehensive multi-dimensional code analysis**
+**Multi-dimensional code analysis with auto-depth detection**
 
-Claude performs thorough code review across quality, security, performance, and testing dimensions with **language-specific and framework-specific checks**.
+Claude reviews your current branch diff vs `origin/main` (by default) across quality, security, performance, and testing dimensions with **platform-specific checks**.
+
+**Auto-Depth Detection:**
+- **Quick** (<100 lines, ≤3 files): 2-3 min, critical issues only
+- **Standard** (100-500 lines, 4-15 files): 10-15 min, comprehensive
+- **Deep** (>500 lines, >15 files): 20-30 min, full architecture
+
+Auto-detected from change size - you can override.
 
 **Review Dimensions:**
-- **Code Quality**: Readability, maintainability, complexity, code smells
-- **Architecture**: Design patterns, SOLID principles, separation of concerns
-- **Security**: Auth/authz, input validation, secrets, data exposure
-- **Performance**: Database queries, caching, algorithms, resource management
+- **Code Quality**: Readability, maintainability, complexity
+- **Architecture**: Design patterns, SOLID principles
+- **Security**: Auth/authz, input validation, secrets
+- **Performance**: N+1 queries, memory leaks, algorithms
 - **Testing**: Coverage, quality, edge cases
 
 **Platform-specific checks:**
-- **Ruby/Rails**: Strong parameters, N+1 queries, migrations reversibility, background jobs, ActiveRecord best practices
-- **iOS/Swift**: Memory management, retain cycles, optional handling, main thread UI updates, async/await patterns
-- **Android/Kotlin**: Lifecycle awareness, Context leaks, Coroutines usage, ViewModel patterns, Hilt dependency injection
+- **Rails**: Strong parameters, N+1 queries, migrations, ActiveRecord
+- **iOS Swift**: Retain cycles, optional handling, main thread UI, async/await
+- **Android Kotlin**: Context leaks, Coroutines, ViewModel, Hilt DI
 
 **Natural activation:**
 - "Review my code"
 - "Check my changes"
 - "Code review please"
+- 🇫🇷 "Réviser le code", "vérifier les changements"
 
 **Output:**
-- Findings by severity (Critical/Major/Minor)
-- File:line references for each issue
-- Code examples showing problems and fixes
-- Positive feedback on what's done well
-- Prioritized action items
+- Findings by severity (🔴 Critical, 🟠 Major, 🟡 Minor)
+- File:line references with code examples
+- Fix suggestions (you apply them)
+- Positive feedback
 - Approval recommendation
+- Suggested next steps (fix, commit, create PR)
 
 ## Complete Workflow Example
 
-Here's a natural conversation showing all skills in action:
+Here's a natural conversation showing the developer-controlled workflow:
 
 ```
-You: "I want to build a parking spot reservation feature"
+You: "I want to build a parking reservation feature"
 
 Claude: [generate-prd activates]
-Let me help you create a PRD. I'll ask some questions to understand the requirements...
+        🔍 Exploring codebase...
+        Found: Existing booking patterns in app/services/booking/
+        ✨ Detected: FULL mode PRD
 
-[After answering questions]
-Claude: Created PRD at docs/prds/2024-10-25-parking-reservation.md with 3 phases and 8 substories.
+        [Asks 15 questions]
 
-You: "Great, let's start implementing it"
+        ✅ Created PRD at docs/prds/2024-10-25-parking-reservation.md
 
-Claude: [implement-prd activates]
-Detected Rails backend project. I'll implement the PRD starting with Phase 1, Substory 1: Creating the Reservation model...
+        💡 Next: "implement PRD" to start coding
 
-[Claude implements code, writes tests, updates PRD status]
+You: "Implement PRD"
 
-You: "Commit what we have so far"
+Claude: [implement-code activates]
+        🔍 Analyzing Rails architecture...
+        📋 Implementing substory 1.1: Reservation model...
 
-Claude: [commit activates]
-I'll analyze the changes and create a commit...
+        ✅ Substory 1.1 complete!
 
-Generated commit message:
-feat(booking): add reservation model and database schema
+        💡 Next steps:
+        - "review my code" - Check quality
+        - "write tests" - Add test coverage
+        - "commit these changes" - Save progress
+        - "continue to 1.2" - Next substory
 
-[Shows full commit message]
+        What would you like?
 
-Shall I proceed with this commit?
+You: "Write tests"
 
-You: "Yes, and review the code before we continue"
+Claude: [implement-tests activates]
+        🔍 Detected: RSpec + FactoryBot
+        ✅ Writing tests...
+
+        📊 Coverage: 78% → 94% (+16%)
+        All tests passing ✅
+
+        💡 Next: "commit these changes"
+
+You: "Review my code first"
 
 Claude: [code-review activates]
-Performing comprehensive code review for Rails application...
+        📊 Standard Review (247 lines, 8 files)
 
-# Code Review Report
-✅ Overall Status: Approved with minor suggestions
+        ✅ Review complete!
+        - 🔴 0 critical
+        - 🟠 1 major (missing index)
+        - 🟡 3 minor
 
-[Shows detailed review with Rails-specific checks]
+        💡 Next: "help fix X" or "commit"
 
-You: "Looks good, let's create a PR for this phase"
+You: "Help fix the index issue"
+
+Claude: [Shows fix, you apply it]
+
+You: "Commit these changes"
+
+Claude: [commit activates]
+        📊 8 files, 247 lines
+
+        📝 Generated:
+        feat(booking): add reservation model with tests
+        [Shows message]
+
+        Proceed? [yes/no]
+
+You: "Yes"
+
+Claude: ✅ Committed: a1b2c3d
+
+        💡 Next: "create a PR" or "continue to 1.2"
+
+You: "Create a PR"
 
 Claude: [create-pr activates]
-Creating pull request...
+        📝 Generated PR:
+        Title: feat(booking): add reservation model
+        [Shows description]
 
-✅ PR Created: https://github.com/yespark/app/pull/123
-Title: feat(booking): implement reservation model (Phase 1.1)
+        Create? [yes/no]
 
-[Shows PR summary]
+You: "Yes"
 
-PRD updated with PR reference.
+Claude: ✅ PR #123 created!
+        🔗 https://github.com/yespark/app/pull/123
 ```
+
+**Notice:** You control every step. Skills suggest, you decide.
 
 ## Benefits
 
 ### For Individual Developers
-- **Natural Workflow**: Just describe what you want - no commands to remember
-- **Automatic Best Practices**: Skills encode best practices for Rails, iOS Swift, and Android Kotlin
-- **Complete Traceability**: From PRD → Implementation → Commit → PR
-- **Time Savings**: Automate tedious parts (commit messages, PR descriptions, reviews)
-- **Platform-aware**: Automatically adapts to Rails backend, iOS, or Android projects
+- **Stay in Control**: You decide what happens next, skills just help
+- **Learn Best Practices**: Skills show platform-specific patterns (Rails, iOS, Android)
+- **Save Time**: Generate commit messages, PR descriptions, review reports instantly
+- **Clear Mental Model**: Each skill does one thing, no hidden automation
+- **Complete Traceability**: From PRD → Code → Review → Commit → PR
+- **Work Your Way**: Use skills in any order, skip what you don't need
 
 ### For Teams
-- **Shared Standards**: Everyone's PRDs, commits, and PRs follow same format
-- **Better Documentation**: PRDs with real-time status, comprehensive PR descriptions
-- **Code Quality**: Consistent review standards for Rails, iOS, and Android
-- **Knowledge Sharing**: New developers learn platform-specific patterns from skill outputs
-- **Multi-Platform Support**: Same workflow whether building Rails backend, iOS app, or Android app
+- **Consistent Standards**: Everyone's commits and PRs follow same format
+- **Predictable Workflow**: Tools behave the same for everyone
+- **No Surprises**: Skills suggest, never auto-execute
+- **Easy Onboarding**: New developers see patterns in skill outputs
+- **Multi-Platform**: Same skills for Rails backend, iOS, and Android
 
 ### For Product Management
-- **Visibility**: PRD status shows real-time progress
-- **Traceability**: Clear link from requirements to implementation to PR
-- **Quality**: Automated reviews before human review
-- **Documentation**: Living documentation that stays up-to-date
-- **Cross-Platform Tracking**: Track progress across Rails backend, iOS, and Android implementations
+- **Real-time Visibility**: Track PRD implementation progress
+- **Requirements Traceability**: Link PRD → Code → Commit → PR
+- **Quality Gates**: Reviews happen before commits
+- **Living Documentation**: PRDs stay updated automatically
+- **Cross-Platform Tracking**: Unified workflow across platforms
 
 ## Key Advantages of Skills vs Commands
 
@@ -401,9 +610,31 @@ The code-review skill automatically checks against these guidelines.
 
 ## Version
 
-**Current version: 3.1.0**
+**Current version: 5.0.0**
 
 ### Changelog
+
+#### 5.0.0 (2025-10-25) - **Developer Control Release**
+- **🎯 Philosophy shift**: Tools, not automation - you control the workflow
+- **7 focused skills** - each does one thing well, suggests next steps
+  - `implement-prd` → `implement-code`, `implement-tests`, `track-prd-progress`
+- **NO auto-invocations** - skills never call other skills automatically
+  - `implement-code`: writes code, suggests review/test/commit
+  - `commit`: generates message, waits for approval before committing
+  - `create-pr`: requires clean branch, waits for approval before creating
+  - `code-review`: reviews branch diff, suggests fixes (you apply them)
+- **Approval gates** - every action requires explicit user confirmation
+- **Clear suggestions** - skills show "Next steps" with natural phrases
+- **Adaptive intelligence** retained:
+  - `generate-prd`: auto-detects Quick vs Full mode
+  - `code-review`: auto-detects Quick/Standard/Deep depth
+- **Bilingual support** - English and French for all skills
+- **Codebase exploration** - PRD generation analyzes existing patterns
+- **Default scope**: code-review checks branch diff vs `origin/main`
+
+#### 4.0.0 (2025-10-25) - **Automation Release** (deprecated)
+- Fully automated workflow with auto-review → auto-commit → auto-PR
+- Removed in favor of developer-controlled approach
 
 #### 3.1.0 (2025-10-25)
 - **Platform-aware skills** - supports Rails, iOS Swift, and Android Kotlin

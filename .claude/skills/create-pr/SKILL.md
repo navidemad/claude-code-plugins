@@ -1,25 +1,54 @@
 ---
 name: create-pr
-description: Create GitHub PRs with comprehensive descriptions. Activates when user says create PR, make pull request, submit for review, open PR, or ready for review.
+description: Generate GitHub PR titles and descriptions. Activates when user says create PR, make pull request, submit for review, open PR, ready for review. French: créer une PR, soumettre pour révision, ouvrir une pull request.
 allowed-tools: Bash(git:*), Bash(gh pr create:*), Bash(.claude/skills/shared/scripts/detect_platform.sh:*), Read, Glob
 ---
 
 # Create Pull Request
 
-Create comprehensive GitHub pull requests with platform-aware descriptions linking to PRDs and commits.
+Generate comprehensive GitHub pull requests with platform-aware descriptions. This skill is a **PR description generator** - it helps you create great PRs, you stay in control.
 
 ## When to Activate
 
 This skill activates automatically when the user:
-- Says "create a PR" or "create pull request"
-- Mentions "submit for review" or "ready for review"
+- Says "create a PR", "create pull request", "make a PR"
+- Mentions "submit for review", "ready for review", "open a PR"
 - Says "I'm ready to push" or "ready for PR"
-- Asks to "open a pull request" or "make a PR"
-- References creating PR in PRD context
+- French: "créer une PR", "soumettre pour révision", "ouvrir une pull request"
 
 ## Process
 
-### Step 1: Gather Information
+### Step 1: Verify Branch is Clean
+
+**FIRST: Check if there are uncommitted changes:**
+```bash
+git status
+```
+
+**If uncommitted changes exist - STOP with error:**
+```
+❌ ERROR: Cannot create PR - you have uncommitted changes
+
+📊 Uncommitted changes:
+- app/models/user.rb (modified)
+- app/services/auth/oauth_service.rb (modified)
+- spec/models/user_spec.rb (new file)
+
+💡 Please commit your changes first:
+   Say "commit these changes" to create a commit
+   Then try "create a PR" again
+
+Alternatively:
+- git stash    (to save changes for later)
+- git reset    (to discard changes)
+```
+
+**Do NOT auto-commit. User must explicitly commit first.**
+
+**If branch is clean:**
+- Proceed to Step 2
+
+### Step 2: Gather Information
 
 Use git commands and platform detection to collect data:
 
@@ -49,17 +78,16 @@ Analyze:
 - Database migrations present (Rails)
 - New dependencies added
 
-### Step 2: Find Related PRD
+### Step 3: Find Related PRD
 
 Search for related PRD by:
 - Looking in commit messages for PRD references
 - Checking docs/prds/ for recent PRDs
-- Asking user if PRD exists for this work
 - Reading PRD to understand which substories are completed
 
-### Step 3: Generate PR Title
+### Step 4: Generate PR Title and Description
 
-Format: `[type](scope): brief description`
+**Title Format:** `[type](scope): brief description`
 
 Types:
 - `feat`: New feature
@@ -75,16 +103,16 @@ Examples:
 - `fix(api): prevent null pointer in user serializer`
 - `refactor(mobile): extract booking logic to view models`
 
-### Step 4: Generate PR Description
+**Description Template:**
 
-Create comprehensive description:
+Create focused, scannable description with core sections only:
 
 ```markdown
 ## Summary
-[2-3 sentence overview of what this PR accomplishes]
+[2-3 sentence overview of what this PR accomplishes and why]
 
 ## Related PRD
-[Link to PRD document if exists: `docs/prds/YYYY-MM-DD-feature-name.md`]
+[Link to PRD if exists: `docs/prds/YYYY-MM-DD-feature-name.md`]
 
 **Completed Substories:**
 - ✅ [Phase X.Y] Substory title
@@ -93,265 +121,29 @@ Create comprehensive description:
 ## Changes
 
 ### Added
-- New authentication endpoints
-- OAuth provider configurations
-- Social login UI components
+- [List new features, files, endpoints]
 
 ### Modified
-- User model to support OAuth
-- API client to handle OAuth tokens
-- Login screen with social buttons
+- [List changed files/features]
 
 ### Removed
-- Deprecated legacy authentication code
-- Unused helper methods
-
-## Implementation Details
-
-**Tailor this section based on detected platform:**
-
-### For Rails Projects
-**Models:**
-- List new/modified models with key changes
-- Example: `User`: Added oauth_provider, oauth_uid fields
-
-**Controllers:**
-- List new/modified controllers and endpoints
-- Example: `Api::V1::AuthController`: New OAuth endpoints
-
-**Services:**
-- List new service objects
-- Example: `OAuthService`: Handles provider authentication
-
-**Migrations:**
-- List database migrations
-- Example: `20241025_add_oauth_to_users.rb`
-
-### For Android Kotlin Projects
-**Presentation Layer:**
-- `Activities/Fragments`: List new/modified UI components
-- `ViewModels`: List ViewModels with key changes
-
-**Domain Layer:**
-- `UseCases`: List business logic use cases
-- `Models`: Domain models
-
-**Data Layer:**
-- `Repositories`: Data access implementations
-- `API Services`: Network endpoints
-- `DAOs`: Database access objects
-
-### For iOS Swift Projects
-**ViewControllers/Views:**
-- List UI components (UIKit or SwiftUI)
-- Example: `LoginViewController`: Added social login buttons
-
-**ViewModels:**
-- List ViewModels with responsibilities
-- Example: `LoginViewModel`: Handles authentication logic
-
-**Services:**
-- List service layer implementations
-- Example: `AuthService`: New OAuth methods
-
-**Models:**
-- List data models
+- [List deprecated/deleted code]
 
 ## Testing
 
-- [x] Unit tests added/updated
-- [x] Integration tests added/updated
-- [x] Manual testing completed
-- [x] All tests passing locally
+**Test Coverage:** X% → Y% (+Z%)
 
-**Test Coverage:** 87% → 92% (+5%)
+**Tests Added:**
+- Unit tests: [count] tests
+- Integration tests: [count] tests
+- E2E tests: [count] tests (if applicable)
 
-### Test Scenarios Covered
-1. ✅ Successful OAuth login (Google, Apple, GitHub)
-2. ✅ OAuth callback handling
-3. ✅ Token storage and retrieval
-4. ✅ Account linking for existing users
-5. ✅ Error handling for failed OAuth
-6. ✅ Token refresh flow
+**Manual Testing:**
+- [Platform-specific testing performed]
+- [Devices/browsers tested]
+- [Key scenarios verified]
 
-### Manual Testing
-- ✅ Tested on Android (Pixel 6, API 33)
-- ✅ Tested on iOS (iPhone 14, iOS 17)
-- ✅ Verified against staging API
-- ✅ Tested all OAuth providers
-
-## Database Changes
-
-### Migrations
-```ruby
-# 20241025_add_oauth_to_users.rb
-add_column :users, :oauth_provider, :string
-add_column :users, :oauth_uid, :string
-add_index :users, [:oauth_provider, :oauth_uid], unique: true
-
-# 20241025_create_oauth_tokens.rb
-create_table :oauth_tokens do |t|
-  t.references :user, null: false
-  t.string :provider, null: false
-  t.text :access_token, null: false
-  t.text :refresh_token
-  t.datetime :expires_at
-end
-```
-
-**Migration Rollback Tested:** ✅ Yes
-
-## API Changes
-
-### New Endpoints
-
-#### `POST /api/v1/auth/oauth/callback`
-Handles OAuth provider callbacks
-
-**Request:**
-```json
-{
-  "provider": "google",
-  "code": "auth_code_from_provider",
-  "redirect_uri": "app://callback"
-}
-```
-
-**Response (200):**
-```json
-{
-  "token": "jwt_token",
-  "user": {
-    "id": 123,
-    "email": "user@example.com",
-    "oauth_provider": "google"
-  }
-}
-```
-
-**Errors:**
-- 400: Invalid provider or code
-- 422: Account linking conflict
-
-### Modified Endpoints
-None
-
-### Breaking Changes
-None - fully backward compatible
-
-## Security Considerations
-
-✅ **Security Checklist:**
-- [x] OAuth state parameter validated (CSRF protection)
-- [x] OAuth tokens stored encrypted
-- [x] Provider signatures verified
-- [x] No client secrets exposed in mobile apps
-- [x] Rate limiting on OAuth endpoints
-- [x] Proper redirect URI validation
-
-**Security Review:**
-- OAuth implementation follows RFC 6749
-- PKCE used for mobile apps
-- Tokens encrypted at rest
-- Secure token refresh implemented
-
-## Performance Impact
-
-- No significant performance impact
-- OAuth calls are async
-- Token caching implemented
-- Database indexes added for OAuth lookups
-
-**Load Testing:**
-- Tested 100 concurrent OAuth logins
-- Average response time: 250ms
-- No memory leaks detected
-
-## Screenshots/Demos
-
-[If UI changes, add screenshots or video links]
-
-### Android
-- Login screen with social buttons
-- OAuth web view flow
-
-### iOS
-- Login screen with social buttons
-- OAuth web view flow
-
-## Documentation
-
-- [x] API documentation updated (Swagger)
-- [x] README updated with OAuth setup
-- [x] Mobile SDK documentation updated
-- [x] Code comments added for complex logic
-
-## Deployment Notes
-
-### Prerequisites
-- [ ] OAuth app credentials configured in environment
-- [ ] Environment variables set:
-  - `GOOGLE_OAUTH_CLIENT_ID`
-  - `GOOGLE_OAUTH_CLIENT_SECRET`
-  - `APPLE_OAUTH_CLIENT_ID`
-  - `GITHUB_OAUTH_CLIENT_ID`
-
-### Deployment Steps
-1. Deploy backend first (includes migrations)
-2. Run migrations: `rails db:migrate`
-3. Verify OAuth providers in admin panel
-4. Deploy mobile apps (no special steps)
-
-### Rollback Plan
-If issues occur:
-1. Revert backend deployment
-2. Run migration rollback: `rails db:rollback STEP=2`
-3. Mobile apps remain compatible (graceful degradation)
-
-### Post-Deployment Verification
-- [ ] Test OAuth login for each provider
-- [ ] Monitor error rates
-- [ ] Check OAuth token creation rates
-- [ ] Verify user account linking
-
-## Dependencies
-
-**External:**
-- OAuth provider apps configured
-- No new gems or packages
-
-**Internal:**
-- None - feature is self-contained
-
-## Risks & Mitigations
-
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| OAuth provider outage | Users can't login | Support fallback to email/password |
-| Account linking conflicts | Duplicate accounts | Implemented conflict resolution UI |
-
-## Checklist
-
-- [x] Code follows project style guidelines
-- [x] Tests pass locally and in CI
-- [x] No console.log or debugging code
-- [x] Comments added for complex logic
-- [x] Security best practices followed
-- [x] No sensitive data hardcoded
-- [x] Database migrations are reversible
-- [x] API documentation updated
-- [x] Mobile apps tested on real devices
-
-## Related Issues/PRs
-
-- Closes #456 (Add social login support)
-- Related to #423 (User authentication refactor)
-- Implements PRD: `docs/prds/2024-10-15-social-auth.md`
-
-## Questions for Reviewers
-
-1. Should we add LinkedIn as another OAuth provider?
-2. Token expiration set to 7 days - is that appropriate?
+**All tests passing:** ✅
 
 ---
 
@@ -359,9 +151,62 @@ If issues occur:
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
-### Step 5: Create the PR
+**Keep it simple** - reviewers can read the code for implementation details!
 
-**Execute in SINGLE message with multiple tool calls:**
+### Step 5: Present PR Preview and Get Approval
+
+**Show the generated PR to the user:**
+
+```markdown
+📝 Generated Pull Request:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Title: feat(auth): add OAuth2 social login support
+
+## Summary
+Implement OAuth2 authentication for Google, GitHub, and Apple.
+Users can now sign in using their social accounts with secure
+token management and account linking.
+
+## Related PRD
+docs/prds/2024-10-25-auth.md
+
+**Completed Substories:**
+- ✅ [Phase 1.1] OAuth provider configuration
+- ✅ [Phase 1.2] Callback handler implementation
+- ✅ [Phase 1.3] Token encryption and storage
+
+## Changes
+
+### Added
+- OAuth2Service for provider authentication
+- Token encryption using AES-256
+- Account linking for existing users
+
+### Modified
+- User model to support OAuth identities
+- Authentication controller for OAuth flow
+
+## Testing
+
+**Test Coverage:** 78% → 94% (+16%)
+
+**Tests Added:**
+- Unit tests: 23 tests
+- Integration tests: 8 tests
+
+**All tests passing:** ✅
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create PR with this description? [yes/no/edit]
+```
+
+**Wait for user approval.**
+
+### Step 6: Create the PR (After Approval)
+
+**Only after user says "yes", execute:**
 
 ```bash
 # Ensure branch is pushed (if not already)
@@ -377,28 +222,30 @@ EOF
   --base main
 ```
 
-**Note:** If user hasn't committed changes yet, inform them they need to commit first (can activate the `commit` skill).
-
-### Step 6: Update PRD and Confirm
+### Step 7: Update PRD and Confirm Success
 
 After PR is created:
-1. Show PR URL and number
-2. If related to PRD, update it with PR reference:
-   ```markdown
-   ## Implementation Status
-   - ✅ Phase 1 completed - PR #123
-   ```
-3. Confirm success
 
-## Output
+```markdown
+✅ PR created successfully!
+🔗 PR URL: https://github.com/org/repo/pull/123
+📊 Summary: 8 files changed, 5 commits
 
-Provide:
-- ✅ PR created successfully
-- 🔗 PR URL: https://github.com/org/repo/pull/123
-- 📊 Summary: X files changed, Y commits
-- 👥 Reviewers assigned
-- 🏷️  Labels added
-- 📋 Next: Wait for CI checks and review
+💡 PR has been linked to PRD (if applicable)
+
+Next steps:
+- Wait for CI checks to complete
+- Assign reviewers if needed: gh pr edit --add-reviewer @username
+- Monitor PR for review feedback
+
+🎉 Great work!
+```
+
+**If related to PRD, update it with PR reference:**
+```markdown
+## Implementation Status
+- ✅ Phase 1 completed - PR #123 (2024-10-25)
+```
 
 ## Best Practices
 
@@ -408,27 +255,29 @@ Provide:
 - Mention key feature/fix
 
 ### Description
-- Comprehensive but scannable
-- Use sections and checkboxes
-- Link to related issues and PRDs
+- Focused and scannable (4 core sections)
+- Link to related PRD and substories
 - Include testing evidence
-- Document deployment needs
-
-### Context
-- Explain WHY changes were made
-- Link to discussions or decisions
-- Note any trade-offs made
+- Show what changed (Added/Modified/Removed)
 
 ### Testing
-- Be specific about test coverage
-- List manual testing performed
-- Include screenshots for UI changes
+- Be specific about test coverage changes
+- List test types and counts
+- Confirm all tests passing
 
-## Tips
+## Important Notes
 
-- Check for uncommitted changes before creating PR
-- Verify tests are passing
-- Include performance implications
-- Document breaking changes prominently
-- Make it easy for reviewers to understand context
-- Link back to PRD for traceability
+**This skill does NOT:**
+- Auto-commit uncommitted changes
+- Auto-push your branch
+- Auto-merge or auto-approve
+- Modify your code
+
+**This skill DOES:**
+- Generate comprehensive PR descriptions
+- Link to related PRDs automatically
+- Summarize changes intelligently
+- Wait for your approval before creating PR
+- Update PRD with PR reference after creation
+
+**Philosophy:** You maintain full control. This skill is a writing assistant for PR descriptions, not an automation engine.

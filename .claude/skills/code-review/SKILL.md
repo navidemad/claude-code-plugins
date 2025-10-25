@@ -1,35 +1,86 @@
 ---
 name: code-review
-description: Comprehensive code review with platform-specific checks. Activates when user says review code, check changes, code review, review my work, check my code, or analyze code quality.
+description: Comprehensive code review with auto-depth detection. Reviews current branch diff vs origin/main by default. Activates when user says review code, check changes, code review, review my work. French: réviser le code, vérifier les changements, revue de code.
 ---
 
 # Code Review
 
-Perform comprehensive, multi-dimensional code review with actionable feedback.
+Perform comprehensive, multi-dimensional code review with automatic depth detection. This skill is a **code quality assistant** - it helps you catch issues before review, you stay in control.
 
 ## When to Use
 
 Activate this skill when the user:
-- Says "review my code" or "code review"
-- Asks to "review this" or "check my changes"
-- Mentions "review PR" or "review pull request"
+- Says "review my code", "code review", "review this"
+- Asks to "check my changes", "check my code", "analyze code quality"
+- Mentions "review PR", "review pull request", "quality check"
 - Says "look at my code" before committing
-- Wants quality check before pushing
+- French: "réviser le code", "vérifier les changements", "revue de code", "analyser la qualité"
 
 ## Process
 
 ### Step 1: Determine Scope
 
-Ask what to review:
-- **Uncommitted changes**: `git diff` (most common)
-- **Staged changes**: `git diff --staged`
-- **Branch/PR**: Compare with main branch
-- **Specific files**: User-provided file paths
-- **Commit range**: Between two commits
+**Default scope (if not specified):**
+- Review current branch diff vs `origin/main`
+- Command: `git diff origin/main...HEAD`
 
-Default to uncommitted changes if not specified.
+**User can specify different scope:**
+- "review uncommitted changes" → `git diff`
+- "review staged changes" → `git diff --staged`
+- "review last commit" → `git diff HEAD~1..HEAD`
+- "review file X" → specific file review
 
-### Step 2: Gather Context
+**Show what will be reviewed:**
+```
+🔍 Review Scope:
+- Comparing: current branch vs origin/main
+- Branch: feature/oauth-login
+- Commits ahead: 5 commits
+- Will review all changes in this branch
+
+Continue with this scope? [yes/change scope]
+```
+
+### Step 2: Auto-Detect Review Depth
+
+**Calculate change metrics:**
+
+```bash
+# Count lines and files changed
+git diff [scope] --shortstat
+git diff [scope] --name-only | wc -l
+```
+
+**Apply depth rules and notify user:**
+
+**Quick Review** (2-3 minutes) - Auto-selected when:
+- Lines changed < 100 AND Files ≤ 3
+- Focuses on: Critical issues only (security, crashes, obvious bugs)
+
+**Standard Review** (10-15 minutes) - Auto-selected when:
+- Lines 100-500 OR Files 4-15
+- Focuses on: All dimensions (quality, security, performance, testing)
+
+**Deep Review** (20-30 minutes) - Auto-selected when:
+- Lines > 500 OR Files > 15
+- Focuses on: Comprehensive analysis including architecture
+
+**Show detection result:**
+```
+📊 Change Analysis:
+- 247 lines changed (+189/-58)
+- 8 files modified
+- Platform: Rails backend
+
+📋 Auto-selected: Standard Review (10-15 minutes)
+   Will review: code quality, security, performance, testing
+
+Proceed? [yes/quick/deep]
+```
+
+**User can override the detected depth at this point.**
+
+### Step 3: Gather Context
 
 **Execute in parallel:**
 ```bash
@@ -37,7 +88,7 @@ git diff [scope]                # Get the changes
 git diff --name-only [scope]    # List changed files
 # Check for project guidelines
 if [ -f "CLAUDE.md" ]; then cat CLAUDE.md; fi
-# Detect platform (cached for session)
+# Detect platform
 platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
 ```
 
@@ -46,6 +97,8 @@ platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
 - **Rails**: Check strong params, N+1 queries, migrations, ActiveRecord patterns
 - **iOS Swift**: Check retain cycles, optional handling, main thread UI, async/await
 - **Android Kotlin**: Check Context leaks, Coroutines, ViewModel usage, Hilt DI
+
+### Step 4: Perform Review (Based on Depth)
 
 ### Step 3: Multi-Dimensional Analysis
 
@@ -399,34 +452,63 @@ Once fixed, this will be in excellent shape.
 Review completed in approximately 10 minutes
 ```
 
-### Step 7: Present Findings
+### Step 7: Present Findings and Offer Help
 
-Show the report to user and offer to:
-1. Explain any finding in more detail
-2. Help fix issues automatically
-3. Create GitHub review comments
-4. Update PRD if this was implementing a PRD substory
+**Show the complete review report, then offer assistance:**
 
-## Review Modes
+```markdown
+✅ Code review complete!
 
-Offer different depth levels:
+📊 Summary:
+- 🔴 0 critical issues
+- 🟠 3 major issues
+- 🟡 5 minor suggestions
+- ✅ Many positive aspects
 
-**Quick Review (2-3 minutes):**
-- Focus on critical issues only
-- Security and obvious bugs
-- Fast scan for common problems
+💡 How can I help?
+- "explain issue X" - Get more details about a specific finding
+- "help fix X" - I'll suggest code changes (you apply them)
+- "show me examples" - See code examples for fixes
+- "commit these changes" - Commit your code (if review passed)
+- "create a PR" - Create pull request (if review passed)
 
-**Standard Review (10-15 minutes):**
-- All categories covered
-- Detailed analysis
+What would you like to do?
+```
+
+**Do NOT:**
+- Auto-fix issues
+- Auto-commit changes
+- Auto-invoke other skills
+- Modify code without explicit request
+
+**DO:**
+- Offer to explain findings
+- Offer to show fix examples
+- Suggest next steps
+- Wait for user decision
+
+## Review Depth Details
+
+**Quick Review** focuses on:
+- Critical issues only (security, crashes)
+- Obvious bugs and errors
+- Platform-specific critical checks
+- Quick scan (< 3 min)
+
+**Standard Review** includes:
+- All categories (quality, security, performance, testing)
+- Detailed analysis with examples
+- Platform-specific checks
 - Code examples and fixes
+- Moderate depth (10-15 min)
 
-**Deep Review (20-30 minutes):**
+**Deep Review** provides:
 - Comprehensive analysis
 - Architecture review
 - Performance profiling
 - Test strategy review
 - Documentation review
+- Full depth (20-30 min)
 
 ## Best Practices
 

@@ -1,11 +1,11 @@
 ---
 name: generate-prd
-description: Generate comprehensive PRDs with phases and substories. Activates when user says create PRD, plan feature, document requirements, write requirements, generate PRD, or spec out feature.
+description: Generate adaptive PRDs with codebase exploration. Activates when user says create PRD, plan feature, document requirements, write spec, generate PRD, build requirements. French: créer un PRD, planifier une fonctionnalité, rédiger les exigences, écrire une spec.
 ---
 
 # Generate Product Requirements Document
 
-Create structured PRDs in `docs/prds/YYYY-MM-DD-feature-name.md` through interactive discovery and comprehensive documentation.
+Create structured PRDs in `docs/prds/YYYY-MM-DD-feature-name.md` with automatic complexity detection and codebase exploration.
 
 ## Activation Context
 
@@ -14,57 +14,162 @@ Use when user requests:
 - Feature planning and documentation
 - Requirements gathering
 - Implementation roadmap
+- French: création de PRD, planification de fonctionnalité, spécification
 
 ## Discovery Process
 
-### Phase 1: Requirements Gathering
+### Phase 0: Detect Complexity and Explore Codebase
 
-**FIRST: Detect platform and load reference (cached for session):**
+**Step 1: Understand Feature Scope**
+
+Ask initial scoping question:
+```
+"Describe the feature briefly (1-2 sentences):"
+```
+
+**Step 2: Auto-Detect Complexity**
+
+Analyze user's description to determine mode:
+
+**QUICK MODE** (triggered by):
+- Simple CRUD operations
+- Minor UI changes
+- Single model/component
+- Clear, simple requirements
+- Keywords: "simple", "just", "only", "basic"
+
+**FULL MODE** (triggered by):
+- Multi-system integrations
+- Complex business logic
+- Multiple phases/components
+- External API integrations
+- Keywords: "integrate", "complex", "multi-step", "workflow", "system"
+
+**Inform user:**
+```
+✨ Detected: [QUICK/FULL] mode PRD
+📋 This will be a [lightweight/comprehensive] requirements document
+
+Continue? [yes/change mode]
+```
+
+**Step 3: Explore Existing Codebase**
+
+**Before asking detailed questions, understand what exists:**
+
 ```bash
-# Detect once per session and cache result
+# Detect platform
 platform=$(bash .claude/skills/shared/scripts/detect_platform.sh)
 
-# Load platform-specific reference
+# Load platform reference
 # Read .claude/skills/shared/references/${platform}/conventions.md
 ```
 
-**Use reference file to:**
-- Use platform-specific terminology in questions
-- Tailor PRD structure to platform patterns
-- Include platform-appropriate technical sections
+**Explore relevant areas:**
 
-Ask targeted questions to understand:
+**For Rails:**
+```bash
+# Find similar features
+ls app/models/ app/controllers/ app/services/
 
-**Feature Overview**
+# Check for related models
+grep -r "class.*Model" app/models/
+
+# Look for authentication/authorization patterns
+ls app/policies/ app/controllers/concerns/
+
+# Check existing API structure
+grep -r "namespace.*api" config/routes.rb
+```
+
+**For iOS Swift:**
+```bash
+# Find ViewModels and Views
+find . -name "*ViewModel.swift" -o -name "*View.swift"
+
+# Check for service patterns
+find . -name "*Service.swift"
+
+# Look for existing navigation
+grep -r "coordinator\|router" . --include="*.swift"
+```
+
+**For Android Kotlin:**
+```bash
+# Find existing architecture
+ls -R app/src/main/java/*/{data,domain,presentation}/
+
+# Check ViewModels
+find . -name "*ViewModel.kt"
+
+# Look for repositories
+find . -name "*Repository.kt"
+```
+
+**Document findings:**
+```
+🔍 Codebase Analysis:
+- Found similar feature: OAuth login in app/services/auth/
+- Existing pattern: Service objects for business logic
+- Database: PostgreSQL with ActiveRecord
+- API: RESTful endpoints under /api/v1/
+- Testing: RSpec with FactoryBot
+- Authentication: Devise + JWT
+
+Will follow these established patterns.
+```
+
+### Phase 1: Requirements Gathering
+
+**Adapt questions based on mode:**
+
+**QUICK MODE** - Ask only core questions (5-7 questions):
+
+1. **What does it do?** (Core functionality)
+2. **Who uses it?** (Target users)
+3. **What changes?** (New vs modification of existing)
+4. **What's the main user flow?** (Single primary flow)
+5. **How do we know it works?** (Success criteria)
+6. **Any dependencies?** (Required features/services)
+7. **What's out of scope?** (Explicit exclusions)
+
+**FULL MODE** - Ask comprehensive questions (15-20 questions):
+
+**Feature Overview:**
 - Core functionality and purpose
-- Problem being solved
-- Target users and their needs
-- Success metrics
+- Problem being solved in detail
+- Target users and their specific needs
+- Success metrics and KPIs
 
-**Scope Definition**
+**Scope Definition:**
 - New feature vs enhancement
 - Platforms/systems affected (already detected)
 - Dependencies on existing features
+- Integration points
 - Explicitly out of scope items
 
-**User Experience**
-- Primary user flows
-- UI/UX requirements
+**User Experience:**
+- Multiple user flows (happy path + alternatives)
+- UI/UX requirements and mockups
 - Edge case handling
-- Error scenarios
+- Error scenarios and recovery
+- Accessibility requirements
 
-**Technical Requirements**
+**Technical Requirements:**
 - Architecture constraints
-- Data models needed
-- API/interface requirements
+- Data models needed (detailed schema)
+- API/interface requirements (full specs)
 - External integrations
-- Authentication/authorization
-- Performance requirements
+- Authentication/authorization approach
+- Performance requirements (specific metrics)
+- Scalability considerations
+- Security requirements
 
-**Success Criteria**
-- Measurable acceptance criteria
+**Success Criteria:**
+- Measurable acceptance criteria per substory
 - Key performance indicators
 - Definition of done
+- Rollout strategy
 
 ### Phase 2: Document Generation
 

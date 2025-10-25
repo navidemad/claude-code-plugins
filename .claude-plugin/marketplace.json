@@ -1,8 +1,8 @@
 {
   "name": "yespark-team-marketplace",
   "metadata": {
-    "description": "Platform-aware product development workflow skills for Rails, iOS Swift, and Android Kotlin: PRD generation, implementation tracking, smart commits, PR creation, and code review.",
-    "version": "3.1.0",
+    "description": "Powerful AI assistants for Rails, iOS Swift, and Android Kotlin. 7 focused skills that help you work faster while you stay in control. Tools, not automation. Bilingual English/French.",
+    "version": "5.0.0",
     "pluginRoot": ".claude"
   },
   "owner": {
@@ -13,7 +13,7 @@
     {
       "name": "product-workflow-skills",
       "source": "skills",
-      "description": "AI-powered skills for complete product development workflow: generate-prd, implement-prd, commit, create-pr, and code-review"
+      "description": "7 developer-controlled skills: generate-prd (adaptive modes), implement-code (guided workflow), implement-tests, track-prd-progress, commit (message generator), create-pr (description generator), code-review (branch diff analysis). No auto-invocations - you orchestrate the workflow."
     }
   ]
 }

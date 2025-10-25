@@ -1,21 +1,20 @@
 ---
 name: commit
-description: Create git commits with Conventional Commits format. Activates when user says commit, save changes, create commit, save my work, or git commit.
+description: Generate well-formatted conventional commit messages. Activates when user says commit, save changes, create commit, save my work, git commit. French: committer, sauvegarder les modifications, créer un commit.
 allowed-tools: Bash(git add:*), Bash(git status:*), Bash(git commit:*), Bash(git diff:*), Bash(git log:*), Bash(.claude/skills/shared/scripts/detect_platform.sh:*)
 ---
 
 # Commit
 
-Create focused git commits with platform-aware, Conventional Commits formatted messages.
+Generate focused, well-formatted git commits using Conventional Commits format. This skill is a **commit message assistant** - it helps you create great commits, you stay in control.
 
 ## When to Activate
 
 This skill activates automatically when the user:
-- Says "commit" or "create a commit"
-- Says "save my work" or "commit my changes"
-- Mentions "git commit" or "make a commit"
-- Asks to "commit this code" or "commit these files"
-- Says "save these changes"
+- Says "commit", "create a commit", "make a commit"
+- Says "save my work", "commit my changes", "save these changes"
+- Mentions "git commit" or "commit this code"
+- French: "committer", "sauvegarder", "créer un commit", "enregistrer les modifications"
 
 ## Process
 
@@ -26,15 +25,32 @@ Run git commands in parallel to understand changes:
 ```bash
 git status                    # See staged/unstaged files
 git diff HEAD                 # All changes (staged + unstaged)
+git diff HEAD --shortstat     # Get lines/files changed count
 git log --oneline -5          # Recent commits for style context
 bash .claude/skills/shared/scripts/detect_platform.sh  # Detect platform
 ```
 
-Analyze:
+**Show change summary:**
+```
+📊 Changes detected:
+- 8 files changed
+- 247 lines (+189/-58)
+- Files: app/models/user.rb, app/services/auth/, spec/...
+```
+
+**Analyze:**
 - Which files changed and their paths
 - Nature of changes (new feature, bug fix, refactor, etc.)
 - Platform-specific scope from file paths
 - If changes should be split into multiple commits
+
+**If changes span multiple unrelated areas:**
+```
+💡 Notice: Changes span both authentication (3 files) and booking (5 files).
+   Consider splitting into separate commits for cleaner history.
+
+   Continue with single commit? [yes/split/cancel]
+```
 
 ### Step 2: Determine Commit Type
 
@@ -131,9 +147,38 @@ Users can now sign in with Google, GitHub, or Apple.
 - PRD references: `Related: PRD-2024-10-25-auth (substory 1.3)`
 - Co-authors: `Co-authored-by: Name <email>`
 
-### Step 5: Create the Commit
+### Step 5: Present Commit Message and Get Approval
 
-**Execute in a SINGLE message with multiple tool calls:**
+**Show the generated commit message to the user:**
+
+```markdown
+📝 Generated commit message:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+feat(auth): add OAuth2 social login support
+
+Implement OAuth2 authentication for Google, GitHub, and Apple.
+Users can now sign in using their social accounts.
+
+- Add OAuth2 provider configurations
+- Create callback handler for authentication flow
+- Store OAuth tokens securely with encryption
+- Implement account linking for existing users
+
+Related: PRD-2024-10-25-auth (substory 1.3)
+
+🤖 Generated with Claude Code
+Co-Authored-By: Claude <noreply@anthropic.com>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Proceed with this commit? [yes/no/edit message]
+```
+
+**Wait for user approval.**
+
+### Step 6: Create the Commit (After Approval)
+
+**Only after user says "yes", execute:**
 
 ```bash
 # Stage all relevant files
@@ -158,12 +203,25 @@ git status
 
 **Important:** Use heredoc format for commit message to preserve formatting.
 
-### Step 6: Confirm Success
+### Step 7: Confirm Success and Suggest Next Steps
 
 After commit is created:
-1. Show commit hash and message
-2. Display files committed
-3. Confirm next steps if user requests (push, PR, continue working)
+
+```markdown
+✅ Commit created successfully!
+📝 Commit hash: a1b2c3d
+📊 Files committed: 8 files, +189/-58 lines
+
+💡 Suggested next steps:
+- "review my code" - Review other changes before committing
+- "create a PR" - Create pull request for this branch
+- "show progress" - See PRD implementation status
+- Continue working on your feature
+
+What would you like to do next?
+```
+
+**Do NOT auto-invoke any other skills. Just suggest and wait.**
 
 ## Handling Different Scenarios
 
@@ -171,46 +229,38 @@ After commit is created:
 
 If changes span unrelated areas:
 ```
-"I see changes to authentication (3 files) and booking system (5 files).
-These seem unrelated. Should we create separate commits?"
+💡 Notice: Changes span both authentication (3 files) and booking (5 files).
+   These seem unrelated - consider separate commits for cleaner history.
+
+   Options:
+   1. Create single commit anyway
+   2. Commit authentication files only (I'll help with booking next)
+   3. Cancel and let me manually stage files
+
+   What would you like? [1/2/3]
 ```
 
-Offer to commit them separately for cleaner history.
+### No Changes to Commit
 
-### Large Changesets
-
-For many files changed:
-- Group by logical areas
-- Suggest breaking into multiple commits
-- Or create one commit with detailed body listing all areas
-
-### Incomplete Work
-
-If changes are incomplete or break tests:
+If `git diff HEAD` shows no changes:
 ```
-"These changes appear to be work in progress. Create a WIP commit?"
+❌ No changes detected to commit.
+
+💡 If you have untracked files, use: git add <file>
+   Or if you want to amend the last commit, say "amend last commit"
 ```
 
-Format: `wip: describe what's in progress`
+### Unstaged Changes
 
-### No Changes Staged
-
-If nothing is staged:
+If changes exist but nothing staged:
 ```
-"No changes are staged. Would you like me to:
-1. Stage all changes and commit
-2. Help you select which files to stage
-3. Cancel"
-```
+📊 Found unstaged changes in 8 files:
+- app/models/user.rb
+- app/services/auth/oauth_service.rb
+- spec/models/user_spec.rb
+...
 
-### Only Unstaged Changes
-
-If changes are unstaged:
-```
-"Changes are unstaged. I'll stage them for commit. Files to include:
-- file1.rb
-- file2.kt
-Proceed?"
+Stage all files and commit? [yes/select files/cancel]
 ```
 
 ## Examples
