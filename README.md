@@ -1,6 +1,8 @@
 # 🚀 Yespark Claude Plugins
+![Claude Code Skill](https://img.shields.io/badge/Claude_Code-Skill-8A2BE2)
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 [![Changelog](https://img.shields.io/badge/changelogs-view-blue.svg)](CHANGELOG.md)
+![Status: Beta](https://img.shields.io/badge/Status-Beta-orange)
 
 **Supercharge your development workflow with AI-powered skills tailored for :**
 
