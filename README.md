@@ -1,35 +1,52 @@
-# Yespark Claude Plugins
+<div align="center">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Claude_AI_logo.svg" alt="Claude AI Logo" width="200"/>
 
-Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows -- all through natural language commands.
-Use it in your terminal, IDE. **Learn more in the [official documentation](https://docs.anthropic.com/en/docs/claude-code/overview)**.
+  # 🚀 Yespark Claude Plugins
 
-This repository includes several Claude Code skills that extend its functionalityies. It has been tailored for for Rails, iOS Swift, and Android Kotlin development.
+  **Supercharge your development workflow with AI-powered skills**
 
-| Skill | Purpose |
-|-------|---------|
-| **generate-prd** | Create adaptive PRDs with codebase exploration |
-| **implement-code** | Write code substory-by-substory from PRDs |
-| **implement-tests** | Write comprehensive test suites |
-| **track-prd-progress** | Track and update PRD implementation status |
-| **commit** | Generate well-formatted commit messages |
-| **create-pr** | Generate comprehensive PR descriptions |
-| **code-review** | Multi-dimensional code quality analysis |
+  [![Version](https://img.shields.io/badge/version-5.0.0-blue.svg)](CHANGELOG.md)
+  [![Platform](https://img.shields.io/badge/platform-Rails%20%7C%20iOS%20%7C%20Android-green.svg)](.claude/skills/README.md)
 
-For detailed information about individual skills, see [.claude/skills/README.md](.claude/skills/README.md)
+</div>
 
 ---
 
-## Installation
+## 💡 What is This?
 
-### Étape 1. Install Claude Code:
+Claude Code is an agentic coding tool that lives in your terminal 💻, understands your codebase 🧠, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows -- all through natural language commands 🗣️.
+
+**Learn more in the [official documentation](https://docs.anthropic.com/en/docs/claude-code/overview)** 📚
+
+This repository includes several Claude Code skills that extend its functionality. It has been tailored for **Rails** 💎, **iOS Swift** 🍎, and **Android Kotlin** 🤖 development.
+
+## 🛠️ Available Skills
+
+| Skill | Purpose | Emoji |
+|-------|---------|-------|
+| **generate-prd** | Create adaptive PRDs with codebase exploration | 📋 |
+| **implement-code** | Write code substory-by-substory from PRDs | 💻 |
+| **implement-tests** | Write comprehensive test suites | ✅ |
+| **track-prd-progress** | Track and update PRD implementation status | 📊 |
+| **commit** | Generate well-formatted commit messages | 💾 |
+| **create-pr** | Generate comprehensive PR descriptions | 🚀 |
+| **code-review** | Multi-dimensional code quality analysis | 🔍 |
+
+📖 For detailed information about individual skills, see [.claude/skills/README.md](.claude/skills/README.md)
+
+---
+
+## 📦 Installation
+
+### 1️⃣ Install Claude Code:
 
 ```sh
 bun -g install @anthropic-ai/claude-agent-sdk
 ```
 
-### Étape 2. Navigate to your project directory and run `claude`.
+### 2️⃣ Navigate to your project directory and run `claude` 🎯
 
-### Étape 3. Add to your project's `.claude/settings.json`:
+### 3️⃣ Add to your project's `.claude/settings.json` ⚙️:
 
 ```json
 {
@@ -47,9 +64,9 @@ bun -g install @anthropic-ai/claude-agent-sdk
 }
 ```
 
-### Étape 4. Start Using
+### 4️⃣ Start Using 🎉
 
-Just talk naturally! No slash commands needed.
+Just talk naturally! No slash commands needed. 🗣️✨
 
 ```
 You:    "Create a PRD for user authentication"
@@ -68,7 +85,7 @@ You:    "Create a PR"
 Claude: [Generates PR description, waits for approval]
 ```
 
-## Workflow Example
+## 🔄 Workflow Example
 
 ```mermaid
 sequenceDiagram
@@ -121,10 +138,10 @@ sequenceDiagram
     Claude->>Dev: ✅ PR #123 created
 ```
 
-## Complete Workflow Example
+## 📝 Complete Workflow Example
 
 <details>
-<summary>Click to see a full conversation showing all 7 skills in action</summary>
+<summary>💬 Click to see a full conversation showing all 7 skills in action</summary>
 
 <br>
 
@@ -217,8 +234,14 @@ Claude: ✅ PR #123 created!
         🔗 https://github.com/yespark/app/pull/123
 ```
 
-**Notice:** You control every step. Skills suggest, you decide.
+**Notice:** You control every step. Skills suggest, you decide. 🎮
 
 </details>
 
-**Version:** 5.0.0 | [View Changelog](CHANGELOG.md)
+---
+
+<div align="center">
+
+**Version:** 5.0.0 | [📋 View Changelog](CHANGELOG.md)
+
+</div>
