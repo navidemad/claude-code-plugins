@@ -184,10 +184,10 @@ Once detected, skills automatically load platform-specific conventions and best 
 
 ## Skills in Detail
 
-### 🎯 generate-prd
-**Create adaptive Product Requirements Documents with codebase exploration**
+<details>
+<summary><strong>🎯 generate-prd</strong> - Create adaptive PRDs with codebase exploration</summary>
 
-Claude explores your existing codebase first, then asks clarifying questions and generates structured PRDs in `docs/prds/` with:
+<br>
 
 **Adaptive Modes:**
 - **Quick Mode**: Simple features (5-7 questions, lightweight spec)
@@ -220,12 +220,14 @@ Claude explores your existing codebase first, then asks clarifying questions and
 - "Write a spec for the payment system"
 - 🇫🇷 "Créer un PRD", "planifier une fonctionnalité"
 
+</details>
+
 ---
 
-### 🔨 implement-code
-**Implement PRDs substory-by-substory with smart guidance**
+<details>
+<summary><strong>🔨 implement-code</strong> - Implement PRDs substory-by-substory with smart guidance</summary>
 
-Claude reads your PRD, explores your architecture, and implements it incrementally. After each substory, it suggests next steps - you decide.
+<br>
 
 **Guided Workflow:**
 1. 📋 Implement substory code
@@ -242,18 +244,16 @@ Claude reads your PRD, explores your architecture, and implements it incremental
 - Clear suggestions, no auto-invocations
 - You orchestrate review → test → commit → PR
 
-**Natural activation:**
-- "Implement the authentication PRD"
-- "Build the booking feature"
-- "Continue implementing docs/prds/2024-10-25-booking.md"
-- 🇫🇷 "Implémenter le PRD", "coder cette fonctionnalité"
+**Natural activation:** "Implement the authentication PRD" • "Build the booking feature" • 🇫🇷 "Implémenter le PRD"
+
+</details>
 
 ---
 
-### ✅ implement-tests
-**Write comprehensive test suites**
+<details>
+<summary><strong>✅ implement-tests</strong> - Write comprehensive test suites</summary>
 
-Claude writes unit, integration, and E2E tests mapped to PRD acceptance criteria.
+<br>
 
 **Features:**
 - Auto-detects testing framework (RSpec, Minitest, XCTest, JUnit+MockK)
@@ -262,24 +262,18 @@ Claude writes unit, integration, and E2E tests mapped to PRD acceptance criteria
 - Covers happy paths, edge cases, and error scenarios
 - Platform-specific test patterns
 
-**Test Types:**
-- Unit tests for models/services/components
-- Integration tests for API/workflow
-- E2E tests for critical user flows
-- Platform-specific UI tests
+**Test Types:** Unit • Integration • E2E • Platform-specific UI tests
 
-**Natural activation:**
-- "Write tests for the auth feature"
-- "Add tests for booking service"
-- "Test the payment flow"
-- 🇫🇷 "Écrire des tests", "ajouter des tests"
+**Natural activation:** "Write tests for the auth feature" • "Add tests for booking service" • 🇫🇷 "Écrire des tests"
+
+</details>
 
 ---
 
-### 📊 track-prd-progress
-**Track and update PRD implementation status**
+<details>
+<summary><strong>📊 track-prd-progress</strong> - Track and update PRD implementation status</summary>
 
-Claude provides real-time progress tracking, metrics, and status reports.
+<br>
 
 **Features:**
 - Real-time progress dashboard
@@ -289,7 +283,7 @@ Claude provides real-time progress tracking, metrics, and status reports.
 - ETA predictions
 
 **Progress Metrics:**
-```markdown
+```
 📊 Progress Metrics:
 ✅ Completed: 3 (37.5%)
 🔄 In Progress: 1 (12.5%)
@@ -297,22 +291,19 @@ Claude provides real-time progress tracking, metrics, and status reports.
 ⏳ Pending: 3 (37.5%)
 
 📈 Velocity: 1.5 substories/day
-⏱️  Avg Duration: 1.2 hours/substory
-🎯 ETA: 2 days (based on current velocity)
+🎯 ETA: 2 days
 ```
 
-**Natural activation:**
-- "Show PRD progress"
-- "Update the PRD status"
-- "What's the implementation status?"
-- 🇫🇷 "Mettre à jour le PRD", "suivre la progression"
+**Natural activation:** "Show PRD progress" • "Update the PRD status" • 🇫🇷 "Suivre la progression"
+
+</details>
 
 ---
 
-### 💾 commit
-**Generate well-formatted commit messages**
+<details>
+<summary><strong>💾 commit</strong> - Generate well-formatted commit messages</summary>
 
-Claude analyzes your changes and generates descriptive commit messages following Conventional Commits specification. You approve before committing.
+<br>
 
 **Workflow:**
 1. 📊 Show change summary (files, lines)
@@ -322,28 +313,20 @@ Claude analyzes your changes and generates descriptive commit messages following
 
 **Platform-aware features:**
 - Automatic change type detection (feat/fix/refactor/etc.)
-- Scope detection from file paths (Rails: models/controllers, iOS: ui/viewmodel, Android: data/domain/presentation)
+- Scope detection from file paths
 - Detailed commit body with context
 - Links to PRD substories
 - Suggests splitting unrelated changes
-
-**Natural activation:**
-- "Commit these changes"
-- "Save my work"
-- "Create a commit"
-- 🇫🇷 "Committer", "sauvegarder les modifications"
 
 **Generated Format:**
 ```
 feat(auth): add OAuth2 social login support
 
 Implement OAuth2 authentication for Google, GitHub, and Apple.
-Users can now sign in using their social accounts.
 
 - Add OAuth2 provider configurations
 - Create callback handler for authentication flow
 - Store OAuth tokens securely with encryption
-- Implement account linking for existing users
 
 Related: PRD-2024-10-25-auth (substory 1.3)
 
@@ -351,12 +334,16 @@ Related: PRD-2024-10-25-auth (substory 1.3)
 Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
+**Natural activation:** "Commit these changes" • "Save my work" • 🇫🇷 "Committer"
+
+</details>
+
 ---
 
-### 🚀 create-pr
-**Generate comprehensive GitHub pull requests**
+<details>
+<summary><strong>🚀 create-pr</strong> - Generate comprehensive GitHub pull requests</summary>
 
-Claude analyzes your branch, finds related PRD, and creates a focused PR description. **Requires clean branch** - you must commit first.
+<br>
 
 **Workflow:**
 1. ❌ Error if uncommitted changes exist (tells you to commit first)
@@ -365,38 +352,28 @@ Claude analyzes your branch, finds related PRD, and creates a focused PR descrip
 4. ✅ Wait for your approval
 5. 🚀 Create PR only after "yes"
 
-**Platform-aware features:**
-- Auto-generated title and description
-- Links to related PRD with completed substories
-- Focused change summary (Added/Modified/Removed)
-- Testing evidence with coverage metrics
-
-**Natural activation:**
-- "Create a pull request"
-- "Make a PR"
-- "Submit this for review"
-- 🇫🇷 "Créer une PR", "soumettre pour révision"
-
 **Generated PR Includes:**
 - Summary (2-3 sentences)
 - Related PRD and completed substories
-- Changes by category
+- Changes by category (Added/Modified/Removed)
 - Test coverage metrics
 - All tests passing confirmation
 
+**Natural activation:** "Create a pull request" • "Make a PR" • 🇫🇷 "Créer une PR"
+
+</details>
+
 ---
 
-### 🔍 code-review
-**Multi-dimensional code analysis with auto-depth detection**
+<details>
+<summary><strong>🔍 code-review</strong> - Multi-dimensional code analysis with auto-depth detection</summary>
 
-Claude reviews your current branch diff vs `origin/main` (by default) across quality, security, performance, and testing dimensions with **platform-specific checks**.
+<br>
 
 **Auto-Depth Detection:**
 - **Quick** (<100 lines, ≤3 files): 2-3 min, critical issues only
 - **Standard** (100-500 lines, 4-15 files): 10-15 min, comprehensive
 - **Deep** (>500 lines, >15 files): 20-30 min, full architecture
-
-Auto-detected from change size - you can override.
 
 **Review Dimensions:**
 - **Code Quality**: Readability, maintainability, complexity
@@ -410,23 +387,24 @@ Auto-detected from change size - you can override.
 - **iOS Swift**: Retain cycles, optional handling, main thread UI, async/await
 - **Android Kotlin**: Context leaks, Coroutines, ViewModel, Hilt DI
 
-**Natural activation:**
-- "Review my code"
-- "Check my changes"
-- "Code review please"
-- 🇫🇷 "Réviser le code", "vérifier les changements"
-
 **Output:**
 - Findings by severity (🔴 Critical, 🟠 Major, 🟡 Minor)
 - File:line references with code examples
 - Fix suggestions (you apply them)
 - Positive feedback
 - Approval recommendation
-- Suggested next steps (fix, commit, create PR)
+- Suggested next steps
+
+**Natural activation:** "Review my code" • "Check my changes" • 🇫🇷 "Réviser le code"
+
+</details>
 
 ## Complete Workflow Example
 
-Here's a natural conversation showing the developer-controlled workflow:
+<details>
+<summary>Click to see a full conversation showing all 7 skills in action</summary>
+
+<br>
 
 ```
 You: "I want to build a parking reservation feature"
@@ -519,6 +497,8 @@ Claude: ✅ PR #123 created!
 
 **Notice:** You control every step. Skills suggest, you decide.
 
+</details>
+
 ## Benefits
 
 ### For Individual Developers
@@ -569,6 +549,11 @@ Claude: ✅ PR #123 created!
 
 ## Advanced Usage
 
+<details>
+<summary>Customizing skills for your team</summary>
+
+<br>
+
 ### Customizing Skills
 
 Skills are in `.claude/skills/` - you can customize them:
@@ -590,7 +575,12 @@ Create `CLAUDE.md` in your project root with:
 
 The code-review skill automatically checks against these guidelines.
 
-## Sharing with Your Team
+</details>
+
+<details>
+<summary>Sharing with your team</summary>
+
+<br>
 
 ### Method 1: Marketplace (Recommended)
 1. Push this repository to GitHub
@@ -602,7 +592,12 @@ The code-review skill automatically checks against these guidelines.
 2. Commit to git
 3. Team members pull and get skills immediately
 
-## Troubleshooting
+</details>
+
+<details>
+<summary>Troubleshooting</summary>
+
+<br>
 
 ### Skills Not Activating
 - **Check installation**: Verify `.claude/settings.json` has correct marketplace config
@@ -620,6 +615,8 @@ The code-review skill automatically checks against these guidelines.
 - Check required tools are installed (git, gh CLI)
 - Verify permissions (can Claude write files?)
 - Check Claude Code version (skills require recent version)
+
+</details>
 
 ## Support
 
