@@ -360,12 +360,18 @@ Located in `.claude/skills/shared/scripts/`:
 **context-manager.sh** - Context management (used by `plan`, `implement`)
 - `init_context()` - Create new context file
 - `read_context()` - Load context as JSON
-- `add_created_file()` - Track files
+- `context_exists()` - Check if context file exists
+- `add_created_file()` - Track created files
+- `add_modified_file()` - Track modified files
 - `set_pattern()` - Store patterns
 - `set_library()` - Store library choices
 - `add_decision()` - Store architectural decisions
 - `get_core_files()` - Extract core files for expansions
+- `get_core_patterns()` - Extract core patterns for expansions
+- `get_core_libraries()` - Extract core libraries for expansions
+- `get_core_decisions()` - Extract core decisions for expansions
 - `mark_phase_complete()` - Update phase status
+- `set_current_phase()` - Set current working phase
 
 ### Platform References
 
