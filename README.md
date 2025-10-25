@@ -50,7 +50,7 @@ This marketplace provides **7 intelligent skills** that enhance your development
 
 ## Quick Start
 
-### Installation
+### 1. Install
 
 Add to your project's `.claude/settings.json`:
 
@@ -70,100 +70,53 @@ Add to your project's `.claude/settings.json`:
 }
 ```
 
-Trust the folder in Claude Code - skills are immediately available!
+### 2. Trust Folder
 
-### How It Works
+When Claude Code prompts you, click **Trust**.
 
-**Skills activate naturally** when you describe what you want. Each skill helps with one task, then suggests next steps. You decide the workflow.
+### 3. Start Using
+
+Just talk naturally! No slash commands needed.
 
 ```
-You: "Let's create a PRD for the new payment feature"
+You: "Create a PRD for user authentication"
+Claude: [Asks questions, generates PRD]
 
-Claude: [generate-prd activates]
-        🔍 Exploring codebase...
-        Found: Existing payment logic in app/services/payment/
-        ✨ Detected: FULL mode PRD (complex feature)
-
-        [Asks 15 clarifying questions]
-
-        ✅ Created PRD at docs/prds/2024-10-25-payments.md
-
-        💡 Next steps:
-        - "implement PRD" - Start coding
-        - "review PRD" - Check requirements
-
-        What would you like to do?
-
-You: "Implement PRD"
-
-Claude: [implement-code activates]
-        📋 Implementing substory 1.1: Payment model...
-        [Writes code following existing patterns]
-
-        ✅ Substory 1.1 complete!
-
-        💡 Next steps:
-        - "review my code" - Check code quality
-        - "commit these changes" - Save progress
-        - "continue to 1.2" - Next substory
-
-        What would you like to do?
+You: "Implement the PRD"
+Claude: [Writes code substory by substory]
 
 You: "Review my code"
-
-Claude: [code-review activates]
-        📊 Auto-detected: Standard Review (247 lines, 8 files)
-
-        [Performs comprehensive review]
-
-        ✅ Review complete!
-        - 🔴 0 critical issues
-        - 🟠 2 major issues
-        - 🟡 3 minor suggestions
-
-        💡 Next steps:
-        - "help fix X" - Get fix suggestions
-        - "commit anyway" - Proceed with commit
-
-        What would you like to do?
-
-You: "Help fix the major issues"
-
-Claude: [Helps fix issues interactively]
+Claude: [Performs quality analysis]
 
 You: "Commit these changes"
-
-Claude: [commit activates]
-        📊 Changes: 8 files, 247 lines
-
-        📝 Generated commit message:
-        feat(payment): add payment model with validation
-        [Shows full message]
-
-        Proceed? [yes/no/edit]
-
-You: "Yes"
-
-Claude: ✅ Committed: a1b2c3d
-
-        💡 Next steps:
-        - "create a PR" - Submit for review
-        - "continue to 1.2" - Next substory
-
-        What would you like to do?
+Claude: [Generates commit message, waits for approval]
 
 You: "Create a PR"
-
-Claude: [create-pr activates]
-        [Generates PR description]
-
-        Create PR? [yes/no/edit]
-
-You: "Yes"
-
-Claude: ✅ PR #123 created!
-        🔗 https://github.com/yespark/app/pull/123
+Claude: [Generates PR description, waits for approval]
 ```
+
+**You control the workflow.** Each skill:
+- ✅ Does one thing well
+- ✅ Suggests next steps
+- ✅ Waits for your approval
+- ❌ Never auto-invokes other skills
+
+<details>
+<summary>Troubleshooting</summary>
+
+<br>
+
+**Skills not activating?**
+1. Check `.claude/settings.json` is correct
+2. Trust the folder in Claude Code
+3. Say "use the [skill-name] skill" explicitly
+4. Restart Claude Code
+
+**Need help?**
+- **Issues**: Open an issue in this repo
+- **Claude Code docs**: https://docs.claude.com/claude-code/skills
+
+</details>
 
 ## Platform Support
 
@@ -498,132 +451,6 @@ Claude: ✅ PR #123 created!
 **Notice:** You control every step. Skills suggest, you decide.
 
 </details>
-
-## Benefits
-
-### For Individual Developers
-- **Stay in Control**: You decide what happens next, skills just help
-- **Learn Best Practices**: Skills show platform-specific patterns (Rails, iOS, Android)
-- **Save Time**: Generate commit messages, PR descriptions, review reports instantly
-- **Clear Mental Model**: Each skill does one thing, no hidden automation
-- **Complete Traceability**: From PRD → Code → Review → Commit → PR
-- **Work Your Way**: Use skills in any order, skip what you don't need
-
-### For Teams
-- **Consistent Standards**: Everyone's commits and PRs follow same format
-- **Predictable Workflow**: Tools behave the same for everyone
-- **No Surprises**: Skills suggest, never auto-execute
-- **Easy Onboarding**: New developers see patterns in skill outputs
-- **Multi-Platform**: Same skills for Rails backend, iOS, and Android
-
-### For Product Management
-- **Real-time Visibility**: Track PRD implementation progress
-- **Requirements Traceability**: Link PRD → Code → Commit → PR
-- **Quality Gates**: Reviews happen before commits
-- **Living Documentation**: PRDs stay updated automatically
-- **Cross-Platform Tracking**: Unified workflow across platforms
-
-## Key Advantages of Skills vs Commands
-
-**Skills (This Marketplace):**
-- ✅ Natural conversation - no syntax to remember
-- ✅ Claude decides when to use them
-- ✅ Context-aware activation
-- ✅ Progressive disclosure - details loaded as needed
-- ✅ Team collaboration through git
-- ✅ Platform-aware - adapts to Rails, iOS Swift, or Android Kotlin
-
-**Traditional Commands:**
-- ❌ Must remember exact command syntax
-- ❌ Must explicitly invoke with `/command`
-- ❌ Less contextual
-- ❌ All logic loaded upfront
-- ❌ Often platform-specific
-
-## Requirements
-
-- **Claude Code CLI** (latest version with skills support)
-- **Git** for version control
-- **GitHub CLI** (`gh`) for PR creation
-- Your specific development tools (language runtimes, build tools, etc.)
-
-## Advanced Usage
-
-<details>
-<summary>Customizing skills for your team</summary>
-
-<br>
-
-### Customizing Skills
-
-Skills are in `.claude/skills/` - you can customize them:
-1. Modify SKILL.md files to adjust behavior
-2. Add reference files for skill-specific docs
-3. Commit changes so team gets updates
-
-### PRD Templates
-
-The generate-prd skill creates structured PRDs. Customize the template by editing `.claude/skills/generate-prd/SKILL.md`.
-
-### Project Guidelines
-
-Create `CLAUDE.md` in your project root with:
-- Coding conventions
-- Architecture decisions
-- Testing requirements
-- Security policies
-
-The code-review skill automatically checks against these guidelines.
-
-</details>
-
-<details>
-<summary>Sharing with your team</summary>
-
-<br>
-
-### Method 1: Marketplace (Recommended)
-1. Push this repository to GitHub
-2. Team members add marketplace to their `.claude/settings.json`
-3. Skills automatically available in all their projects
-
-### Method 2: Direct Copy
-1. Copy `.claude/skills/` to your project
-2. Commit to git
-3. Team members pull and get skills immediately
-
-</details>
-
-<details>
-<summary>Troubleshooting</summary>
-
-<br>
-
-### Skills Not Activating
-- **Check installation**: Verify `.claude/settings.json` has correct marketplace config
-- **Trust folder**: Make sure you trusted the project folder
-- **Restart Claude Code**: Close and reopen Claude Code
-- **Be explicit**: Say "use the generate-prd skill" to force activation
-- **Check logs**: Run `claude --debug` to see skill loading errors
-
-### Wrong Platform Detected
-- Skills detect from project files (Gemfile with rails gem, .xcodeproj, gradle.properties)
-- Make sure these marker files are present at project root
-- You can mention platform explicitly: "implement this as a Rails feature"
-
-### Skill Errors
-- Check required tools are installed (git, gh CLI)
-- Verify permissions (can Claude write files?)
-- Check Claude Code version (skills require recent version)
-
-</details>
-
-## Support
-
-- **Quick Start**: See [QUICKSTART.md](QUICKSTART.md) for 2-minute setup
-- **Issues**: Open an issue in this repository
-- **Team Help**: Ask in your development channel
-- **Claude Code Docs**: https://docs.claude.com/claude-code/skills
 
 ## Version
 
