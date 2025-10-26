@@ -818,38 +818,96 @@ mark_phase_complete "$prd_file" "Phase 1"
 **If all phases complete:**
 
 **For CORE PRD:**
+
+First, detect git state to provide contextual next steps:
+
+```bash
+# Detect current git branch
+current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+base_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main")
+
+# Check if on main/master
+on_main=false
+if [[ "$current_branch" == "main" ]] || [[ "$current_branch" == "master" ]] || [[ "$current_branch" == "$base_branch" ]]; then
+    on_main=true
+fi
+
+# Check for uncommitted changes
+has_changes=false
+if [[ -n $(git status --porcelain 2>/dev/null) ]]; then
+    has_changes=true
+fi
+```
+
+Then show contextual completion message:
+
 ```markdown
 🎉 Core PRD Complete!
 
 ✅ All phases implemented and tested:
-- Phase 1: Core Foundation (4 substories)
+- Phase 1: Core Foundation (3 substories)
 
 📊 Core Stats:
-- Files: 12 files created
-- Tests: 45 tests, 95% coverage
+- Files created: 3 files
+- Files modified: 1 file
+- Tests: 2 tests, 3 assertions, 100% passing
 - Patterns established:
-  * Service layer pattern
-  * RESTful API endpoints
-  * DTO validation
-  * Event-driven notifications
+  * Rails MVC structure
+  * Thin controller pattern
+  * RESTful routing
+  * Minitest integration testing
+  * frozen_string_literal pragma
 
 🌱 Core foundation is ready!
 
-Context saved: .claude/prds/context/2024-10-25-invoice-core.json
+Context saved: .claude/prds/context/2025-10-26-hello-world-core.json
 This context will be auto-loaded when creating expansion PRDs.
 
 💡 Next steps:
-1. "ship" - Create commit and PR for core
-2. "plan" - Create expansion PRDs to add more features:
-   - Customer details
-   - Line items
-   - Tax calculations
-   - Payment integration
 
-What would you like to do?
+[If on_main == true && has_changes == true:]
+**Git Status:** On main branch with uncommitted changes
+
+Choose an option or type your own:
+1. 🚀 Create pull request (creates feature branch, commits, pushes, opens PR)
+2. 📋 Plan expansion (create expansion PRD to add more features)
+3. ✏️  Continue coding (keep working on this branch)
+
+[If on_main == false && has_changes == true:]
+**Git Status:** On branch '${current_branch}' with uncommitted changes
+
+Choose an option or type your own:
+1. 💾 Commit changes (creates commit on current branch)
+2. 📋 Plan expansion (create expansion PRD to add more features)
+3. ✏️  Continue coding (keep working without committing)
+
+[If on_main == false && has_changes == false:]
+**Git Status:** On branch '${current_branch}' - ready to ship
+
+Choose an option or type your own:
+1. 🚀 Create pull request (push branch and open PR to ${base_branch})
+2. 💾 Commit more changes (continue working on branch)
+3. 📋 Plan expansion (create expansion PRD to add more features)
+
+[If on_main == true && has_changes == false:]
+**Git Status:** On main branch - all changes committed
+
+Choose an option or type your own:
+1. 📋 Plan expansion (create expansion PRD to add more features):
+   - Personalized greeting (accept name parameter)
+   - Styling with CSS/Tailwind
+   - Interactive form version
+   - API endpoint version (JSON response)
+2. ✏️  Start new feature (plan a different PRD)
+3. 🎯 Other (describe what you'd like to do)
+
+What would you like to do? [1/2/3 or type your request]:
 ```
 
 **For EXPANSION PRD:**
+
+First, detect git state (same as Core PRD), then show contextual completion:
+
 ```markdown
 🎉 Expansion Complete: [Expansion Name]
 
@@ -869,11 +927,57 @@ Extended core with:
 Context updated: .claude/prds/context/2024-10-25-invoice-{expansion}.json
 
 💡 Next steps:
-- "ship" - Create commit and PR for expansion
-- "plan" - Create another expansion PRD
-- Continue building more expansions
 
-What would you like to do?
+[If on_main == true && has_changes == true:]
+**Git Status:** On main branch with uncommitted changes
+
+Choose an option or type your own:
+1. 🚀 Create pull request (creates feature branch, commits, pushes, opens PR)
+2. 📋 Plan another expansion (add more features to core)
+3. ✏️  Continue coding (keep working on this branch)
+
+[If on_main == false && has_changes == true:]
+**Git Status:** On branch '${current_branch}' with uncommitted changes
+
+Choose an option or type your own:
+1. 💾 Commit changes (creates commit on current branch)
+2. 📋 Plan another expansion (add more features to core)
+3. ✏️  Continue coding (keep working without committing)
+
+[If on_main == false && has_changes == false:]
+**Git Status:** On branch '${current_branch}' - ready to ship
+
+Choose an option or type your own:
+1. 🚀 Create pull request (push branch and open PR to ${base_branch})
+2. 💾 Commit more changes (continue working on branch)
+3. 📋 Plan another expansion (add more features to core)
+
+[If on_main == true && has_changes == false:]
+**Git Status:** On main branch - all changes committed
+
+Choose an option or type your own:
+1. 📋 Plan another expansion (continue building on core)
+2. ✏️  Start new feature (plan a different PRD)
+3. 🎯 Other (describe what you'd like to do)
+
+What would you like to do? [1/2/3 or type your request]:
+```
+
+**Handling User Response:**
+
+The user can respond in three ways:
+1. **Select numbered option**: "1" or "2" or "3"
+2. **Type natural language**: "I want to add authentication" or "let's create a PR"
+3. **Use skill keywords**: "ship", "plan", "implement"
+
+**Map responses to actions:**
+```bash
+# If user selects option 1-3, map to the corresponding action
+# If user types natural language, interpret intent:
+#   - Words like "commit", "save", "ship" → trigger publish skill
+#   - Words like "pr", "pull request", "merge" → trigger publish skill in PR mode
+#   - Words like "plan", "expansion", "add feature" → trigger plan-prd skill
+#   - Otherwise, treat as continuation of conversation
 ```
 
 ### Step 8: Standalone Test Mode (No PRD)
