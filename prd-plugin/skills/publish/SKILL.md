@@ -982,6 +982,25 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 **Philosophy:** You maintain full control. This skill is a writing assistant for git operations, not an automation engine.
 
+## Directory Structure
+
+This skill reads PRDs from:
+
+```
+.claude/prds/
+├── YYYY-MM-DD-feature-core.md              # Active PRD files
+├── YYYY-MM-DD-feature-expansion.md
+├── context/                                 # Active context files
+│   ├── YYYY-MM-DD-feature-core.json
+│   └── YYYY-MM-DD-feature-expansion.json
+└── archive/                                 # Archived PRDs (user managed)
+    ├── old-feature.md
+    └── context/
+        └── old-feature.json
+```
+
+**Note:** The skill only searches active PRDs (not archived ones) when detecting related PRDs for commits/PRs.
+
 ## Shared Code
 
 This skill uses `skills/shared/scripts/git-tools.sh` for common git operations, ensuring consistency and reducing code duplication.

@@ -748,18 +748,41 @@ When creating an expansion PRD, the skill **automatically**:
 
 **This ensures expansions are consistent with core through automated context awareness.**
 
+## Directory Structure
+
+The skill maintains this directory structure:
+
+```
+.claude/prds/
+├── YYYY-MM-DD-feature-core.md              # Active PRD files
+├── YYYY-MM-DD-feature-expansion.md
+├── context/                                 # Active context files
+│   ├── YYYY-MM-DD-feature-core.json
+│   └── YYYY-MM-DD-feature-expansion.json
+└── archive/                                 # Manual archival (user responsibility)
+    ├── old-feature.md                       # Archived PRD
+    └── context/
+        └── old-feature.json                 # Archived context
+```
+
+**Archive Usage:**
+- The `archive/` folder is created but managed by users
+- When archiving a completed PRD, move **both** files:
+  - `.claude/prds/feature.md` → `.claude/prds/archive/feature.md`
+  - `.claude/prds/context/feature.json` → `.claude/prds/archive/context/feature.json`
+- This keeps PRD and context paired together
+- Only archive PRDs that are fully complete, shipped, and no longer actively referenced
+
 ## Directory Initialization
 
 Before creating any PRD, validate and create required directories:
 
 ```bash
-# Ensure .claude/prds directory exists
-if [[ ! -d ".claude/prds" ]]; then
-    mkdir -p .claude/prds
-fi
+# Ensure .claude/prds directory structure exists
+mkdir -p .claude/prds/context
+mkdir -p .claude/prds/archive/context
 
-# Ensure .claude/prds/context directory exists
-if [[ ! -d ".claude/prds/context" ]]; then
-    mkdir -p .claude/prds/context
-fi
+# Note: archive/ is for user manual archival only
+# Users should move both .md and corresponding .json to archive/
+# to keep PRD and context paired together
 ```

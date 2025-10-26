@@ -79,9 +79,13 @@ fi
 
 ### Step 1: Load PRD, Context, and Project Conventions
 
-**First, validate and load PRD:**
+**First, ensure directory structure and load PRD:**
 
 ```bash
+# Ensure .claude/prds directory structure exists
+mkdir -p .claude/prds/context
+mkdir -p .claude/prds/archive/context
+
 # Source context manager
 source skills/shared/scripts/context-manager.sh
 
@@ -1051,6 +1055,25 @@ Implement substories → Show progress → Phase complete →
 Auto-test → Auto-review → Auto-fix → Ask approval →
 Continue or stop
 ```
+
+## Directory Structure
+
+The skill works with this directory structure:
+
+```
+.claude/prds/
+├── YYYY-MM-DD-feature-core.md              # Active PRD files
+├── YYYY-MM-DD-feature-expansion.md
+├── context/                                 # Active context files
+│   ├── YYYY-MM-DD-feature-core.json
+│   └── YYYY-MM-DD-feature-expansion.json
+└── archive/                                 # Manual archival (user responsibility)
+    ├── old-feature.md                       # Archived PRD
+    └── context/
+        └── old-feature.json                 # Archived context
+```
+
+**Note:** The `archive/` folder is created but managed by users. When archiving a completed PRD, move both the .md and .json files to maintain the pair.
 
 ## Guidelines
 
