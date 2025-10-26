@@ -182,19 +182,19 @@ Analyze changes to identify type:
 source skills/shared/scripts/context-manager.sh
 
 # Strategy 1: Check recent commits for PRD references
-prd_from_commits=$(git log -5 --oneline | grep -o 'docs/prds/[^)]*\.md' | head -1)
+prd_from_commits=$(git log -5 --oneline | grep -o '.claude/prds/[^)]*\.md' | head -1)
 
 # Strategy 2: Find PRD from changed files
 # - Match file paths to PRD context files
-# - Check .claude/context/*.json for files_created
-for context_file in .claude/context/*.json; do
+# - Check .claude/prds/context/*.json for files_created
+for context_file in .claude/prds/context/*.json; do
     if [[ -f "$context_file" ]]; then
         context_files=$(jq -r '.files_created[]' "$context_file")
         # Check if any changed files match context files
         for changed_file in $changed_files; do
             if echo "$context_files" | grep -q "$changed_file"; then
                 prd_file=$(basename "$context_file" .json)
-                related_prd="docs/prds/${prd_file}.md"
+                related_prd=".claude/prds/${prd_file}.md"
                 break 2
             fi
         done
@@ -204,7 +204,7 @@ done
 # Strategy 3: Check for in-progress PRDs
 # - Find PRDs with status "In Progress"
 # - Suggest most recently modified PRD
-in_progress_prds=$(grep -l "Status.*In Progress" docs/prds/*.md 2>/dev/null)
+in_progress_prds=$(grep -l "Status.*In Progress" .claude/prds/*.md 2>/dev/null)
 
 # Strategy 4: Ask user if multiple matches or no match found
 if [[ -z "$related_prd" ]] && [[ -n "$in_progress_prds" ]]; then
@@ -217,7 +217,7 @@ fi
 🔍 PRD Detection:
 
 Strategy used: [Strategy name]
-Related PRD: docs/prds/2024-10-25-oauth-core.md
+Related PRD: .claude/prds/2024-10-25-oauth-core.md
 
 PRD Details:
 - Type: Core Feature
@@ -275,7 +275,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - Can use bullet points with `-`
 
 **Footer:**
-- PRD reference: `Related: docs/prds/2024-10-25-auth-core.md (Phase 1)`
+- PRD reference: `Related: .claude/prds/2024-10-25-auth-core.md (Phase 1)`
 - Issue refs: `Fixes #123`, `Closes #456`
 - Breaking changes: `BREAKING CHANGE: description`
 
@@ -295,7 +295,7 @@ Users can now sign in using their social accounts.
 - Store OAuth tokens securely with encryption
 - Implement account linking for existing users
 
-Related: docs/prds/2024-10-25-auth-core.md (Phase 1)
+Related: .claude/prds/2024-10-25-auth-core.md (Phase 1)
 
 🤖 Generated with Claude Code
 Co-Authored-By: Claude <noreply@anthropic.com>
@@ -326,7 +326,7 @@ Users can now sign in using their social accounts.
 - Store OAuth tokens securely with encryption
 - Implement account linking for existing users
 
-Related: docs/prds/2024-10-25-auth-core.md (Phase 1)
+Related: .claude/prds/2024-10-25-auth-core.md (Phase 1)
 
 🤖 Generated with Claude Code
 Co-Authored-By: Claude <noreply@anthropic.com>
@@ -538,16 +538,16 @@ Documentation:
 source skills/shared/scripts/context-manager.sh
 
 # Strategy 1: Check commit messages for PRD references
-prd_from_commits=$(git log "$base_branch..HEAD" | grep -o 'docs/prds/[^)]*\.md' | head -1)
+prd_from_commits=$(git log "$base_branch..HEAD" | grep -o '.claude/prds/[^)]*\.md' | head -1)
 
 # Strategy 2: Match changed files to PRD context files
-for context_file in .claude/context/*.json; do
+for context_file in .claude/prds/context/*.json; do
     if [[ -f "$context_file" ]]; then
         context_files=$(jq -r '.files_created[]' "$context_file")
         for changed_file in $changed_files; do
             if echo "$context_files" | grep -q "$changed_file"; then
                 prd_file=$(basename "$context_file" .json)
-                related_prd="docs/prds/${prd_file}.md"
+                related_prd=".claude/prds/${prd_file}.md"
                 break 2
             fi
         done
@@ -557,7 +557,7 @@ done
 # Strategy 3: Check branch name for PRD hints
 # e.g., feature/oauth-login might match oauth-core PRD
 branch_hint=$(echo "$current_branch" | sed 's/feature\///' | sed 's/-login//')
-matching_prd=$(find docs/prds/ -name "*${branch_hint}*.md" | head -1)
+matching_prd=$(find .claude/prds/ -name "*${branch_hint}*.md" | head -1)
 ```
 
 **If PRD found, load comprehensive context:**
@@ -570,7 +570,7 @@ prd_type=$(grep "Type:" "$related_prd" | head -1)
 prd_status=$(grep "Status:" "$related_prd" | head -1)
 
 # Load context file if exists
-context_file=".claude/context/$(basename $related_prd .md).json"
+context_file=".claude/prds/context/$(basename $related_prd .md).json"
 if [[ -f "$context_file" ]]; then
     prd_context=$(cat "$context_file")
 
@@ -594,7 +594,7 @@ fi
 ```
 🔍 PRD Detection:
 
-Found: docs/prds/2024-10-25-oauth-core.md
+Found: .claude/prds/2024-10-25-oauth-core.md
 Strategy: Matched changed files to PRD context
 Type: Core Feature
 Status: In Progress → Completed (with this PR)
@@ -630,7 +630,7 @@ Examples:
 [2-3 sentence overview of what this PR accomplishes and why it matters]
 
 ## Related PRD
-[Link to PRD: `docs/prds/YYYY-MM-DD-feature-name.md`]
+[Link to PRD: `.claude/prds/YYYY-MM-DD-feature-name.md`]
 
 **PRD Type:** [Core Feature/Expansion/Task]
 **Status Change:** [Previous Status] → [New Status]
@@ -734,7 +734,7 @@ Users can now sign in using their social accounts with secure
 token management and account linking.
 
 ## Related PRD
-docs/prds/2024-10-25-auth-core.md
+.claude/prds/2024-10-25-auth-core.md
 
 **Completed Substories:**
 - ✅ [Phase 1.1] OAuth provider configuration
@@ -797,7 +797,7 @@ Users can now sign in using their social accounts with secure
 token management and account linking.
 
 ## Related PRD
-docs/prds/2024-10-25-auth-core.md
+.claude/prds/2024-10-25-auth-core.md
 
 **Completed Substories:**
 - ✅ [Phase 1.1] OAuth provider configuration
@@ -881,7 +881,7 @@ Technical implementation:
 - Account linking for users with existing email accounts
 - Graceful fallback to traditional email/password login
 
-Related: docs/prds/2024-10-25-auth-core.md (Phase 1)
+Related: .claude/prds/2024-10-25-auth-core.md (Phase 1)
 
 🤖 Generated with Claude Code
 Co-Authored-By: Claude <noreply@anthropic.com>
@@ -898,7 +898,7 @@ Invoices can now be associated with customer records including
 contact details and billing information.
 
 ## Related PRD
-docs/prds/2024-10-28-invoice-customer-details.md
+.claude/prds/2024-10-28-invoice-customer-details.md
 
 **Type:** Expansion (builds on invoice-core)
 

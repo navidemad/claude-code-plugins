@@ -78,12 +78,12 @@ Choose [1/2/3]:
 - Create minimal foundation PRD
 - Max 2-4 substories in single phase
 - Essential fields only
-- File: `docs/prds/YYYY-MM-DD-{feature}-core.md`
+- File: `.claude/prds/YYYY-MM-DD-{feature}-core.md`
 - Goal: Establish patterns and working code, NOT completeness
-- Initialize context: `.claude/context/YYYY-MM-DD-{feature}-core.json`
+- Initialize context: `.claude/prds/context/YYYY-MM-DD-{feature}-core.json`
 
 **If user chooses "2 - Expansion":**
-- Ask: "Which core feature does this expand?" or auto-detect from `docs/prds/`
+- Ask: "Which core feature does this expand?" or auto-detect from `.claude/prds/`
 - **VALIDATE CORE PRD EXISTS AND IS COMPLETE:**
   ```bash
   # Check core PRD exists
@@ -100,25 +100,25 @@ Choose [1/2/3]:
   fi
 
   # Check context file exists
-  if [[ ! -f ".claude/context/{core-prd-name}.json" ]]; then
+  if [[ ! -f ".claude/prds/context/{core-prd-name}.json" ]]; then
       echo "⚠️  WARNING: No context file found for core PRD"
       echo "Context may be limited. Continue? [yes/no]"
   fi
   ```
 - **AUTOMATICALLY LOAD CORE CONTEXT:**
   1. Read core PRD file (parse frontmatter, substories, acceptance criteria)
-  2. Load `.claude/context/{core-prd-name}.json` (structured context)
+  2. Load `.claude/prds/context/{core-prd-name}.json` (structured context)
   3. Extract files_created, patterns, libraries, architectural_decisions
   4. Read actual core implementation files (analyze code patterns)
   5. Document established patterns with examples
   6. Present findings to user before asking questions
 - Create focused expansion PRD building on core
-- File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
+- File: `.claude/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 - Goal: Add ONE focused aspect using established patterns
 
 **If user chooses "3 - Task-based Change":**
 - Use task-oriented format instead of substories
-- File: `docs/prds/YYYY-MM-DD-{task-name}-task.md`
+- File: `.claude/prds/YYYY-MM-DD-{task-name}-task.md`
 - Format: Checklist of concrete steps instead of phases/substories
 - Examples: Database migration, CI/CD setup, performance optimization, refactoring, security patch
 - Goal: Complete specific technical task with clear acceptance criteria
@@ -334,7 +334,7 @@ I see the core uses [Pattern X] for [Purpose]. Should this expansion follow the 
 
 #### Core PRD Structure
 
-File: `docs/prds/YYYY-MM-DD-{feature}-core.md`
+File: `.claude/prds/YYYY-MM-DD-{feature}-core.md`
 
 ```markdown
 # [Feature Name] - Core
@@ -342,7 +342,7 @@ File: `docs/prds/YYYY-MM-DD-{feature}-core.md`
 **Type:** Core Feature
 **Created:** YYYY-MM-DD
 **Status:** Planning
-**Context File:** `.claude/context/YYYY-MM-DD-{feature}-core.json`
+**Context File:** `.claude/prds/context/YYYY-MM-DD-{feature}-core.json`
 
 ## Overview
 
@@ -414,7 +414,7 @@ After core is complete, consider these expansion PRDs:
 3. [Expansion 3 name]
 
 ## Context
-This PRD has an associated context file at `.claude/context/YYYY-MM-DD-{feature}-core.json` which tracks:
+This PRD has an associated context file at `.claude/prds/context/YYYY-MM-DD-{feature}-core.json` which tracks:
 - Architectural decisions
 - Patterns established
 - Libraries chosen
@@ -425,16 +425,16 @@ This context is automatically loaded when creating expansion PRDs.
 
 #### Expansion PRD Structure
 
-File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
+File: `.claude/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 
 ```markdown
 # [Feature Name] - [Expansion Name]
 
 **Type:** Expansion
-**Builds On:** [Link to core PRD: docs/prds/YYYY-MM-DD-{feature}-core.md]
+**Builds On:** [Link to core PRD: .claude/prds/YYYY-MM-DD-{feature}-core.md]
 **Created:** YYYY-MM-DD
 **Status:** Planning
-**Context File:** `.claude/context/YYYY-MM-DD-{feature}-{expansion}.json` (inherits from core)
+**Context File:** `.claude/prds/context/YYYY-MM-DD-{feature}-{expansion}.json` (inherits from core)
 
 ## Overview
 
@@ -443,7 +443,7 @@ File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 
 ### Core Implementation Reference (AUTO-LOADED)
 
-**Core PRD:** `docs/prds/YYYY-MM-DD-{feature}-core.md`
+**Core PRD:** `.claude/prds/YYYY-MM-DD-{feature}-core.md`
 
 **Files created in core:**
 [AUTO-POPULATED from context file - actual file paths from your project]
@@ -512,12 +512,12 @@ File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 - [New third-party services if any]
 
 ## Context
-This expansion inherits context from core and adds expansion-specific context to `.claude/context/YYYY-MM-DD-{feature}-{expansion}.json`.
+This expansion inherits context from core and adds expansion-specific context to `.claude/prds/context/YYYY-MM-DD-{feature}-{expansion}.json`.
 ```
 
 #### Task-Based PRD Structure
 
-File: `docs/prds/YYYY-MM-DD-{task-name}-task.md`
+File: `.claude/prds/YYYY-MM-DD-{task-name}-task.md`
 
 ```markdown
 # [Task Name]
@@ -525,7 +525,7 @@ File: `docs/prds/YYYY-MM-DD-{task-name}-task.md`
 **Type:** Task
 **Created:** YYYY-MM-DD
 **Status:** Planning
-**Context File:** `.claude/context/YYYY-MM-DD-{task-name}-task.json`
+**Context File:** `.claude/prds/context/YYYY-MM-DD-{task-name}-task.json`
 
 ## Overview
 
@@ -611,8 +611,8 @@ fi
 - Confirm context file created
 - Output message:
 ```
-✅ Core PRD created: docs/prds/YYYY-MM-DD-{feature}-core.md
-📋 Context file: .claude/context/YYYY-MM-DD-{feature}-core.json
+✅ Core PRD created: .claude/prds/YYYY-MM-DD-{feature}-core.md
+📋 Context file: .claude/prds/context/YYYY-MM-DD-{feature}-core.json
 
 📋 Core includes: [brief summary]
 🚫 Out of scope (future expansions): [list]
@@ -632,8 +632,8 @@ fi
 - Confirm context inherited and extended
 - Output message:
 ```
-✅ Expansion PRD created: docs/prds/YYYY-MM-DD-{feature}-{expansion}.md
-📋 Context file: .claude/context/YYYY-MM-DD-{feature}-{expansion}.json
+✅ Expansion PRD created: .claude/prds/YYYY-MM-DD-{feature}-{expansion}.md
+📋 Context file: .claude/prds/context/YYYY-MM-DD-{feature}-{expansion}.json
 
 🔧 Expands: {core feature name}
 📋 Adds: [brief summary]
@@ -652,8 +652,8 @@ fi
 - Confirm success criteria are measurable
 - Output message:
 ```
-✅ Task PRD created: docs/prds/YYYY-MM-DD-{task-name}-task.md
-📋 Context file: .claude/context/YYYY-MM-DD-{task-name}-task.json
+✅ Task PRD created: .claude/prds/YYYY-MM-DD-{task-name}-task.md
+📋 Context file: .claude/prds/context/YYYY-MM-DD-{task-name}-task.json
 
 ⚡ Task: [brief summary]
 📋 Steps: [X] concrete steps defined
@@ -669,10 +669,10 @@ fi
 - **ALWAYS ask core vs expansion first** - This determines everything
 - **For Core: Enforce minimalism** - Push back on complexity, max 2-4 substories
 - **For Expansion: AUTO-LOAD core context** - Read core PRD and context file automatically
-- **Initialize context files** - Always create/update `.claude/context/{prd-name}.json`
+- **Initialize context files** - Always create/update `.claude/prds/context/{prd-name}.json`
 - **Naming convention**:
-  - Core: `docs/prds/YYYY-MM-DD-{feature}-core.md`
-  - Expansion: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
+  - Core: `.claude/prds/YYYY-MM-DD-{feature}-core.md`
+  - Expansion: `.claude/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 
 **Project Conventions:**
 - Read `CLAUDE.md` from project root for project-specific conventions
@@ -704,7 +704,7 @@ When creating an expansion PRD, the skill **automatically**:
 
 2. **Loads core information**:
    - Reads core PRD file content (parse frontmatter, substories)
-   - Reads `.claude/context/{core-prd-name}.json` file
+   - Reads `.claude/prds/context/{core-prd-name}.json` file
    - Extracts structured data (files, patterns, libraries, decisions)
 
 3. **Analyzes implementation**:
@@ -747,3 +747,19 @@ When creating an expansion PRD, the skill **automatically**:
    - Maintains link to core PRD
 
 **This ensures expansions are consistent with core through automated context awareness.**
+
+## Directory Initialization
+
+Before creating any PRD, validate and create required directories:
+
+```bash
+# Ensure .claude/prds directory exists
+if [[ ! -d ".claude/prds" ]]; then
+    mkdir -p .claude/prds
+fi
+
+# Ensure .claude/prds/context directory exists
+if [[ ! -d ".claude/prds/context" ]]; then
+    mkdir -p .claude/prds/context
+fi
+```

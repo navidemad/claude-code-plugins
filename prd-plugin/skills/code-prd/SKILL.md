@@ -113,7 +113,7 @@ fi
 ```
 
 **If no PRD specified:**
-- Check `docs/prds/` for PRD files
+- Check `.claude/prds/` for PRD files
 - If multiple exist, show user a list with:
   - PRD name and type (Core/Expansion/Task)
   - Completion status (Not Started/In Progress/Complete)
@@ -169,7 +169,7 @@ if ! grep -q "Status.*Complete" "$core_prd"; then
 fi
 
 # Validate core context exists
-core_context_file=".claude/context/$(basename $core_prd .md).json"
+core_context_file=".claude/prds/context/$(basename $core_prd .md).json"
 if [[ ! -f "$core_context_file" ]]; then
     echo "⚠️  WARNING: Core context file not found: $core_context_file"
     echo "Context loading will be limited. Continue? [yes/no]"
@@ -213,8 +213,8 @@ done
 ```
 🔍 Core Implementation Analysis (AUTO-LOADED):
 
-Core PRD: docs/prds/YYYY-MM-DD-{feature}-core.md
-Context: .claude/context/YYYY-MM-DD-{feature}-core.json
+Core PRD: .claude/prds/YYYY-MM-DD-{feature}-core.md
+Context: .claude/prds/context/YYYY-MM-DD-{feature}-core.json
 Status: ✅ Complete
 
 Implementation Files ([X] files analyzed):
@@ -831,7 +831,7 @@ mark_phase_complete "$prd_file" "Phase 1"
 
 🌱 Core foundation is ready!
 
-Context saved: .claude/context/2024-10-25-invoice-core.json
+Context saved: .claude/prds/context/2024-10-25-invoice-core.json
 This context will be auto-loaded when creating expansion PRDs.
 
 💡 Next steps:
@@ -862,7 +862,7 @@ Extended core with:
 - [New functionality 1]
 - [New functionality 2]
 
-Context updated: .claude/context/2024-10-25-invoice-{expansion}.json
+Context updated: .claude/prds/context/2024-10-25-invoice-{expansion}.json
 
 💡 Next steps:
 - "ship" - Create commit and PR for expansion
