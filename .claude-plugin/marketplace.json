@@ -13,13 +13,13 @@
     {
       "name": "prd-skills",
       "description": "Complete PRD workflow: plan features with intelligent context loading, implement with automatic testing and code review, and ship with well-formatted commits and PRs. Supports core features, expansions, and tasks.",
-      "source": "./skills",
+      "source": "./prd-plugin",
       "strict": false,
       "version": "1.1.0",
       "skills": [
-        "./prd/plan-prd",
-        "./prd/code-prd",
-        "./prd/publish"
+        "./skills/prd/plan-prd",
+        "./skills/prd/code-prd",
+        "./skills/prd/publish"
       ]
     }
   ]
