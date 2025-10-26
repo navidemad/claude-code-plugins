@@ -77,26 +77,24 @@ Start Claude Code:
 claude
 ```
 
-Add the marketplace and install plugins:
+Add the marketplace and install the plugin:
 ```bash
 # Add the marketplace from GitHub
-/plugin marketplace add navidemad/claude-code-plugins
+/plugin marketplace add https://github.com/navidemad/claude-code-plugins
 
-# Install the plugins
-/plugin install plan-prd@claude-code-plugins
-/plugin install code-prd@claude-code-plugins
-/plugin install publish@claude-code-plugins
+# Install the prd-skills plugin (includes all three skills)
+/plugin install prd-skills
 ```
-
-Restart Claude Code to activate the plugins.
 
 **Verification:**
 ```bash
-# Verify the marketplace was added
-/plugin marketplace list
+# View installed plugins
+/plugin list
 
-# View available plugins
-/plugin
+# You should see prd-skills with three skills:
+# - plan-prd
+# - code-prd
+# - publish
 ```
 
 ## ✅ Best Practices & Human Verification

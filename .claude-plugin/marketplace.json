@@ -12,10 +12,10 @@
   "plugins": [
     {
       "name": "prd-skills",
-      "description": "Collection of PRD skills demonstrating various capabilities including PRD planning with auto-context gathering - creates core or expansion PRDs, Code implementation with testing, review, and progress tracking, Commit and PR creation with approval gates",
+      "description": "Complete PRD workflow: plan features with intelligent context loading, implement with automatic testing and code review, and ship with well-formatted commits and PRs. Supports core features, expansions, and tasks.",
       "source": "./skills",
       "strict": false,
-      "version": "1.0.0",
+      "version": "1.1.0",
       "skills": [
         "./prd/plan-prd",
         "./prd/code-prd",
