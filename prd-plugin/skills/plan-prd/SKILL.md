@@ -778,9 +778,17 @@ The skill maintains this directory structure:
 Before creating any PRD, validate and create required directories:
 
 ```bash
-# Ensure .claude/prds directory structure exists
+# Ensure .claude directory structure exists
 mkdir -p .claude/prds/context
 mkdir -p .claude/prds/archive/context
+mkdir -p .claude/checkpoints
+
+# Ensure checkpoints are gitignored (created by code-prd skill)
+if [[ -f ".gitignore" ]]; then
+    if ! grep -q "\.claude/checkpoints" .gitignore; then
+        echo ".claude/checkpoints/" >> .gitignore
+    fi
+fi
 
 # Note: archive/ is for user manual archival only
 # Users should move both .md and corresponding .json to archive/

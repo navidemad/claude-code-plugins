@@ -9,6 +9,19 @@ Write production-quality code for PRD substories with **automatic testing, code 
 
 **Communication Style**: In all interactions and commit messages, be extremely concise and sacrifice grammar for the sake of concision.
 
+**UX Enhancements**: This skill includes advanced UX features detailed in `references/ux-enhancements.md`:
+- Learning Mode (explain approach before substories)
+- Smart PRD Discovery (auto-resume from last session)
+- PRD Health Check (validate quality before implementing)
+- Progress Visualization (visual progress bars)
+- Dependency Warnings (detect blockers early)
+- Smart Test Suggestions (complexity-based test plans)
+- Code Review Insights (trends and gamification)
+- Rollback Protection (auto-checkpoints at phases)
+- Context-Aware Expansion Suggestions (data-driven next steps)
+- Parallel Work Detection (merge conflict prevention)
+- Adaptive Difficulty (workflow speeds up as you improve)
+
 ## Philosophy
 
 - **Substory-by-substory**: Implement incrementally with progress tracking
@@ -31,7 +44,7 @@ This skill activates when user says things like:
 
 ## Implementation Workflow
 
-### Phase 0: Validate Prerequisites
+### Phase 0: Validate Prerequisites and Configure Session
 
 **FIRST: Check for CLAUDE.md**
 
@@ -53,10 +66,74 @@ EOF
 fi
 ```
 
-**Show confirmation:**
+**Check for Adaptive Difficulty settings:**
+```bash
+# Load user skill level from context if exists
+user_level="beginner"  # default
+auto_approve_safe_changes=false
+learning_mode=true  # default ON
+
+if [[ -f ".claude/user-preferences.json" ]]; then
+    user_level=$(jq -r '.skill_level // "beginner"' .claude/user-preferences.json)
+    auto_approve_safe_changes=$(jq -r '.auto_approve_safe_changes // false' .claude/user-preferences.json)
+    learning_mode=$(jq -r '.learning_mode // true' .claude/user-preferences.json)
+fi
+```
+
+**Show configuration prompt:**
 ```
 ✅ CLAUDE.md found
 📋 Ready to implement
+
+💡 Session Configuration:
+
+Learning Mode: [Currently: ${learning_mode ? "ON" : "OFF"}]
+  When ON: I'll explain my approach before each substory
+  When OFF: I'll implement directly without explanations
+
+  Recommended for: Understanding patterns and decisions
+
+Change Learning Mode? [yes/no/default: no]:
+```
+
+**If user says "yes":**
+```
+Enable or disable Learning Mode?
+1. 💡 Enable (explain approach for each substory)
+2. ⚡ Disable (faster, direct implementation)
+3. 🎯 Smart (only explain new patterns)
+
+Choice [1/2/3]:
+```
+
+**Save preference:**
+```bash
+# Save to .claude/user-preferences.json (user-specific, gitignored)
+mkdir -p .claude
+
+# Ensure user-preferences.json is gitignored
+if [[ -f ".gitignore" ]]; then
+    if ! grep -q "\.claude/user-preferences\.json" .gitignore; then
+        echo "" >> .gitignore
+        echo "# Claude Code user-specific preferences (do not commit)" >> .gitignore
+        echo ".claude/user-preferences.json" >> .gitignore
+    fi
+else
+    cat > .gitignore <<'GITIGNORE'
+# Claude Code user-specific preferences (do not commit)
+.claude/user-preferences.json
+GITIGNORE
+fi
+
+# Write user preferences
+echo "{
+  \"skill_level\": \"$user_level\",
+  \"learning_mode\": $learning_mode,
+  \"auto_approve_safe_changes\": $auto_approve_safe_changes,
+  \"last_updated\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
+}" > .claude/user-preferences.json
+
+echo "✅ Preferences saved (local only, not committed to git)"
 ```
 
 ### Mode Detection
@@ -82,9 +159,17 @@ fi
 **First, ensure directory structure and load PRD:**
 
 ```bash
-# Ensure .claude/prds directory structure exists
+# Ensure .claude directory structure exists
 mkdir -p .claude/prds/context
 mkdir -p .claude/prds/archive/context
+mkdir -p .claude/checkpoints
+
+# Ensure checkpoints are gitignored
+if [[ -f ".gitignore" ]]; then
+    if ! grep -q "\.claude/checkpoints" .gitignore; then
+        echo ".claude/checkpoints/" >> .gitignore
+    fi
+fi
 
 # Source context manager
 source skills/shared/scripts/context-manager.sh
@@ -116,22 +201,81 @@ else
 fi
 ```
 
-**If no PRD specified:**
-- Check `.claude/prds/` for PRD files
-- If multiple exist, show user a list with:
-  - PRD name and type (Core/Expansion/Task)
-  - Completion status (Not Started/In Progress/Complete)
-  - Brief description
-- Ask which PRD to implement
-- Format:
-  ```
-  Available PRDs:
-  1. [Core] invoice-core (In Progress) - Basic invoice with essential fields
-  2. [Expansion] invoice-customers (Not Started) - Add customer details
-  3. [Task] migrate-to-postgres (Not Started) - Database migration
+**If no PRD specified - Smart PRD Discovery:**
 
-  Which PRD? [1/2/3]
-  ```
+```bash
+# Strategy 1: Check for in-progress PRD from last session
+last_prd=""
+last_timestamp=0
+
+# Check context files for most recently updated in-progress PRD
+for context_file in .claude/prds/context/*.json; do
+    if [[ -f "$context_file" ]]; then
+        # Get last updated timestamp
+        timestamp=$(jq -r '.last_updated // 0' "$context_file" 2>/dev/null || echo 0)
+        prd_file=$(basename "$context_file" .json)
+        prd_path=".claude/prds/${prd_file}.md"
+
+        # Check if PRD exists and is in progress
+        if [[ -f "$prd_path" ]] && grep -q "Status.*In Progress" "$prd_path"; then
+            if [[ $timestamp -gt $last_timestamp ]]; then
+                last_timestamp=$timestamp
+                last_prd=$prd_path
+                last_context=$context_file
+            fi
+        fi
+    fi
+done
+
+# Strategy 2: Check git log for recently committed PRD references
+recent_prd=$(git log -10 --oneline 2>/dev/null | grep -o '.claude/prds/[^)]*\.md' | head -1)
+
+# Strategy 3: Check recently modified files in .claude/prds/
+recent_file=$(ls -t .claude/prds/*.md 2>/dev/null | head -1)
+```
+
+**If found recent PRD in progress:**
+```
+🔍 Detected context from your last session:
+
+Working on: .claude/prds/2025-10-26-hello-world-core.md
+Type: Core Feature
+Status: Phase 1 - In Progress (2/3 substories complete)
+Last worked: 2 hours ago
+
+Completed:
+✅ Substory 1.1: Basic MVC structure
+✅ Substory 1.2: RESTful routing
+
+Next up:
+⏳ Substory 1.3: Integration tests
+
+Continue where you left off? [yes/choose-different/new]:
+```
+
+**If user says "choose-different" or no recent PRD found:**
+```
+Available PRDs:
+
+In Progress:
+  1. 🔄 [Core] hello-world-core - Basic hello world feature
+     Progress: ████████░░ 66% (2/3 substories)
+     Last updated: 2 hours ago
+
+Not Started:
+  2. ⏸️  [Expansion] hello-world-personalized - Add name parameter
+     Depends on: hello-world-core (not complete)
+
+  3. ⏸️  [Task] setup-ci-cd - Configure GitHub Actions
+     Estimated: 5 steps
+
+Completed:
+  4. ✅ [Core] auth-core - OAuth authentication
+     Completed: 3 days ago
+     (Move to archive? Type 'archive 4')
+
+Which PRD? [1/2/3/4/new]:
+```
 
 **Determine PRD Type:**
 Check PRD frontmatter for:
@@ -284,6 +428,120 @@ Project Conventions (from CLAUDE.md):
 
 **Document findings based on your project's CLAUDE.md and codebase analysis.**
 
+### Step 2a: PRD Health Check
+
+**Before implementing, validate PRD quality:**
+
+```bash
+# Run automated PRD quality analysis
+prd_score=0
+issues=()
+warnings=()
+
+# Check 1: Acceptance criteria defined
+if grep -q "Acceptance Criteria:" "$prd_file"; then
+    prd_score=$((prd_score + 20))
+else
+    issues+=("❌ Missing acceptance criteria")
+fi
+
+# Check 2: Success metrics defined
+if grep -q "Success Criteria:" "$prd_file"; then
+    prd_score=$((prd_score + 15))
+else
+    warnings+=("⚠️  Missing success metrics")
+fi
+
+# Check 3: Security considerations
+if grep -qi "security\|auth\|permission\|sanitiz" "$prd_file"; then
+    prd_score=$((prd_score + 15))
+else
+    warnings+=("⚠️  No security considerations documented")
+fi
+
+# Check 4: Performance requirements
+if grep -qi "performance\|latency\|speed\|optimize" "$prd_file"; then
+    prd_score=$((prd_score + 10))
+else
+    warnings+=("⚠️  No performance requirements")
+fi
+
+# Check 5: Error handling approach
+if grep -qi "error\|exception\|failure\|fallback" "$prd_file"; then
+    prd_score=$((prd_score + 10))
+else
+    warnings+=("⚠️  No error handling strategy")
+fi
+
+# Check 6: Testing strategy
+if grep -qi "test\|testing\|coverage" "$prd_file"; then
+    prd_score=$((prd_score + 15))
+else
+    warnings+=("⚠️  No testing strategy defined")
+fi
+
+# Check 7: Clear substories with phases
+substory_count=$(grep -c "Substory" "$prd_file" || echo 0)
+if [[ $substory_count -gt 0 ]]; then
+    prd_score=$((prd_score + 15))
+else
+    issues+=("❌ No substories defined")
+fi
+```
+
+**Show health check results:**
+```
+🔍 PRD Health Check
+
+Analyzing: .claude/prds/2025-10-26-hello-world-core.md
+
+Quality Score: ${prd_score}/100 $(if [[ $prd_score -ge 80 ]]; then echo "(Excellent ✅)"; elif [[ $prd_score -ge 60 ]]; then echo "(Good 👍)"; elif [[ $prd_score -ge 40 ]]; then echo "(Acceptable ⚠️)"; else echo "(Needs Improvement ❌)"; fi)
+
+[If issues found:]
+Critical Issues:
+${issues[@]}
+
+[If warnings found:]
+Recommendations:
+${warnings[@]}
+
+[If prd_score >= 60:]
+✅ PRD quality is sufficient for implementation
+
+[If prd_score < 60:]
+⚠️  PRD quality is below recommended threshold
+
+Options:
+1. 🔧 Fix issues now (pause to improve PRD)
+2. ⏭️  Implement anyway (accept risks)
+3. 📋 Show detailed recommendations
+
+Choice [1/2/3/default: 2]:
+```
+
+**If user chooses "3 - Show detailed recommendations":**
+```
+📋 Detailed Recommendations
+
+To improve this PRD to ${100 - prd_score}% better quality:
+
+1. Add acceptance criteria for each substory
+   Why: Defines "done" clearly, prevents scope creep
+   How: For each substory, add checklist of verifiable outcomes
+
+2. Define success metrics
+   Why: Measurable goals help track feature effectiveness
+   How: Add metrics like "response time < 200ms" or "95% test coverage"
+
+3. Document security approach
+   Why: Security considerations upfront prevent vulnerabilities
+   How: Add section covering auth, input validation, data protection
+
+[etc for each missing element]
+
+Would you like to improve the PRD now? [yes/no/implement-anyway]
+```
+
 ### Step 3: Parse PRD and Create Implementation Plan
 
 **Parse PRD for:**
@@ -303,15 +561,17 @@ Project Conventions (from CLAUDE.md):
 - Show completion summary
 - Confirm continuation point
 
-**Show plan:**
+**Show plan with Progress Visualization:**
 ```
 📋 Implementation Plan: [Feature Name]
 
+Overall Progress: ░░░░░░░░░░ 0% (0/4 substories complete)
+
 Phase 1: [Phase Name] (4 substories)
-├─ Substory 1.1: [Name] - ⏳ Not Started
-├─ Substory 1.2: [Name] - ⏳ Not Started
-├─ Substory 1.3: [Name] - ⏳ Not Started
-└─ Substory 1.4: [Name] - ⏳ Not Started
+├─ ⏳ Substory 1.1: [Name] - Not Started
+├─ ⏳ Substory 1.2: [Name] - Not Started
+├─ ⏳ Substory 1.3: [Name] - Not Started
+└─ ⏳ Substory 1.4: [Name] - Not Started
 
 Context loaded: ✅
 Patterns to follow: [list from context and CLAUDE.md]
@@ -319,9 +579,51 @@ Patterns to follow: [list from context and CLAUDE.md]
 Ready to begin Phase 1? [yes/show-details/skip-to]
 ```
 
+**For continuation (resuming in-progress PRD):**
+```
+📋 Implementation Plan: Hello World Core
+
+Overall Progress: ████████░░ 66% (2/3 substories complete)
+
+Phase 1: Core Foundation (3 substories)
+├─ ✅ Substory 1.1: Basic MVC structure - Completed
+├─ ✅ Substory 1.2: RESTful routing - Completed
+└─ 🔄 Substory 1.3: Integration tests - In Progress
+
+Context loaded: ✅
+Patterns established: Rails MVC, Thin controller pattern
+Files created so far: 3 files, 1 modified
+
+Resume at Substory 1.3? [yes/show-details/restart-substory]
+```
+
 ### Step 4: Implement Phase (Substory-by-Substory)
 
 **For each substory in the phase:**
+
+#### Step 4.0: Learning Mode Explanation (If Enabled)
+
+**📚 See references/ux-enhancements.md Section 1 for full implementation**
+
+If Learning Mode is enabled, explain approach before implementing:
+- Show what will be built and why
+- Explain pattern choices and decisions
+- List files to be created/modified
+- Estimate complexity
+
+Give user option to proceed, request more details, or adjust approach.
+
+#### Step 4.1: Dependency Warnings Check
+
+**⚠️ See references/ux-enhancements.md Section 2 for full implementation**
+
+Before implementing substory, detect and warn about dependencies:
+- Check for required API keys/credentials
+- Verify external services are running
+- Check for pending migrations
+- Validate package dependencies
+
+If blockers found, offer to resolve, skip, or continue anyway.
 
 #### Mark Substory In Progress
 
@@ -402,6 +704,18 @@ Update PRD:
 
 **Continue to next substory automatically** until phase is complete.
 
+### Step 4.9: Rollback Protection Checkpoint
+
+**💾 See references/ux-enhancements.md Section 3 for full implementation**
+
+Before starting each new phase, create automatic checkpoint:
+- Save git state (diffs, status, commit hash)
+- Backup PRD and context files
+- Create rollback script
+- Auto-add to .gitignore
+
+Show checkpoint confirmation with rollback instructions.
+
 ### Step 5: Phase Complete - Auto-Test and Review Loop
 
 **When all substories in a phase are complete:**
@@ -424,6 +738,14 @@ Update PRD:
 ```
 
 #### Step 5a: Auto-Run Tests
+
+**🧪 See references/ux-enhancements.md Section 4 for Smart Test Suggestions**
+
+Before writing tests, analyze code complexity and suggest test strategy:
+- Calculate cyclomatic complexity
+- Count public methods and edge cases
+- Recommend test coverage level (minimal/standard/comprehensive)
+- Let user choose or customize test plan
 
 **Check if testing is applicable:**
 
@@ -579,6 +901,14 @@ All acceptance criteria verified!
 - Note in review summary that tests were not executed
 
 #### Step 5b: Auto-Run Code Review (Internal)
+
+**📋 See references/ux-enhancements.md Section 5 for Code Review Insights Summary**
+
+Enhanced code review with trends, gamification, and achievements:
+- Track quality score trends across substories
+- Show improvement/regression in each dimension
+- Unlock achievements for consistent quality
+- Provide focus areas for next substory
 
 **Run comprehensive internal code review analysis:**
 
@@ -808,6 +1138,18 @@ mark_phase_complete "$prd_file" "Phase 1"
 # Continue to next phase or finish
 ```
 
+### Step 6.5: Parallel Work Detection
+
+**🔍 See references/ux-enhancements.md Section 6 for full implementation**
+
+Before continuing to next phase, check for parallel work on main branch:
+- Fetch latest from remote
+- Compare changed files between branches
+- Identify potential conflicts
+- Show risk level and affected substories
+
+If conflicts detected, offer to merge now, continue anyway, or coordinate with team.
+
 ### Step 7: Continuation or Completion
 
 **If more phases exist:**
@@ -892,8 +1234,17 @@ Choose an option or type your own:
 [If on_main == true && has_changes == false:]
 **Git Status:** On main branch - all changes committed
 
+**🎯 See references/ux-enhancements.md Section 7 for Context-Aware Expansion Suggestions**
+
+Analyze core implementation for smart expansion suggestions:
+- Check "Out of Scope" section from PRD
+- Find TODO comments in implemented files
+- Analyze data model for missing relationships
+- Rank by effort, impact, and dependencies
+
 Choose an option or type your own:
 1. 📋 Plan expansion (create expansion PRD to add more features):
+   [Smart suggestions based on code analysis:]
    - Personalized greeting (accept name parameter)
    - Styling with CSS/Tailwind
    - Interactive form version
@@ -1165,19 +1516,59 @@ Continue or stop
 The skill works with this directory structure:
 
 ```
-.claude/prds/
-├── YYYY-MM-DD-feature-core.md              # Active PRD files
-├── YYYY-MM-DD-feature-expansion.md
-├── context/                                 # Active context files
-│   ├── YYYY-MM-DD-feature-core.json
-│   └── YYYY-MM-DD-feature-expansion.json
-└── archive/                                 # Manual archival (user responsibility)
-    ├── old-feature.md                       # Archived PRD
-    └── context/
-        └── old-feature.json                 # Archived context
+.claude/
+├── prds/
+│   ├── YYYY-MM-DD-feature-core.md              # Active PRD files
+│   ├── YYYY-MM-DD-feature-expansion.md
+│   ├── context/                                 # Active context files
+│   │   ├── YYYY-MM-DD-feature-core.json
+│   │   └── YYYY-MM-DD-feature-expansion.json
+│   └── archive/                                 # Manual archival (user responsibility)
+│       ├── old-feature.md                       # Archived PRD
+│       └── context/
+│           └── old-feature.json                 # Archived context
+├── user-preferences.json                        # User-specific settings (GITIGNORED)
+└── checkpoints/                                 # Rollback protection (GITIGNORED)
+    └── phase-1-20251026-143022/
+        ├── git-diff.patch
+        ├── prd.md
+        └── rollback.sh
+
+.gitignore additions:
+# Claude Code user-specific files (do not commit)
+.claude/user-preferences.json
+.claude/checkpoints/
 ```
 
-**Note:** The `archive/` folder is created but managed by users. When archiving a completed PRD, move both the .md and .json files to maintain the pair.
+**Important Notes:**
+- **PRDs and context files**: Committed to git (team-shared)
+- **User preferences**: Local only, auto-gitignored (personal settings)
+- **Checkpoints**: Local only, auto-gitignored (temporary rollback points)
+- **Archive folder**: When archiving, move both .md and .json files to maintain the pair
+
+## UX Enhancement Reference Map
+
+This skill includes advanced UX features. At each workflow step, refer to references/ux-enhancements.md:
+
+| Workflow Step | UX Enhancement | Section |
+|---------------|----------------|---------|
+| **Phase 0** | Learning Mode Toggle | Section 1 |
+| **Phase 0** | Adaptive Difficulty Check | Section 8 |
+| **Step 1** | Smart PRD Discovery | Built-in |
+| **Step 2a** | PRD Health Check | Built-in |
+| **Step 3** | Progress Visualization | Built-in |
+| **Step 4.0** | Learning Mode Explanation | Section 1 |
+| **Step 4.1** | Dependency Warnings | Section 2 |
+| **Step 4.9** | Rollback Protection | Section 3 |
+| **Step 5a** | Smart Test Suggestions | Section 4 |
+| **Step 5b** | Code Review Insights | Section 5 |
+| **Step 6.5** | Parallel Work Detection | Section 6 |
+| **Step 7** | Context-Aware Expansions | Section 7 |
+
+**When to read references/ux-enhancements.md:**
+- At workflow step callouts (📚 🧪 📋 💾 🔍 🎯 markers)
+- When user requests specific feature (e.g., "enable learning mode")
+- To understand full implementation details for any enhancement
 
 ## Guidelines
 
@@ -1196,3 +1587,4 @@ The skill works with this directory structure:
 - Communicate clearly and frequently
 - Handle blockers gracefully
 - Support standalone test mode
+- **Reference references/ux-enhancements.md at callout steps for full feature implementation**
