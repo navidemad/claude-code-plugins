@@ -70,20 +70,25 @@ brew install gh
 gh auth login
 ```
 
-### Install plugins in Claude Code:
+### Add the marketplace from GitHub
 
-Start Claude Code:
 ```bash
-claude
+claude plugin marketplace add navidemad/claude-code-plugins
+
+# To update the marketplace:
+claude plugin marketplace update claude-code-plugins
 ```
 
-Add the marketplace and install the plugin:
-```bash
-# Add the marketplace from GitHub
-/plugin marketplace add https://github.com/navidemad/claude-code-plugins
+### Install the prd-skills plugin (includes all three skills)
 
-# Install the prd-skills plugin (includes all three skills)
-/plugin install prd-skills
+```bash
+claude plugin install prd-skills@claude-code-plugins
+```
+
+### Start Claude Code:
+
+```bash
+claude
 ```
 
 **Verification:**
@@ -201,4 +206,11 @@ Claude: Auto-loads booking-core context ✅
 Claude: Extends core using same libraries/patterns ✅
         Auto-test + Auto-review + Auto-fix ✅
         Asks approval ✅
+```
+
+## CONTRIBUTING
+
+```bash
+claude plugin marketplace add ./
+claude plugin install prd-skills@claude-code-plugins
 ```
