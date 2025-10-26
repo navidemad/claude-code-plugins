@@ -1,11 +1,6 @@
 ---
 name: publish
-description: Create commits and pull requests with conventional formats. Auto-references PRDs, waits for approval before executing git commands. Activates when user says publish, ship, commit, create PR, ship changes. French: publier, committer, créer une PR, soumettre.
-allowed-tools:
-  - "Bash(git:*)"
-  - "Bash(gh pr create:*)"
-  - Read
-  - Glob
+description: Ship code when user wants to commit changes, create pull requests, or save work. Auto-detects whether to create commits or PRs based on git state. Generates well-formatted messages with PRD references. Always waits for approval before executing git commands.
 ---
 
 # Publish Changes
@@ -14,11 +9,16 @@ Create well-formatted git commits and GitHub pull requests with automatic PRD re
 
 ## When to Activate
 
-This skill activates when user:
-- Says "commit", "create a commit", "save changes"
-- Says "create PR", "make pull request", "submit for review"
-- Mentions "git commit" or "ship this code"
-- French: "committer", "créer une PR", "soumettre pour révision"
+This skill activates when user says things like:
+- "ship this"
+- "commit changes"
+- "save my work"
+- "create a commit"
+- "make a PR"
+- "create pull request"
+- "submit for review"
+- "push this code"
+- Any request to commit, ship, or create a pull request
 
 ## Mode Detection
 
@@ -62,13 +62,14 @@ Proceed with commit creation? [yes/show-changes/cancel]
 **If user says "yes":**
 - Continue to Step 1
 
-#### Step 1: Analyze Changes
+#### Step 1: Analyze Changes Comprehensively
 
+**Load git tools and analyze changes:**
 ```bash
 # Source shared git tools
 source skills/shared/scripts/git-tools.sh
 
-# Analyze changes
+# Analyze changes with detailed stats
 changes=$(analyze_git_changes "HEAD")
 
 # Parse the output
@@ -76,27 +77,76 @@ files_changed=$(echo "$changes" | grep "FILES_CHANGED=" | cut -d'=' -f2)
 insertions=$(echo "$changes" | grep "INSERTIONS=" | cut -d'=' -f2)
 deletions=$(echo "$changes" | grep "DELETIONS=" | cut -d'=' -f2)
 
-# Get file list
-git diff HEAD --name-only
+# Get detailed file list with status
+git diff HEAD --name-status
+
+# Categorize changes by type
+new_files=$(git diff HEAD --name-only --diff-filter=A)
+modified_files=$(git diff HEAD --name-only --diff-filter=M)
+deleted_files=$(git diff HEAD --name-only --diff-filter=D)
 ```
 
-**Show change summary:**
+**Analyze change patterns:**
+```bash
+# Group files by directory/area
+# Detect if changes span multiple features
+# Identify primary area of change
+
+# Analyze actual diff content to understand nature of changes:
+# - Are we adding new functionality? (new classes, functions)
+# - Are we fixing bugs? (error handling, validation)
+# - Are we refactoring? (moving code, renaming)
+# - Are we updating tests? (test files changed)
 ```
-📊 Changes analyzed:
-- 8 files changed
-- +247 lines added
-- -58 lines removed
-- Files: app/models/user.rb, app/services/auth/, spec/...
+
+**Show comprehensive change summary:**
+```
+📊 Changes Analyzed:
+
+Statistics:
+- 8 files changed (+247/-58 lines)
+- New files: 2
+- Modified files: 5
+- Deleted files: 1
+
+Changes by area:
+- Authentication (5 files, +180/-20 lines)
+  * app/models/user.rb
+  * app/services/auth/oauth_service.rb
+  * app/controllers/auth_controller.rb
+  * spec/models/user_spec.rb
+  * spec/services/oauth_service_spec.rb
+
+- Testing (3 files, +67/-38 lines)
+  * spec/models/user_spec.rb
+  * spec/services/oauth_service_spec.rb
+  * spec/integration/oauth_flow_spec.rb
+
+Nature of changes:
+- New functionality: OAuth provider integration
+- Modified: User model with OAuth fields
+- Tests: Comprehensive test coverage added
 ```
 
 **Check for multiple unrelated areas:**
-If changes span both "auth" and "booking" (for example), suggest splitting:
+If changes span multiple distinct features, suggest splitting:
 ```
-💡 Notice: Changes span both authentication (3 files) and booking (5 files).
-   Consider splitting into separate commits for cleaner history.
+💡 Notice: Changes span multiple areas:
+   - Authentication (5 files)
+   - Booking system (3 files)
+
+   These appear to be unrelated changes. Recommend splitting into:
+   1. Commit for authentication changes
+   2. Commit for booking changes
+
+   Benefits: Cleaner history, easier review, better git bisect
 
    Continue with single commit? [yes/split/cancel]
 ```
+
+**If user chooses "split":**
+- Help create multiple commits by feature area
+- Process each area separately through commit workflow
 
 #### Step 2: Analyze Changed Files
 
@@ -124,17 +174,75 @@ Analyze changes to identify type:
 - **perf**: Performance improvement
 - **style**: Code style/formatting (no logic change)
 
-#### Step 4: Find Related PRD
+#### Step 4: Find Related PRD Intelligently
 
+**Multi-strategy PRD detection:**
 ```bash
 # Source context manager
 source skills/shared/scripts/context-manager.sh
 
-# Find related PRD
-related_prd=$(find_related_prd "$changed_files")
+# Strategy 1: Check recent commits for PRD references
+prd_from_commits=$(git log -5 --oneline | grep -o 'docs/prds/[^)]*\.md' | head -1)
 
-# Or check commits for PRD reference
-prd_ref=$(get_prd_from_commits)
+# Strategy 2: Find PRD from changed files
+# - Match file paths to PRD context files
+# - Check .claude/context/*.json for files_created
+for context_file in .claude/context/*.json; do
+    if [[ -f "$context_file" ]]; then
+        context_files=$(jq -r '.files_created[]' "$context_file")
+        # Check if any changed files match context files
+        for changed_file in $changed_files; do
+            if echo "$context_files" | grep -q "$changed_file"; then
+                prd_file=$(basename "$context_file" .json)
+                related_prd="docs/prds/${prd_file}.md"
+                break 2
+            fi
+        done
+    fi
+done
+
+# Strategy 3: Check for in-progress PRDs
+# - Find PRDs with status "In Progress"
+# - Suggest most recently modified PRD
+in_progress_prds=$(grep -l "Status.*In Progress" docs/prds/*.md 2>/dev/null)
+
+# Strategy 4: Ask user if multiple matches or no match found
+if [[ -z "$related_prd" ]] && [[ -n "$in_progress_prds" ]]; then
+    # Present options to user
+fi
+```
+
+**Show PRD detection results:**
+```
+🔍 PRD Detection:
+
+Strategy used: [Strategy name]
+Related PRD: docs/prds/2024-10-25-oauth-core.md
+
+PRD Details:
+- Type: Core Feature
+- Status: In Progress
+- Phase: Phase 1 - OAuth Integration (3/4 substories complete)
+
+This commit relates to: [Substory 1.3] Token management
+
+✅ Will include PRD reference in commit message
+```
+
+**If no PRD detected:**
+```
+ℹ️  No related PRD detected
+
+Checked:
+- Recent commits (no PRD references found)
+- Context files (changed files don't match any PRD)
+- In-progress PRDs (none found)
+
+Options:
+1. Continue without PRD reference (standalone commit)
+2. Manually specify PRD: [enter path]
+
+Choice: [1/2]
 ```
 
 #### Step 5: Generate Commit Message
@@ -311,8 +419,9 @@ Alternatively:
 
 **Do NOT auto-commit. User must explicitly commit first.**
 
-#### Step 2: Gather Information
+#### Step 2: Gather Information and Analyze Comprehensively
 
+**Source tools and gather git information:**
 ```bash
 # Source shared tools
 source skills/shared/scripts/git-tools.sh
@@ -320,43 +429,189 @@ source skills/shared/scripts/git-tools.sh
 # Get current branch
 current_branch=$(get_current_branch)
 
-# Get base branch
+# Get base branch (main/master)
 base_branch=$(get_base_branch)
 
 # Get commits ahead
 commits_ahead=$(get_commits_ahead)
-
-# Analyze branch diff
-changes=$(analyze_git_changes "$base_branch...HEAD")
-
-# Get commit messages
-git log "$base_branch..HEAD" --oneline
-
-# Get full diff
-git diff "$base_branch...HEAD" --name-only
 ```
 
-**Analyze:**
-- What was added (new features/files)
-- What was modified (improvements/fixes)
-- What was removed (deprecated code)
-- Test coverage changes (if applicable)
-- Schema changes (migrations, SQL, ORM changes - if applicable)
-- New dependencies (if applicable)
-
-#### Step 3: Find Related PRD
-
+**Analyze branch changes comprehensively:**
 ```bash
-# Find PRD from commits or docs/prds/
-related_prd=$(find_related_prd)
+# Get detailed change statistics
+changes=$(analyze_git_changes "$base_branch...HEAD")
 
-# Or get from commit messages
-prd_ref=$(get_prd_from_commits)
+# Get commit messages with details
+commits=$(git log "$base_branch..HEAD" --oneline)
 
-# Read PRD if found
-if [[ -n "$related_prd" ]]; then
-    # Read PRD to extract completed substories
+# Get files changed with status (A=added, M=modified, D=deleted)
+git diff "$base_branch...HEAD" --name-status
+
+# Categorize files by change type
+new_files=$(git diff "$base_branch...HEAD" --name-only --diff-filter=A)
+modified_files=$(git diff "$base_branch...HEAD" --name-only --diff-filter=M)
+deleted_files=$(git diff "$base_branch...HEAD" --name-only --diff-filter=D)
+
+# Analyze diff content for detailed insights
+git diff "$base_branch...HEAD" --stat
+```
+
+**Perform deep analysis:**
+
+1. **Feature Analysis:**
+   - Identify new features added (new classes, modules, endpoints)
+   - Identify improvements to existing features
+   - Identify bug fixes and corrections
+
+2. **Test Analysis:**
+   - Count test files changed
+   - Estimate test coverage change (if coverage tool available)
+   - Identify test types (unit, integration, e2e)
+
+3. **Schema/Data Changes:**
+   - Detect database migrations
+   - Identify schema changes (models, SQL files)
+   - Check for data transformation scripts
+
+4. **Dependency Analysis:**
+   - Check package.json, requirements.txt, Gemfile for new dependencies
+   - Identify version upgrades
+   - Note dependency removals
+
+5. **Documentation:**
+   - Check for README updates
+   - Identify new documentation files
+   - Note code comment additions
+
+6. **Breaking Changes:**
+   - Detect API signature changes
+   - Identify removed public methods
+   - Check for configuration changes
+
+**Present comprehensive analysis:**
+```
+📊 Branch Analysis: feature/oauth-login → main
+
+Commits: 5 commits ahead
+Files: 12 files changed (+347/-89 lines)
+
+Changes by category:
+- New files (3):
+  * src/services/oauth_service.ts - OAuth provider integration
+  * src/models/oauth_token.ts - Token model
+  * src/types/oauth.types.ts - Type definitions
+
+- Modified files (8):
+  * src/models/user.ts - Added OAuth fields
+  * src/controllers/auth_controller.ts - OAuth endpoints
+  * [+ 6 more files]
+
+- Deleted files (1):
+  * src/legacy/old_auth.ts - Removed deprecated code
+
+Test Changes:
+- New tests: 23 tests added
+- Modified tests: 5 tests updated
+- Coverage: 78% → 94% (+16%)
+- Test breakdown:
+  * Unit: 15 tests
+  * Integration: 8 tests
+
+Schema Changes:
+- Database: 1 migration added (add_oauth_fields_to_users)
+- Models: User model extended with oauth_provider, oauth_uid
+
+Dependencies:
+- Added: passport (v0.6.0) - OAuth authentication
+- No version changes or removals
+
+Documentation:
+- README.md updated with OAuth setup instructions
+- Added API documentation for OAuth endpoints
+```
+
+#### Step 3: Find Related PRD and Load Context
+
+**Multi-strategy PRD detection (same as commit mode):**
+```bash
+# Source context manager
+source skills/shared/scripts/context-manager.sh
+
+# Strategy 1: Check commit messages for PRD references
+prd_from_commits=$(git log "$base_branch..HEAD" | grep -o 'docs/prds/[^)]*\.md' | head -1)
+
+# Strategy 2: Match changed files to PRD context files
+for context_file in .claude/context/*.json; do
+    if [[ -f "$context_file" ]]; then
+        context_files=$(jq -r '.files_created[]' "$context_file")
+        for changed_file in $changed_files; do
+            if echo "$context_files" | grep -q "$changed_file"; then
+                prd_file=$(basename "$context_file" .json)
+                related_prd="docs/prds/${prd_file}.md"
+                break 2
+            fi
+        done
+    fi
+done
+
+# Strategy 3: Check branch name for PRD hints
+# e.g., feature/oauth-login might match oauth-core PRD
+branch_hint=$(echo "$current_branch" | sed 's/feature\///' | sed 's/-login//')
+matching_prd=$(find docs/prds/ -name "*${branch_hint}*.md" | head -1)
+```
+
+**If PRD found, load comprehensive context:**
+```bash
+# Read PRD file
+prd_content=$(cat "$related_prd")
+
+# Extract PRD metadata
+prd_type=$(grep "Type:" "$related_prd" | head -1)
+prd_status=$(grep "Status:" "$related_prd" | head -1)
+
+# Load context file if exists
+context_file=".claude/context/$(basename $related_prd .md).json"
+if [[ -f "$context_file" ]]; then
+    prd_context=$(cat "$context_file")
+
+    # Extract completed substories from PRD
+    completed_substories=$(grep "✅.*\[" "$related_prd")
+
+    # Extract phase information
+    current_phase=$(grep "Phase.*Complete\|Phase.*In Progress" "$related_prd" | tail -1)
 fi
+
+# For expansion PRDs, load core PRD info too
+if echo "$prd_type" | grep -q "Expansion"; then
+    core_prd=$(grep "Builds On:" "$related_prd" | sed 's/.*(\(docs\/prds\/[^)]*\)).*/\1/')
+    if [[ -f "$core_prd" ]]; then
+        core_prd_name=$(basename "$core_prd" .md)
+    fi
+fi
+```
+
+**Show PRD detection and context loading:**
+```
+🔍 PRD Detection:
+
+Found: docs/prds/2024-10-25-oauth-core.md
+Strategy: Matched changed files to PRD context
+Type: Core Feature
+Status: In Progress → Completed (with this PR)
+
+Context loaded:
+- Phase 1: OAuth Integration (4/4 substories completed)
+- Files created: 12 files
+- Patterns established: Service layer, Token encryption
+- Tests: 45 tests, 94% coverage
+
+Completed substories in this PR:
+✅ [1.1] OAuth provider configuration
+✅ [1.2] Callback handler implementation
+✅ [1.3] Token encryption and storage
+✅ [1.4] Account linking logic
+
+This PR completes the core OAuth implementation!
 ```
 
 #### Step 4: Generate PR Title and Description
@@ -368,39 +623,96 @@ Examples:
 - `fix(api): prevent null pointer in user serializer`
 - `refactor(mobile): extract booking logic to view models`
 
-**Description Template:**
+**Description Template (Enhanced):**
 
 ```markdown
 ## Summary
-[2-3 sentence overview of what this PR accomplishes and why]
+[2-3 sentence overview of what this PR accomplishes and why it matters]
 
 ## Related PRD
-[Link to PRD if exists: `docs/prds/YYYY-MM-DD-feature-name.md`]
+[Link to PRD: `docs/prds/YYYY-MM-DD-feature-name.md`]
+
+**PRD Type:** [Core Feature/Expansion/Task]
+**Status Change:** [Previous Status] → [New Status]
 
 **Completed Substories:**
-- ✅ [Phase 1.1] Substory title
-- ✅ [Phase 1.2] Substory title
+- ✅ [Phase X.Y] Substory title
+- ✅ [Phase X.Y] Substory title
+- ✅ [Phase X.Y] Substory title
+
+[For Expansion PRDs only:]
+**Builds On:** [Core PRD name and link]
+**Extends Core With:** [Brief description of what this expansion adds]
 
 ## Changes
 
-### Added
-- [List new features, files, endpoints]
+### Added ([X] new files)
+- [Feature/component] - [Description of functionality]
+- [New endpoint/API] - [Purpose and usage]
+- [New model/service] - [What it handles]
 
-### Modified
-- [List changed files/features]
+### Modified ([Y] files)
+- [File/component] - [What changed and why]
+- [Existing feature] - [Enhancement description]
 
-### Removed
-- [List deprecated/deleted code]
+### Removed ([Z] files)
+- [Deprecated code] - [Reason for removal]
+
+[If schema changes exist:]
+## Database Changes
+- **Migrations:** [Count] migration(s) added
+  - [Migration name] - [What it does]
+- **Models Updated:** [List models with changes]
+- **Indexes Added:** [If applicable]
+
+[If dependencies changed:]
+## Dependencies
+**Added:**
+- [package-name] (v[version]) - [Purpose]
+
+**Updated:**
+- [package-name] (v[old] → v[new]) - [Reason for update]
+
+**Removed:**
+- [package-name] - [Reason for removal]
 
 ## Testing
 
-**Test Coverage:** X% → Y% (+Z%)
+**Test Coverage:** [X]% → [Y]% ([+/-Z]%)
 
-**Tests Added:**
+**Tests Added:** [Total] tests
 - Unit tests: [count] tests
 - Integration tests: [count] tests
+- E2E tests: [count] tests (if applicable)
 
-**All tests passing:** ✅
+**Key Test Areas:**
+- [Feature area 1] - [coverage description]
+- [Feature area 2] - [coverage description]
+
+**All tests passing:** ✅ [count]/[count]
+
+[For Expansion PRDs only:]
+## Pattern Consistency
+✅ Follows core patterns:
+- [Pattern 1 from core]
+- [Pattern 2 from core]
+- [Pattern 3 from core]
+
+## Documentation
+[If documentation changes exist:]
+- README updated with [what was added]
+- API docs added for [endpoints]
+- Code comments added for [complex logic]
+
+## Breaking Changes
+[If none:] None
+
+[If breaking changes exist:]
+⚠️ **Breaking Changes:**
+- [Change description]
+  - **Migration path:** [How to update code]
+- [Another change]
+  - **Migration path:** [How to update code]
 
 ---
 

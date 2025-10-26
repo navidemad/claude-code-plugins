@@ -1,6 +1,6 @@
 ---
 name: code-prd
-description: Implement PRD substories with testing, code review, and progress tracking. Works substory-by-substory with approval gates per phase. Can also write standalone tests. Activates when user says code PRD, implement PRD, build PRD, code this, implement feature. French: coder le PRD, implémenter le PRD, développer le PRD.
+description: Build features when user wants to implement PRDs, write code for specs, or develop functionality. Works incrementally substory-by-substory with automatic testing and code review. Automatically loads PRD context to maintain consistency. Also writes standalone tests for any file.
 ---
 
 # Code PRD Implementation
@@ -19,12 +19,15 @@ Write production-quality code for PRD substories with **automatic testing, code 
 
 ## When to Activate
 
-This skill activates when user:
-- Says "implement PRD", "implement", "build this PRD", "start implementation"
-- Says "code this feature", "develop this", "build this"
-- References a PRD file path (e.g., "implement docs/prds/2024-10-25-invoice-core.md")
-- Says "write tests for file X" (standalone mode - no PRD needed)
-- French: "implémenter le PRD", "coder cette fonctionnalité", "développer le PRD", "écrire des tests"
+This skill activates when user says things like:
+- "implement [feature/PRD]"
+- "build this feature"
+- "code this"
+- "develop [feature name]"
+- "start implementation"
+- "write code for [PRD/feature]"
+- "write tests for [file/feature]" (standalone test mode)
+- Any request to implement, build, or code a feature or PRD
 
 ## Implementation Workflow
 
@@ -76,28 +79,55 @@ fi
 
 ### Step 1: Load PRD, Context, and Project Conventions
 
-**Execute in parallel:**
+**First, validate and load PRD:**
+
 ```bash
-# Read the PRD file
 # Source context manager
 source skills/shared/scripts/context-manager.sh
 
-# Read project conventions from CLAUDE.md in project root
-# Read CLAUDE.md
+# Validate PRD file exists
+if [[ ! -f "$prd_file" ]]; then
+    echo "❌ ERROR: PRD file not found: $prd_file"
+    exit 1
+fi
+
+# Read the PRD file
+prd_content=$(cat "$prd_file")
+
+# Read project conventions from CLAUDE.md
+if [[ ! -f "CLAUDE.md" ]]; then
+    echo "❌ ERROR: CLAUDE.md not found"
+    exit 1
+fi
+claude_md=$(cat "CLAUDE.md")
 
 # Load or initialize PRD context
 if context_exists "$prd_file"; then
     context=$(read_context "$prd_file")
+    echo "✅ Loaded existing context"
 else
     context_file=$(init_context "$prd_file")
     context=$(read_context "$prd_file")
+    echo "✅ Initialized new context"
 fi
 ```
 
 **If no PRD specified:**
 - Check `docs/prds/` for PRD files
-- If multiple exist, ask user which PRD to implement
-- List PRDs with their type (Core/Expansion) and completion status
+- If multiple exist, show user a list with:
+  - PRD name and type (Core/Expansion/Task)
+  - Completion status (Not Started/In Progress/Complete)
+  - Brief description
+- Ask which PRD to implement
+- Format:
+  ```
+  Available PRDs:
+  1. [Core] invoice-core (In Progress) - Basic invoice with essential fields
+  2. [Expansion] invoice-customers (Not Started) - Add customer details
+  3. [Task] migrate-to-postgres (Not Started) - Database migration
+
+  Which PRD? [1/2/3]
+  ```
 
 **Determine PRD Type:**
 Check PRD frontmatter for:
@@ -118,30 +148,115 @@ Check PRD frontmatter for:
 - Goal: Complete technical task efficiently
 
 **For Expansion PRDs (CRITICAL - AUTO-LOAD CORE CONTEXT):**
-- Load CLAUDE.md for project conventions
-- **Find the core PRD** referenced in "Builds On" field
-- **Read core context file**: `.claude/context/{core-prd-name}.json`
-- **Auto-extract**:
-  - `files_created` - Core implementation files
-  - `patterns` - Established patterns
-  - `libraries` - Libraries in use
-  - `architectural_decisions` - Design decisions made in core
-- **Read all core implementation files** to understand established patterns
-- Document patterns found:
+
+**Step 1: Validate core PRD exists and is complete:**
+```bash
+# Extract core PRD path from "Builds On" field
+core_prd=$(grep "Builds On:" "$prd_file" | sed 's/.*Builds On:.*\(docs\/prds\/[^)]*\).*/\1/')
+
+# Validate core PRD exists
+if [[ ! -f "$core_prd" ]]; then
+    echo "❌ ERROR: Core PRD not found: $core_prd"
+    echo "This expansion requires a completed core PRD."
+    exit 1
+fi
+
+# Check core is marked complete
+if ! grep -q "Status.*Complete" "$core_prd"; then
+    echo "⚠️  WARNING: Core PRD is not marked complete"
+    echo "Building expansions on incomplete cores may cause inconsistencies."
+    echo "Continue anyway? [yes/no]"
+fi
+
+# Validate core context exists
+core_context_file=".claude/context/$(basename $core_prd .md).json"
+if [[ ! -f "$core_context_file" ]]; then
+    echo "⚠️  WARNING: Core context file not found: $core_context_file"
+    echo "Context loading will be limited. Continue? [yes/no]"
+fi
+```
+
+**Step 2: Load and analyze core context comprehensively:**
+```bash
+# Load CLAUDE.md for project conventions
+claude_md=$(cat "CLAUDE.md")
+
+# Read core PRD
+core_prd_content=$(cat "$core_prd")
+
+# Read core context file
+core_context=$(cat "$core_context_file")
+
+# Extract structured data from context
+core_files=$(echo "$core_context" | jq -r '.files_created[]')
+core_patterns=$(echo "$core_context" | jq -r '.patterns')
+core_libraries=$(echo "$core_context" | jq -r '.libraries')
+core_decisions=$(echo "$core_context" | jq -r '.architectural_decisions[]')
+testing_framework=$(echo "$core_context" | jq -r '.testing_framework')
+
+# Read and analyze each core implementation file
+echo "📖 Analyzing core implementation..."
+for file in $core_files; do
+    if [[ -f "$file" ]]; then
+        # Read file to understand:
+        # - Class/function naming patterns
+        # - Code organization and structure
+        # - Error handling approaches
+        # - Validation patterns
+        # - API/interface design
+        # - Data access patterns
+    fi
+done
+```
+
+**Step 3: Document comprehensive findings:**
 ```
 🔍 Core Implementation Analysis (AUTO-LOADED):
-From: [path to core PRD]
-Context: [path to core context file]
 
-Core files: [list actual files from context]
+Core PRD: docs/prds/YYYY-MM-DD-{feature}-core.md
+Context: .claude/context/YYYY-MM-DD-{feature}-core.json
+Status: ✅ Complete
 
-Established patterns: [list actual patterns from context and code analysis]
+Implementation Files ([X] files analyzed):
+- path/to/model.ext - Data model with validations [describe key aspects]
+- path/to/service.ext - Business logic service [describe key aspects]
+- path/to/controller.ext - API endpoints [describe key aspects]
+- path/to/repository.ext - Data access layer [describe key aspects]
 
-Libraries in use: [list actual libraries from context]
+Established Patterns ([Y] patterns identified):
+1. [Pattern Name] - [Description]
+   Location: [where used in core]
+   Example: [specific code example or approach]
 
-Architectural decisions: [list actual decisions from context]
+2. [Pattern Name] - [Description]
+   Location: [where used in core]
+   Example: [specific code example or approach]
 
-✅ Will extend these patterns for [expansion name].
+Libraries in Use ([Z] libraries):
+- [Library 1] ([Version]) - [Purpose in core implementation]
+- [Library 2] ([Version]) - [Purpose in core implementation]
+
+Architectural Decisions ([W] decisions):
+1. [Decision]: [Rationale from context]
+2. [Decision]: [Rationale from context]
+
+Code Analysis Insights:
+- Naming convention: [Observed pattern, e.g., "FeatureService", "FeatureRepository"]
+- Error handling: [Approach, e.g., "Custom exception hierarchy with FeatureError base"]
+- Validation: [Approach, e.g., "Joi schemas in validators/ directory"]
+- Data access: [Pattern, e.g., "Repository pattern with TypeORM"]
+- Testing: [Framework and approach, e.g., "Jest with 95% coverage requirement"]
+
+Project Conventions (from CLAUDE.md):
+- Tech stack: [List from CLAUDE.md]
+- Architecture: [Pattern from CLAUDE.md]
+- Code style: [Standards from CLAUDE.md]
+
+✅ Expansion will EXTEND these patterns consistently.
+   - Will modify existing files where appropriate
+   - Will create new files following established naming
+   - Will use same libraries and approaches
+   - Will maintain architectural consistency
 ```
 
 ### Step 2: Analyze Existing Architecture
@@ -322,22 +437,89 @@ fi
 Proceeding to code review...
 ```
 
-**If testing is enabled, analyze project testing setup:**
-- Read CLAUDE.md for testing framework and conventions
-- Examine existing test files to understand patterns
-- Identify test command from CLAUDE.md or project config files
+**If testing is enabled, analyze project testing setup comprehensively:**
 
-**Write comprehensive tests:**
-- Unit tests for core logic (business logic, utilities, domain models)
-- Integration tests for interactions between components
-- Cover all acceptance criteria from substories
-- Test happy paths, error scenarios, edge cases
-- Follow project testing conventions from CLAUDE.md
-- Match existing test file patterns and structure
-
-**Update context with testing framework:**
+**Step 1: Identify testing framework and conventions:**
 ```bash
-update_context "$prd_file" "testing_framework" "[framework identified from CLAUDE.md or project]"
+# Check CLAUDE.md for testing info
+testing_info=$(grep -A 10 -i "testing\|test" CLAUDE.md)
+
+# Detect testing framework from multiple sources:
+# 1. CLAUDE.md explicit mention
+# 2. package.json/requirements.txt dependencies
+# 3. Existing test file patterns
+# 4. Test configuration files
+
+# Common framework detection:
+if grep -q "jest" package.json 2>/dev/null; then
+    framework="Jest"
+    test_pattern="**/*.test.ts"
+elif grep -q "pytest" requirements.txt 2>/dev/null; then
+    framework="pytest"
+    test_pattern="**/test_*.py"
+elif grep -q "rspec" Gemfile 2>/dev/null; then
+    framework="RSpec"
+    test_pattern="**/spec/**/*_spec.rb"
+elif grep -q "vitest" package.json 2>/dev/null; then
+    framework="Vitest"
+    test_pattern="**/*.test.ts"
+fi
+
+# Find test command from package.json, Makefile, or CLAUDE.md
+if [[ -f "package.json" ]]; then
+    test_cmd=$(jq -r '.scripts.test // empty' package.json)
+elif [[ -f "Makefile" ]]; then
+    test_cmd=$(grep "^test:" Makefile | cut -d':' -f2 | xargs)
+fi
+
+# Examine existing test files for patterns
+existing_tests=$(find . -name "*test*" -o -name "*spec*" | head -5)
+```
+
+**Step 2: Analyze existing test patterns:**
+```
+📊 Testing Framework Detected: [Framework]
+
+Test Configuration:
+- Framework: [Framework and version]
+- Test pattern: [File pattern, e.g., "*.test.ts"]
+- Test command: [Command, e.g., "npm test"]
+- Coverage tool: [Tool if detected, e.g., "Istanbul"]
+
+Existing Test Patterns (from analysis):
+- Test file location: [Pattern, e.g., "__tests__/" or "spec/"]
+- Naming convention: [Pattern, e.g., "feature.test.ts" or "feature_spec.rb"]
+- Test structure: [Describe/it, test/expect, etc.]
+- Mocking approach: [Library and pattern used]
+- Setup/teardown: [How tests are initialized]
+
+Conventions from CLAUDE.md:
+- Coverage requirement: [E.g., ">= 90%"]
+- Test types required: [Unit, integration, e2e]
+- Mock strategy: [Real vs mocked dependencies]
+```
+
+**Step 3: Write comprehensive tests following established patterns:**
+- **Unit tests** for core logic (business logic, utilities, domain models)
+- **Integration tests** for component interactions
+- **Coverage** for all acceptance criteria from substories
+- **Test cases**:
+  - Happy paths (expected successful flows)
+  - Error scenarios (validation failures, exceptions)
+  - Edge cases (boundary conditions, null/empty values)
+  - Business rule validation
+- **Follow project conventions**:
+  - Match file naming and location patterns
+  - Use same test structure and assertions
+  - Follow mocking strategy from existing tests
+  - Match code style and organization
+
+**Step 4: Update context with testing info:**
+```bash
+# Save testing framework for future reference
+update_context "$prd_file" "testing_framework" "$framework"
+update_context "$prd_file" "test_command" "$test_cmd"
+update_context "$prd_file" "test_pattern" "$test_pattern"
 ```
 
 **Run tests:**
@@ -394,21 +576,76 @@ All acceptance criteria verified!
 
 #### Step 5b: Auto-Run Code Review (Internal)
 
-**Run internal code review analysis:**
+**Run comprehensive internal code review analysis:**
 
-Perform multi-dimensional review:
-- **Code Quality**: Readability, maintainability, complexity
-- **Architecture**: Design patterns, SOLID principles, separation of concerns
-- **Security**: Auth, input validation, secrets, data exposure
-- **Performance**: Query optimization, caching, algorithms, resource management
-- **Testing**: Coverage, edge cases, meaningful tests
-- **Project-Specific**: Checks based on tech stack from CLAUDE.md (e.g., async/await patterns, memory management, concurrency, error handling)
+**Review Dimensions:**
 
-**Categorize findings:**
-- 🔴 Critical (Must fix before approval)
-- 🟠 Major (Should fix)
-- 🟡 Minor (Nice to have)
-- ✅ Positive (Done well)
+1. **Code Quality**:
+   - Readability (clear naming, appropriate comments)
+   - Maintainability (DRY, single responsibility)
+   - Complexity (cyclomatic complexity, nesting depth)
+   - Code organization and structure
+
+2. **Architecture & Design**:
+   - Design patterns (match established patterns from context)
+   - SOLID principles adherence
+   - Separation of concerns
+   - Dependency management
+   - **For Expansions**: Consistency with core implementation
+
+3. **Security**:
+   - Authentication and authorization
+   - Input validation and sanitization
+   - SQL injection prevention
+   - XSS prevention
+   - Secrets management (no hardcoded credentials)
+   - Data exposure (sensitive data handling)
+
+4. **Performance**:
+   - Database query optimization (N+1 queries, indexes)
+   - Caching strategy
+   - Algorithm efficiency
+   - Resource management (connections, memory)
+   - Async/await usage (if applicable)
+
+5. **Testing Quality**:
+   - Coverage of acceptance criteria
+   - Edge case coverage
+   - Meaningful test assertions
+   - Test maintainability
+   - Mock appropriateness
+
+6. **Project-Specific** (from CLAUDE.md and context):
+   - Tech stack best practices
+   - Framework conventions
+   - Coding standards and style
+   - **For Expansions**: Pattern consistency with core
+
+**Categorize findings by severity:**
+- 🔴 **Critical** (Must fix before approval):
+  - Security vulnerabilities
+  - Data loss risks
+  - Breaking changes without migration
+  - Crashes or fatal errors
+
+- 🟠 **Major** (Should fix):
+  - Performance issues
+  - Missing validation
+  - Poor error handling
+  - Pattern inconsistencies (especially in expansions)
+  - Missing tests for critical paths
+
+- 🟡 **Minor** (Nice to have):
+  - Code style inconsistencies
+  - Missing edge case tests
+  - Refactoring opportunities
+  - Documentation improvements
+
+- ✅ **Positive** (Done well):
+  - Highlight good patterns
+  - Acknowledge thorough testing
+  - Note security best practices
+  - Recognize clear, maintainable code
 
 **Show review summary:**
 ```
@@ -639,46 +876,140 @@ What would you like to do?
 
 **When user says "write tests for [file/feature]":**
 
-1. **Identify target:**
-   - Specific files mentioned
-   - Or feature area to test
+**Step 1: Identify and validate target:**
+```bash
+# Specific files mentioned
+if [[ -f "$target_file" ]]; then
+    target_files=("$target_file")
+else
+    # Feature area - find related files
+    target_files=$(find . -name "*$feature*" -type f ! -path "*/test/*" ! -path "*/spec/*")
+fi
 
-2. **Understand testing setup from CLAUDE.md:**
-   - Read CLAUDE.md for testing framework and conventions
-   - Examine existing test files to understand patterns and structure
+# Validate files exist
+if [[ ${#target_files[@]} -eq 0 ]]; then
+    echo "❌ ERROR: No files found for: $target"
+    exit 1
+fi
 
-3. **Read implementation files:**
-   - Understand the code to test
-   - Identify public methods, business logic, edge cases
+echo "📋 Found ${#target_files[@]} files to test"
+```
 
-4. **Write tests:**
-   - Unit tests for logic
-   - Integration tests if applicable
-   - Cover happy paths, errors, edge cases
-   - Follow project testing conventions from CLAUDE.md
+**Step 2: Comprehensive testing setup analysis:**
+```bash
+# Read CLAUDE.md for testing framework and conventions
+testing_info=$(grep -A 10 -i "testing\|test" CLAUDE.md)
 
-5. **Run tests:**
-   ```bash
-   # Run test suite
-   # Report results
-   ```
+# Detect framework (same logic as Phase implementation)
+# - Check package.json, requirements.txt, Gemfile
+# - Identify test command
+# - Find test file patterns
 
-6. **Report:**
-   ```markdown
-   ✅ Tests written for [file/feature]
+# Analyze existing test files
+existing_tests=$(find . -name "*test*" -o -name "*spec*" | head -5)
 
-   📝 Tests created:
-   - tests/unit/user.test.ts (15 tests)
-   - tests/integration/oauth.test.ts (8 tests)
+# For each existing test file, analyze:
+# - File structure and organization
+# - Test naming patterns
+# - Assertion style
+# - Mocking patterns
+# - Setup/teardown approach
+```
 
-   🧪 Test results:
-   ✅ 23/23 tests passing
-   📊 Coverage: 96%
+**Step 3: Present testing plan:**
+```
+📊 Testing Setup Detected:
 
-   Done!
-   ```
+Framework: [Framework name]
+Test command: [Command to run tests]
+Test file pattern: [Where to place tests]
 
-**No PRD updates, no context management, just tests.**
+Files to test ([X] files):
+- path/to/file1.ext - [Brief description of what it does]
+- path/to/file2.ext - [Brief description of what it does]
+
+Test plan:
+- Unit tests: [Estimated count] tests for [specific areas]
+- Integration tests: [If applicable]
+- Coverage goals: [From CLAUDE.md or project standard]
+
+Proceeding with test generation...
+```
+
+**Step 4: Analyze implementation files deeply:**
+```bash
+# For each target file, analyze:
+# - Public API (exported functions, classes, methods)
+# - Business logic and algorithms
+# - Error handling paths
+# - Input validation
+# - Edge cases and boundary conditions
+# - Dependencies and interactions
+```
+
+**Step 5: Write comprehensive tests following patterns:**
+- **Unit tests** for:
+  - Each public method/function
+  - Business logic and calculations
+  - Validation rules
+  - Error handling
+  - Edge cases (null, empty, boundary values)
+
+- **Integration tests** (if applicable):
+  - Component interactions
+  - Database operations
+  - External service calls
+  - Full feature workflows
+
+- **Follow established patterns**:
+  - Match test file naming and location
+  - Use same test structure (describe/it, test/expect)
+  - Follow mocking strategy from existing tests
+  - Match assertion style and organization
+  - Include setup/teardown as needed
+
+**Step 6: Run tests and verify:**
+```bash
+# Run test command
+$test_cmd
+
+# Capture results:
+# - Pass/fail count
+# - Coverage percentage
+# - Any failures or errors
+```
+
+**Step 7: Report comprehensive results:**
+```markdown
+✅ Tests written for [file/feature]
+
+📝 Test files created:
+- tests/unit/feature.test.ts (15 tests)
+  * Happy path scenarios: 5 tests
+  * Error handling: 4 tests
+  * Edge cases: 6 tests
+- tests/integration/feature-flow.test.ts (8 tests)
+  * End-to-end workflows: 8 tests
+
+🧪 Test results:
+✅ 23/23 tests passing
+📊 Coverage:
+  - Overall: 96% (+12% from baseline)
+  - Branches: 94%
+  - Functions: 100%
+  - Lines: 96%
+
+⏱️  Duration: 2.3s
+
+Test breakdown:
+- Unit tests: 15/15 passing
+- Integration tests: 8/8 passing
+
+All acceptance criteria verified ✅
+Done!
+```
+
+**Important**: No PRD updates, no context management, just comprehensive tests following project patterns.
 
 ## Blocker Handling
 

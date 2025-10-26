@@ -7,7 +7,7 @@ Language-agnostic structured workflow guidance for faster development on Mac/Uni
 - `code-prd`  ➡️ Code + Test + Review + Fix + Progress tracking
 - `publish`   ➡️ Commit and PR creation with approval gates
 
-[![Documentation](https://img.shields.io/badge/Documentation-view-blue.svg)](skills/README.md)
+[![Documentation](https://img.shields.io/badge/Documentation-view-blue.svg)](skills/prd/README.md)
 
 > 🗣️ **Just talk naturally! No slash commands needed** ✨
 
@@ -41,7 +41,7 @@ These skills provide **structured guidance** for Claude to help you follow a con
 **Tools:**
 - [jq](https://jqlang.github.io/jq/) >= 1.6 (JSON processor for context management)
 - [gh CLI](https://cli.github.com/) (GitHub CLI, authenticated)
-- CLAUDE.md file in project root ([learn more](skills/README.md#project-conventions))
+- CLAUDE.md file in project root ([learn more](skills/prd/README.md#project-conventions))
 
 ## 📦 Installation
 
@@ -70,24 +70,33 @@ brew install gh
 gh auth login
 ```
 
-### Claude Code Settings `.claude/settings.json`
+### Install plugins in Claude Code:
 
-```json
-{
-  "extraKnownMarketplaces": {
-    "claude-code-plugins": {
-      "source": {
-        "source": "github",
-        "repo": "navidemad/claude-code-plugins"
-      }
-    }
-  },
-  "enabledPlugins": {
-    "claude-code-plugins:plan-prd": true,
-    "claude-code-plugins:code-prd": true,
-    "claude-code-plugins:publish": true
-  }
-}
+Start Claude Code:
+```bash
+claude
+```
+
+Add the marketplace and install plugins:
+```bash
+# Add the marketplace from GitHub
+/plugin marketplace add navidemad/claude-code-plugins
+
+# Install the plugins
+/plugin install plan-prd@claude-code-plugins
+/plugin install code-prd@claude-code-plugins
+/plugin install publish@claude-code-plugins
+```
+
+Restart Claude Code to activate the plugins.
+
+**Verification:**
+```bash
+# Verify the marketplace was added
+/plugin marketplace list
+
+# View available plugins
+/plugin
 ```
 
 ## ✅ Best Practices & Human Verification

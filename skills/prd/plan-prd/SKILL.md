@@ -1,6 +1,6 @@
 ---
 name: plan-prd
-description: Generate core or expansion PRDs with automatic context loading using "land then expand" approach. Activates when user says plan PRD, create PRD, plan feature, document requirements, write spec. French: planifier un PRD, créer un PRD, planifier une fonctionnalité, rédiger les exigences.
+description: Create product requirement documents when user wants to plan features, write specs, or document new functionality. Supports minimal core features, focused expansions, and task-based changes. Automatically loads context from related PRDs to maintain consistency.
 ---
 
 # Plan PRD
@@ -20,12 +20,14 @@ Modern Claude models work best when they establish patterns first, then layer co
 
 ## Activation Context
 
-Use when user requests:
-- PRD creation for new features
-- Feature planning and documentation
-- Requirements gathering
-- Implementation roadmap
-- French: création de PRD, planification de fonctionnalité, spécification
+Use when user says things like:
+- "plan a feature for..."
+- "write a PRD for..."
+- "I want to build..."
+- "document requirements for..."
+- "create a spec for..."
+- "plan [feature name]"
+- Any request to plan, design, or document new functionality
 
 ## Workflow
 
@@ -82,12 +84,34 @@ Choose [1/2/3]:
 
 **If user chooses "2 - Expansion":**
 - Ask: "Which core feature does this expand?" or auto-detect from `docs/prds/`
-- **AUTOMATICALLY:**
-  1. Read core PRD file
-  2. Load `.claude/context/{core-prd-name}.json`
+- **VALIDATE CORE PRD EXISTS AND IS COMPLETE:**
+  ```bash
+  # Check core PRD exists
+  if [[ ! -f "$core_prd_file" ]]; then
+      echo "❌ ERROR: Core PRD not found"
+      exit 1
+  fi
+
+  # Check core PRD is marked complete
+  if ! grep -q "Status.*Complete" "$core_prd_file"; then
+      echo "⚠️  WARNING: Core PRD not marked complete"
+      echo "Expansion PRDs should build on completed cores."
+      echo "Continue anyway? [yes/no]"
+  fi
+
+  # Check context file exists
+  if [[ ! -f ".claude/context/{core-prd-name}.json" ]]; then
+      echo "⚠️  WARNING: No context file found for core PRD"
+      echo "Context may be limited. Continue? [yes/no]"
+  fi
+  ```
+- **AUTOMATICALLY LOAD CORE CONTEXT:**
+  1. Read core PRD file (parse frontmatter, substories, acceptance criteria)
+  2. Load `.claude/context/{core-prd-name}.json` (structured context)
   3. Extract files_created, patterns, libraries, architectural_decisions
-  4. Read core implementation files
-  5. Document established patterns
+  4. Read actual core implementation files (analyze code patterns)
+  5. Document established patterns with examples
+  6. Present findings to user before asking questions
 - Create focused expansion PRD building on core
 - File: `docs/prds/YYYY-MM-DD-{feature}-{expansion-name}.md`
 - Goal: Add ONE focused aspect using established patterns
@@ -137,81 +161,172 @@ Ask specifically what this expansion adds to the core.
 Explore to understand project patterns and conventions from CLAUDE.md and existing codebase.
 
 **For Expansion PRDs (CRITICAL - AUTO-LOAD):**
+
+**Execute comprehensive context loading:**
+
 ```bash
 # Source context manager
 source skills/shared/scripts/context-manager.sh
 
-# Load core PRD context
+# 1. Load core PRD file
+core_prd_content=$(cat "$core_prd_file")
+
+# 2. Load core context file
 core_context=$(read_context "$core_prd_file")
 
-# Extract core files
-core_files=$(get_core_files "$core_prd_file")
+# 3. Extract structured information
+core_files=$(echo "$core_context" | jq -r '.files_created[]')
+core_patterns=$(echo "$core_context" | jq -r '.patterns')
+core_libraries=$(echo "$core_context" | jq -r '.libraries')
+core_decisions=$(echo "$core_context" | jq -r '.architectural_decisions[]')
 
-# Extract patterns
-core_patterns=$(get_core_patterns "$core_prd_file")
-
-# Read those core implementation files
+# 4. Read actual implementation files to understand patterns
+echo "📖 Reading core implementation files..."
 for file in $core_files; do
-    # Read file to understand patterns
+    if [[ -f "$file" ]]; then
+        # Read file to analyze patterns, naming conventions, structure
+        # Focus on: class/function naming, code organization, error handling
+    fi
 done
+
+# 5. Analyze patterns from code
+# - Identify naming conventions (e.g., *Service, *Repository, *Controller)
+# - Detect architectural patterns (e.g., MVC, service layer, repository pattern)
+# - Note error handling approaches
+# - Identify validation patterns
+# - Observe data flow patterns
 ```
 
-**Document findings:**
+**Document comprehensive findings:**
 ```
-🔍 Codebase Analysis:
+🔍 Context Analysis Complete:
 
-[For Core:]
-- Found similar feature: [describe what you found]
-- Existing patterns: [list patterns from CLAUDE.md and codebase]
-- Tech stack: [from CLAUDE.md]
-- Testing approach: [from CLAUDE.md and existing tests]
-- Key libraries: [from CLAUDE.md]
+[For Core PRDs:]
+Project Conventions (from CLAUDE.md):
+- Tech stack: [framework, language, key technologies]
+- Architecture: [architectural pattern from CLAUDE.md]
+- Testing: [testing framework and approach]
+- Code style: [linting, formatting standards]
 
-[For Expansion - AUTO-LOADED:]
-- Core PRD: [path to core PRD]
-- Core files created: [list from context]
-- Established patterns: [list from context]
-- Libraries in use: [list from context]
-- Architectural decisions: [list from context]
+Existing Patterns (from codebase exploration):
+- Similar features found: [list related features]
+- Common patterns: [list patterns observed]
+- File organization: [describe structure]
+- Naming conventions: [describe conventions]
 
-Will follow these established patterns.
+[For Expansion PRDs - AUTO-LOADED:]
+✅ Core Context Loaded: docs/prds/YYYY-MM-DD-{feature}-core.md
+
+Implementation Files ([X] files):
+[List actual files with brief description of each]
+- path/to/file1.ext - [what it does]
+- path/to/file2.ext - [what it does]
+
+Established Patterns ([Y] patterns):
+[List specific patterns with examples from code]
+- Pattern 1: [name] - [where used, how implemented]
+- Pattern 2: [name] - [where used, how implemented]
+
+Libraries in Use ([Z] libraries):
+[List with purpose]
+- library1 - [purpose in core]
+- library2 - [purpose in core]
+
+Architectural Decisions ([W] decisions):
+[List key decisions with rationale]
+1. [Decision 1]: [rationale from context]
+2. [Decision 2]: [rationale from context]
+
+Code Analysis Insights:
+- Naming convention: [pattern observed, e.g., "FeatureNameService"]
+- Error handling: [approach used, e.g., "Custom exception classes"]
+- Validation: [approach used, e.g., "Schema validators"]
+- Data access: [pattern used, e.g., "Repository pattern"]
+
+✅ Expansion will extend these patterns consistently.
 ```
 
 ### Phase 1: Requirements Gathering
 
 **Adapt questions based on PRD type:**
 
-**CORE PRD MODE** - Ask minimal essential questions (5-7 questions):
+**CORE PRD MODE** - Ask focused essential questions (5-8 questions):
 
-**Focus on absolute essentials only:**
+**Start with understanding:**
 
-1. **What are the essential fields/data?** (Minimum viable data model)
-2. **Who uses it?** (Target users)
-3. **What's the single main user flow?** (One primary happy path only)
-4. **How do we know it works?** (Basic success criteria)
-5. **Any critical dependencies?** (Required features/services)
-6. **What's explicitly out of scope for the core?** (Everything else becomes expansions)
+1. **Problem & Context:**
+   - "What problem does this solve?" (User pain point or business need)
+   - "Who is this for?" (Target users/personas)
 
-**Important**: If answers suggest complexity, remind user that core is minimal and suggest moving complexity to expansions.
+2. **Minimal Scope:**
+   - "What's the simplest version that solves the core problem?" (Essential functionality only)
+   - "What are the absolute minimum data/fields needed?" (Core data model)
+   - "What's the ONE primary user flow?" (Single happy path)
 
-**EXPANSION PRD MODE** - Ask focused questions about the expansion (8-12 questions):
+3. **Success & Boundaries:**
+   - "How will we measure success?" (Success criteria, metrics)
+   - "What's explicitly NOT included in v1?" (Out of scope - becomes expansions)
 
-**Context Questions:**
-1. **What does this expansion add to the core?** (Specific enhancement)
-2. **Reference loaded core patterns** - Show what was auto-loaded
-3. **Which patterns should we follow?** (Confirm auto-loaded patterns)
+4. **Technical Constraints:**
+   - "Any critical dependencies or integrations?" (Required systems/services)
+   - "Any technical constraints we should know about?" (Performance, security, compliance)
 
-**Expansion Scope:**
-4. **What new data/fields are needed?** (Additions to core data model)
-5. **What user flows does this enable/enhance?** (New or modified flows)
-6. **Integration points with core?** (How it connects to existing code)
-7. **How do we know it works?** (Acceptance criteria)
-8. **Any new dependencies?** (External services, libraries)
-9. **Performance considerations?** (If applicable)
-10. **Security considerations?** (Auth/validation needs)
-11. **What's out of scope for this expansion?** (May become another expansion)
+**Approach**: Ask questions conversationally, not as a rigid checklist. If answers suggest complexity, push back:
+```
+💡 That sounds complex for a core PRD. Core should be minimal (2-4 substories).
 
-**Important**: Expansion PRDs should be focused on ONE aspect (e.g., customer details OR line items, not both)
+You mentioned: [complex features A, B, C]
+
+Simplest core version: [essential feature only]
+Future expansions: [B], [C]
+
+Does that work?
+```
+
+**EXPANSION PRD MODE** - Ask focused questions about the expansion (6-10 questions):
+
+**First, present loaded context:**
+```
+✅ Core context loaded from: [core PRD name]
+
+Found:
+- [X] implementation files
+- [Y] established patterns
+- [Z] libraries in use
+- [W] architectural decisions
+
+I'll ask questions to understand how this expansion builds on these patterns.
+```
+
+**Then ask expansion-specific questions:**
+
+1. **Expansion Goal:**
+   - "What specific capability does this add to the core?" (Single focused enhancement)
+   - "What user need or use case does this address?" (Why this expansion)
+
+2. **Data & Integration:**
+   - "What new data/fields are needed?" (Data model additions)
+   - "How does this connect to existing core code?" (Integration points)
+   - "Which core files will be extended vs new files?" (Code changes)
+
+3. **User Experience:**
+   - "What new or enhanced user flows?" (User interactions)
+   - "How does this change the existing user experience?" (UX impact)
+
+4. **Success & Constraints:**
+   - "How will we know this expansion works?" (Acceptance criteria)
+   - "Any performance or security considerations?" (Non-functional requirements)
+   - "What's out of scope for THIS expansion?" (Boundaries - next expansion)
+
+**Approach**: Reference loaded patterns explicitly in questions:
+```
+I see the core uses [Pattern X] for [Purpose]. Should this expansion follow the same pattern?
+```
+
+**Important**:
+- Expansion PRDs are FOCUSED on ONE aspect (e.g., customer details OR line items, not both)
+- Must build on core patterns, not introduce conflicting approaches
+- If scope seems large, suggest splitting into multiple expansions
 
 ### Phase 2: Document Generation
 
@@ -581,15 +696,54 @@ fi
 
 When creating an expansion PRD, the skill **automatically**:
 
-1. **Finds core PRD** - From user selection or docs/prds/ directory
-2. **Reads context file** - `.claude/context/{core-prd-name}.json`
-3. **Extracts information**:
-   - `files_created` - Which files were implemented
-   - `patterns` - Established patterns (service objects, API structure, etc.)
-   - `libraries` - Libraries chosen (Stripe, Devise, etc.)
-   - `architectural_decisions` - Key design decisions
-4. **Reads core files** - Loads the actual implementation files for pattern analysis
-5. **Populates expansion PRD** - Auto-fills "Core Implementation Reference" section
-6. **Inherits context** - Expansion context starts with core context as base
+1. **Validates core PRD**:
+   - Checks core PRD file exists
+   - Warns if core is not marked complete
+   - Checks context file exists
+   - Verifies context file is valid JSON
 
-**This ensures expansions are consistent with core without manual effort.**
+2. **Loads core information**:
+   - Reads core PRD file content (parse frontmatter, substories)
+   - Reads `.claude/context/{core-prd-name}.json` file
+   - Extracts structured data (files, patterns, libraries, decisions)
+
+3. **Analyzes implementation**:
+   - Reads actual implementation files from `files_created`
+   - Analyzes code patterns: naming conventions, structure, error handling
+   - Identifies architectural patterns in use
+   - Documents specific examples from code
+
+4. **Presents findings before questions**:
+   ```
+   ✅ Core context loaded successfully
+
+   Implementation files analyzed:
+   - src/models/invoice.rb - Core data model with validations
+   - src/services/invoice_service.rb - Business logic service
+   - src/api/invoices_controller.rb - RESTful API endpoints
+
+   Patterns identified:
+   - Service objects for business logic (InvoiceService)
+   - ActiveRecord models with validations
+   - RESTful API with JSON serialization
+   - RSpec for testing
+
+   Libraries in use:
+   - ActiveRecord (ORM)
+   - ActiveModel::Serializers (JSON API)
+
+   Now I'll ask how this expansion builds on these patterns...
+   ```
+
+5. **Uses context during PRD creation**:
+   - Auto-fills "Core Implementation Reference" section with real data
+   - References specific patterns in substory descriptions
+   - Suggests extending existing files vs creating new ones
+   - Inherits architectural decisions
+
+6. **Creates expansion context**:
+   - Expansion context starts with core context as base
+   - Adds expansion-specific patterns, files, decisions
+   - Maintains link to core PRD
+
+**This ensures expansions are consistent with core through automated context awareness.**

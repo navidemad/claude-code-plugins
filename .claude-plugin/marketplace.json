@@ -11,25 +11,16 @@
   },
   "plugins": [
     {
-      "name": "plan-prd",
-      "description": "PRD planning with auto-context gathering - creates core or expansion PRDs",
-      "source": "./skills/plan-prd",
+      "name": "prd-skills",
+      "description": "Collection of PRD skills demonstrating various capabilities including PRD planning with auto-context gathering - creates core or expansion PRDs, Code implementation with testing, review, and progress tracking, Commit and PR creation with approval gates",
+      "source": "./skills",
+      "strict": false,
       "version": "1.0.0",
-      "strict": false
-    },
-    {
-      "name": "code-prd",
-      "description": "Code implementation with testing, review, and progress tracking",
-      "source": "./skills/code-prd",
-      "version": "1.0.0",
-      "strict": false
-    },
-    {
-      "name": "publish",
-      "description": "Commit and PR creation with approval gates",
-      "source": "./skills/publish",
-      "version": "1.0.0",
-      "strict": false
+      "skills": [
+        "./prd/plan-prd",
+        "./prd/code-prd",
+        "./prd/publish"
+      ]
     }
   ]
 }

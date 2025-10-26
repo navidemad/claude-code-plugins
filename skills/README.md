@@ -147,7 +147,6 @@ These skills work with any stack, including:
 - "Plan a booking system"
 - "Create an expansion for customer details"
 - "Plan the core invoice feature"
-- 🇫🇷 "Créer un PRD", "planifier une fonctionnalité"
 
 </details>
 
@@ -234,7 +233,6 @@ These skills work with any stack, including:
 - "Implement" or "Implement the authentication PRD"
 - "Build the booking feature"
 - "Write tests for user.rb" (standalone)
-- 🇫🇷 "Implémenter le PRD"
 
 </details>
 
@@ -337,7 +335,6 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - "Ship" (auto-detects commit or PR mode)
 - "Commit these changes"
 - "Create a pull request"
-- 🇫🇷 "Committer", "Créer une PR"
 
 </details>
 
@@ -502,13 +499,10 @@ Approval gates at phase boundaries (not per substory). Skills suggest but never 
 ### 5. Project Awareness
 All code follows project-specific conventions loaded from CLAUDE.md.
 
-### 6. Bilingual Support
-All skills support English and French activation phrases.
-
-### 7. Context as Memory
+### 6. Context as Memory
 `.claude/context/*.json` files serve as cross-session memory.
 
-### 8. Power User Focused
+### 7. Power User Focused
 Orchestrated workflows reduce cognitive load while maintaining granular control.
 
 ---
@@ -575,8 +569,6 @@ implement: Detects standalone mode
 ---
 
 <div align="center">
-
-💡 **Tip**: All skills support both English and French activation phrases!
 
 🔗 Back to [Main README](../../README.md)
 </div>
