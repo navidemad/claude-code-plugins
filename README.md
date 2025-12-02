@@ -5,7 +5,6 @@
 Language-agnostic structured workflow guidance for faster development on Mac/Unix-like systems.
 - `plan-prd`  ➡️ Generate PRD and auto-loads core context for expansions
 - `code-prd`  ➡️ Code + Test + Review + Fix + Progress tracking
-- `publish`   ➡️ Commit and PR creation with approval gates
 
 [![Documentation](https://img.shields.io/badge/Documentation-view-blue.svg)](skills/prd/README.md)
 
@@ -99,7 +98,6 @@ claude
 # You should see prd-skills with three skills:
 # - plan-prd
 # - code-prd
-# - publish
 ```
 
 ## ✅ Best Practices & Human Verification
@@ -119,12 +117,6 @@ claude
 - ✓ **Run tests manually** if coverage concerns exist
 - ✓ **Review code changes** before approving phases
 - ⚠️ **Don't blindly approve** - Claude can make mistakes
-
-### During Publishing (`publish`)
-- ✓ **Review commit message** before saying "yes"
-- ✓ **Check PR description** is accurate and complete
-- ✓ **Verify all files** included are intentional
-- ✓ **Review diff** before final approval
 
 ### Periodic Maintenance
 - ✓ **Clean up old context files** from abandoned PRDs
@@ -171,27 +163,6 @@ Claude: Phase 1:
 > yes
 ──────────────────────────────────────────────────────────────
 
-──────────────────────────────────────────────────────────────
-> publish
-──────────────────────────────────────────────────────────────
-Claude: Generated commit message
-        "Approve? [yes/no]"
-
-──────────────────────────────────────────────────────────────
-> yes
-──────────────────────────────────────────────────────────────
-
-──────────────────────────────────────────────────────────────
-> publish
-──────────────────────────────────────────────────────────────
-Claude: Generated PR description
-        "Create PR? [yes/no]"
-
-──────────────────────────────────────────────────────────────
-> yes
-──────────────────────────────────────────────────────────────
-Claude: PR #123 created ✅
-
 # Next day - Expansion
 ──────────────────────────────────────────────────────────────
 > plan payment details expansion
@@ -210,7 +181,16 @@ Claude: Extends core using same libraries/patterns ✅
 
 ## CONTRIBUTING
 
+### To install
+
 ```bash
 claude plugin marketplace add ./
+claude plugin install prd-skills@claude-code-plugins
+```
+
+### After a change
+
+```bash
+claude plugin uninstall prd-skills@claude-code-plugins
 claude plugin install prd-skills@claude-code-plugins
 ```

@@ -248,28 +248,127 @@ Code Analysis Insights:
 
 ### Phase 1: Requirements Gathering
 
+**CRITICAL: Always use AskUserQuestion tool for interactive UX**
+
+Do NOT just output questions as text. Use the `AskUserQuestion` tool to create an interactive experience where users can navigate through options.
+
+**How to ask questions:**
+1. Use `AskUserQuestion` tool with clear, specific questions
+2. Provide 2-4 options when applicable (e.g., "Yes/No", "Small/Medium/Large scope")
+3. For open-ended questions, the tool automatically provides "Other" option for text input
+4. Ask questions ONE AT A TIME or in small groups (max 2-3 related questions per tool call)
+5. Build on previous answers - reference what user said before
+
+**Example - Good UX:**
+```
+AskUserQuestion(
+  questions: [
+    {
+      question: "What problem does this feature solve?",
+      header: "Problem",
+      options: [
+        {label: "User pain point", description: "Solving a specific user frustration"},
+        {label: "Business need", description: "Meeting a business requirement"},
+        {label: "Technical debt", description: "Improving existing system"}
+      ],
+      multiSelect: false
+    }
+  ]
+)
+```
+
+**Example - Bad UX (Don't do this):**
+```
+Just outputting: "What problem does this solve? Who is this for? What's the scope?"
+```
+
 **Adapt questions based on PRD type:**
 
 **CORE PRD MODE** - Ask focused essential questions (5-8 questions):
 
-**Start with understanding:**
+**Question flow (ask interactively with AskUserQuestion):**
 
-1. **Problem & Context:**
-   - "What problem does this solve?" (User pain point or business need)
-   - "Who is this for?" (Target users/personas)
+1. **Problem & Context** (Group 1):
+   ```
+   AskUserQuestion(
+     questions: [
+       {
+         question: "What problem does this feature solve?",
+         header: "Problem",
+         options: [
+           {label: "User pain point", description: "Addressing user frustration"},
+           {label: "Business need", description: "Meeting business requirement"},
+           {label: "Technical improvement", description: "Enhancing existing system"}
+         ]
+       },
+       {
+         question: "Who will use this feature?",
+         header: "Users",
+         options: [
+           {label: "End users", description: "Direct product users"},
+           {label: "Admin users", description: "System administrators"},
+           {label: "Developers", description: "Development team"}
+         ]
+       }
+     ]
+   )
+   ```
 
-2. **Minimal Scope:**
-   - "What's the simplest version that solves the core problem?" (Essential functionality only)
-   - "What are the absolute minimum data/fields needed?" (Core data model)
-   - "What's the ONE primary user flow?" (Single happy path)
+2. **Minimal Scope** (Group 2):
+   ```
+   AskUserQuestion(
+     questions: [
+       {
+         question: "Describe the simplest version that solves the core problem (1-2 sentences)",
+         header: "Core scope",
+         options: [
+           {label: "Very minimal", description: "Absolute bare minimum"},
+           {label: "Basic features", description: "Essential features only"},
+           {label: "Need guidance", description: "Help me scope this down"}
+         ]
+       },
+       {
+         question: "What are the absolute minimum data/fields needed?",
+         header: "Data model",
+         options: [
+           {label: "Simple (1-3 fields)", description: "Very basic data"},
+           {label: "Moderate (4-7 fields)", description: "Essential data points"},
+           {label: "Need examples", description: "Show me similar features"}
+         ]
+       }
+     ]
+   )
+   ```
 
-3. **Success & Boundaries:**
-   - "How will we measure success?" (Success criteria, metrics)
-   - "What's explicitly NOT included in v1?" (Out of scope - becomes expansions)
+3. **Success & Boundaries** (Group 3):
+   ```
+   AskUserQuestion(
+     questions: [
+       {
+         question: "How will we measure success?",
+         header: "Success",
+         options: [
+           {label: "User adoption", description: "Number of users"},
+           {label: "Performance", description: "Speed/efficiency metrics"},
+           {label: "Business metric", description: "Revenue/conversion/etc"}
+         ],
+         multiSelect: true
+       },
+       {
+         question: "What should we explicitly NOT include in v1?",
+         header: "Out of scope",
+         options: [
+           {label: "List features", description: "I'll list what to exclude"},
+           {label: "Everything extra", description: "Only absolute minimum"},
+           {label: "Need suggestions", description: "Help me identify scope creep"}
+         ]
+       }
+     ]
+   )
+   ```
 
-4. **Technical Constraints:**
-   - "Any critical dependencies or integrations?" (Required systems/services)
-   - "Any technical constraints we should know about?" (Performance, security, compliance)
+4. **Technical Constraints** (Group 4 - only if needed):
+   Ask these as follow-ups if applicable based on previous answers
 
 **Approach**: Ask questions conversationally, not as a rigid checklist. If answers suggest complexity, push back:
 ```
@@ -298,30 +397,106 @@ Found:
 I'll ask questions to understand how this expansion builds on these patterns.
 ```
 
-**Then ask expansion-specific questions:**
+**Then ask expansion-specific questions (use AskUserQuestion tool):**
 
-1. **Expansion Goal:**
-   - "What specific capability does this add to the core?" (Single focused enhancement)
-   - "What user need or use case does this address?" (Why this expansion)
+1. **Expansion Goal** (Group 1):
+   ```
+   AskUserQuestion(
+     questions: [
+       {
+         question: "What specific capability does this add to the core?",
+         header: "Enhancement",
+         options: [
+           {label: "New feature", description: "Adds new functionality"},
+           {label: "Data expansion", description: "Adds fields/relationships"},
+           {label: "Integration", description: "Connects to external system"},
+           {label: "UX improvement", description: "Enhances user experience"}
+         ]
+       },
+       {
+         question: "What user need or use case does this address?",
+         header: "Use case",
+         options: [
+           {label: "Common request", description: "Frequently requested feature"},
+           {label: "Power user", description: "Advanced user capability"},
+           {label: "Business requirement", description: "Required for business"}
+         ]
+       }
+     ]
+   )
+   ```
 
-2. **Data & Integration:**
-   - "What new data/fields are needed?" (Data model additions)
-   - "How does this connect to existing core code?" (Integration points)
-   - "Which core files will be extended vs new files?" (Code changes)
+2. **Data & Integration** (Group 2):
+   ```
+   AskUserQuestion(
+     questions: [
+       {
+         question: "What new data/fields are needed for this expansion?",
+         header: "Data model",
+         options: [
+           {label: "Few fields (1-3)", description: "Small data addition"},
+           {label: "Moderate (4-7)", description: "Several new fields"},
+           {label: "New relationships", description: "Linking to other entities"},
+           {label: "Describe custom", description: "I'll describe specific needs"}
+         ]
+       },
+       {
+         question: "How does this connect to existing core code?",
+         header: "Integration",
+         options: [
+           {label: "Extend existing", description: "Modify core files"},
+           {label: "New files", description: "Create separate files"},
+           {label: "Both", description: "Mix of extending and creating"}
+         ]
+       }
+     ]
+   )
+   ```
 
-3. **User Experience:**
-   - "What new or enhanced user flows?" (User interactions)
-   - "How does this change the existing user experience?" (UX impact)
+3. **Pattern Consistency** (Group 3):
+   Reference loaded patterns explicitly:
+   ```
+   AskUserQuestion(
+     questions: [
+       {
+         question: "I see the core uses [Pattern X] for [Purpose]. Should this expansion follow the same pattern?",
+         header: "Pattern",
+         options: [
+           {label: "Yes, use same", description: "Keep consistency with core"},
+           {label: "Slight variation", description: "Similar but adapted"},
+           {label: "Different approach", description: "Need different pattern (explain why)"}
+         ]
+       }
+     ]
+   )
+   ```
 
-4. **Success & Constraints:**
-   - "How will we know this expansion works?" (Acceptance criteria)
-   - "Any performance or security considerations?" (Non-functional requirements)
-   - "What's out of scope for THIS expansion?" (Boundaries - next expansion)
-
-**Approach**: Reference loaded patterns explicitly in questions:
-```
-I see the core uses [Pattern X] for [Purpose]. Should this expansion follow the same pattern?
-```
+4. **Success & Scope** (Group 4):
+   ```
+   AskUserQuestion(
+     questions: [
+       {
+         question: "How will we know this expansion works?",
+         header: "Success",
+         options: [
+           {label: "Feature complete", description: "All functionality works"},
+           {label: "Tests pass", description: "Comprehensive test coverage"},
+           {label: "User validation", description: "User acceptance criteria met"}
+         ],
+         multiSelect: true
+       },
+       {
+         question: "What's out of scope for THIS expansion?",
+         header: "Boundaries",
+         options: [
+           {label: "List exclusions", description: "I'll list what to exclude"},
+           {label: "Single focus", description: "Just this one aspect"},
+           {label: "Future expansion", description: "Leave room for next expansion"}
+         ]
+       }
+     ]
+   )
+   ```
 
 **Important**:
 - Expansion PRDs are FOCUSED on ONE aspect (e.g., customer details OR line items, not both)
@@ -617,12 +792,30 @@ fi
 📋 Core includes: [brief summary]
 🚫 Out of scope (future expansions): [list]
 
-💡 Next steps:
-1. "implement" - Build core foundation with auto-testing and review
-2. After core is complete, use "plan" again for expansions:
-   - Customer details expansion
-   - Line items expansion
-   - [etc]
+💡 What would you like to do next?
+```
+
+**Then use AskUserQuestion tool:**
+```javascript
+AskUserQuestion(
+  questions: [
+    {
+      question: "What would you like to do next with this Core PRD?",
+      header: "Next Step",
+      options: [
+        {
+          label: "Implement now",
+          description: "Start building core foundation with auto-testing and review"
+        },
+        {
+          label: "Plan expansion",
+          description: "Create expansion PRD for: Customer details, Line items, etc."
+        }
+      ],
+      multiSelect: false
+    }
+  ]
+)
 ```
 
 **After Expansion PRD creation:**
@@ -643,7 +836,30 @@ fi
    - [Z] libraries
    - [W] architectural decisions
 
-💡 Next: "implement" to build this expansion following core patterns
+💡 What would you like to do next?
+```
+
+**Then use AskUserQuestion tool:**
+```javascript
+AskUserQuestion(
+  questions: [
+    {
+      question: "What would you like to do next with this Expansion PRD?",
+      header: "Next Step",
+      options: [
+        {
+          label: "Implement now",
+          description: "Build this expansion following core patterns with auto-testing"
+        },
+        {
+          label: "Plan another expansion",
+          description: "Create additional expansion PRD for other features"
+        }
+      ],
+      multiSelect: false
+    }
+  ]
+)
 ```
 
 **After Task-Based PRD creation:**
@@ -660,12 +876,36 @@ fi
 ✅ Success criteria: [brief list]
 🔄 Rollback plan: Included
 
-💡 Next: "implement" to execute this task checklist
+💡 What would you like to do next?
+```
+
+**Then use AskUserQuestion tool:**
+```javascript
+AskUserQuestion(
+  questions: [
+    {
+      question: "What would you like to do next with this Task PRD?",
+      header: "Next Step",
+      options: [
+        {
+          label: "Execute task now",
+          description: "Implement this task checklist with validation and rollback plan"
+        },
+        {
+          label: "Plan another task",
+          description: "Create additional task-based PRD for other changes"
+        }
+      ],
+      multiSelect: false
+    }
+  ]
+)
 ```
 
 ## Guidelines
 
 **Critical Rules:**
+- **ALWAYS use AskUserQuestion tool** - For interactive UX with navigable options (see Phase 1 for examples)
 - **ALWAYS ask core vs expansion first** - This determines everything
 - **For Core: Enforce minimalism** - Push back on complexity, max 2-4 substories
 - **For Expansion: AUTO-LOAD core context** - Read core PRD and context file automatically
@@ -786,7 +1026,7 @@ mkdir -p .claude/checkpoints
 # Ensure checkpoints are gitignored (created by code-prd skill)
 if [[ -f ".gitignore" ]]; then
     if ! grep -q "\.claude/checkpoints" .gitignore; then
-        echo ".claude/checkpoints/" >> .gitignore
+        echo "\n.claude/checkpoints/" >> .gitignore
     fi
 fi
 

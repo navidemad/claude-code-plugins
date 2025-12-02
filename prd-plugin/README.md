@@ -238,115 +238,13 @@ These skills work with any stack, including:
 
 ---
 
-### 🚀 publish
-
-**What:** Commit + Pull Request with approval gates (mode auto-detection)
-
-<details>
-<summary><strong>Click to expand full details</strong></summary>
-
-<br>
-
-### Auto-Mode Detection 🎯
-
-**Commit Mode** - When you have uncommitted changes:
-- Analyzes changes (files, lines, scope)
-- Generates conventional commit message
-- Auto-references PRD
-- Shows preview
-- Waits for "yes" approval
-- Creates commit
-- Updates PRD with commit hash
-
-**PR Mode** - When branch is clean:
-- Errors if uncommitted changes exist (tells you to commit first)
-- Analyzes branch diff vs origin/main
-- Loads PRD context
-- Generates comprehensive PR description
-- Shows preview
-- Waits for "yes" approval
-- Creates GitHub PR
-- Updates PRD with PR link
-
-### Shared Git Tools 🔧
-
-Uses `skills/shared/scripts/git-tools.sh` for:
-- analyze_git_changes()
-- detect_scope_from_files()
-- find_related_prd()
-- get_current_branch()
-- has_uncommitted_changes()
-
-**Benefits**: Consistency between commit and PR modes, reduced code duplication.
-
-### Commit Message Format 📄
-
-```
-<type>(<scope>): <subject>
-
-<body>
-
-Related: docs/prds/2024-10-25-auth-core.md (Phase 1)
-
-🤖 Generated with Claude Code
-Co-Authored-By: Claude <noreply@anthropic.com>
-```
-
-**Types**: feat, fix, refactor, docs, test, chore, perf, style
-
-**Scope**: Auto-detected from file paths
-
-### PR Description Format 📄
-
-```markdown
-## Summary
-[2-3 sentence overview]
-
-## Related PRD
-docs/prds/2024-10-25-auth-core.md
-
-**Completed Substories:**
-- ✅ [Phase 1.1] OAuth provider configuration
-- ✅ [Phase 1.2] Callback handler
-
-## Changes
-
-### Added
-- OAuth2Service for authentication
-- Token encryption
-
-### Modified
-- User model for OAuth support
-
-## Testing
-
-**Test Coverage:** 78% → 94% (+16%)
-**Tests Added:** 23 tests
-**All tests passing:** ✅
-
----
-
-🤖 Generated with Claude Code
-Co-Authored-By: Claude <noreply@anthropic.com>
-```
-
-### Natural Activation 🗣️
-
-- "Ship" (auto-detects commit or PR mode)
-- "Commit these changes"
-- "Create a pull request"
-
-</details>
-
----
-
 ## 📦 Shared Infrastructure
 
 ### Shared Libraries
 
 Located in `skills/shared/scripts/`:
 
-**git-tools.sh** - Git operations (used by `ship`)
+**git-tools.sh** - Git operations
 - `analyze_git_changes()` - Parse git diff output
 - `detect_scope_from_files()` - Simple scope detection using common directory heuristics
 - `find_related_prd()` - Find PRD files
@@ -449,7 +347,7 @@ Skills read project conventions from `CLAUDE.md` in the project root directory.
 These skills are **structured prompts** that guide Claude through a development workflow. They are NOT autonomous code automation.
 
 **How it works:**
-1. You activate a skill (`plan-prd`, `code-prd`, `publish`)
+1. You activate a skill (`plan-prd`, `code-prd`)
 2. Claude reads the skill's instructions (markdown prompts)
 3. Claude **interprets and follows** the workflow
 4. Claude updates files (PRDs, context, code)
